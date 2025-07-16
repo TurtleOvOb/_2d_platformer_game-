@@ -1,7 +1,6 @@
-import 'package:firsgame/pages/levelpage.dart';
+import 'package:_2d_platformergame/pages/levelpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'pages/homepage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

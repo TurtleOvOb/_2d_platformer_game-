@@ -1,6 +1,6 @@
-import 'package:firsgame/widgets/homepage/backgroundicon.dart';
-import 'package:firsgame/widgets/levepage/categoryvutton.dart';
-import 'package:firsgame/widgets/levepage/levelcard.dart';
+import 'package:_2d_platformergame/widgets/homepage/backgroundicon.dart';
+import 'package:_2d_platformergame/widgets/levepage/categoryvutton.dart';
+import 'package:_2d_platformergame/widgets/levepage/levelcard.dart';
 import 'package:flutter/material.dart';
 
 class LevelScreen extends StatelessWidget {

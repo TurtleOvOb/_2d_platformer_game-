@@ -1,11 +1,12 @@
-import 'package:firsgame/ontapthings/homepage/tapexit.dart';
-import 'package:firsgame/ontapthings/homepage/tapgithub.dart';
-import 'package:firsgame/ontapthings/homepage/taplevels.dart';
-import 'package:firsgame/ontapthings/homepage/tapstart.dart';
-import 'package:firsgame/ontapthings/homepage/tapyoutube.dart';
-import 'package:firsgame/ontapthings/homepage/tspsettings.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '/ontapthings/homepage/tapexit.dart';
+import '/ontapthings/homepage/tapgithub.dart';
+import '/ontapthings/homepage/taplevels.dart';
+import '/ontapthings/homepage/tapstart.dart';
+import '/ontapthings/homepage/tapyoutube.dart';
+import '/ontapthings/homepage/tspsettings.dart';
+import 'package:flutter/material.dart';
 import '../widgets/homepage/backgroundicon.dart';
 import '../widgets/homepage/menubutton.dart';
 import '../widgets/homepage/footerbutton.dart';
