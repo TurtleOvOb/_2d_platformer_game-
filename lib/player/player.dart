@@ -4,11 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with CollisionCallbacks {
-  Player({super.position});
-  final Vector2 playersize = Vector2(20.0, 20.0); //玩家大小
+  Player({super.position, required this.spawnPosition});
+  final spawnPosition;
+  final Vector2 playersize = Vector2(35.0, 35.0); //玩家大小
   final Vector2 playerspeed = Vector2(0.0, 0.0); //玩家速度
   final double gravity = 980; //重力
-  final double moveSpeed = 300; // 移动速度
+  final double moveSpeed = 200; // 移动速度
+  final double jumpSpeed = 400;
   bool isGrounded = false; // 标记玩家是否在地面
 
   @override
@@ -26,7 +28,7 @@ class Player extends PositionComponent with CollisionCallbacks {
   @override
   void onMount() {
     super.onMount();
-    position = Vector2(0, 0);
+    position = spawnPosition;
     size = playersize;
   }
 
@@ -61,7 +63,7 @@ class Player extends PositionComponent with CollisionCallbacks {
 
   void jump() {
     if (isGrounded) {
-      playerspeed.y = -300;
+      playerspeed.y = -jumpSpeed;
       isGrounded = false; // 跳跃后标记为不在地面
     }
   }

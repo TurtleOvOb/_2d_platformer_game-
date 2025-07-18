@@ -1,6 +1,6 @@
+import 'package:_2d_platformergame/Game/game_ui.dart';
 import 'package:_2d_platformergame/level_editor/level_editor_ui.dart';
-import 'package:_2d_platformergame/my_game.dart';
-import 'package:flame/game.dart';
+
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget {
@@ -18,9 +18,7 @@ class MainMenu extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => GameWidget(game: MyGame()),
-                  ),
+                  MaterialPageRoute(builder: (context) => GameScreen()),
                 );
               },
               child: const Text('进入游戏'),

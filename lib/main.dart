@@ -1,6 +1,6 @@
+import 'package:_2d_platformergame/MyApp/MainMenu.dart';
 import 'package:flutter/material.dart';
-import 'package:_2d_platformergame/MyApp/MyApp.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(home: MainMenu()));
 }

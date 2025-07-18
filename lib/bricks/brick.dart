@@ -7,7 +7,7 @@ class Brick extends PositionComponent with CollisionCallbacks {
   // 定义圆角半径
   final double borderRadius = 8.0;
   final Vector2 Brickpos;
-  // 按照 Dart 命名规范修改参数名
+
   Brick({required Vector2 brickpos}) : Brickpos = brickpos;
 
   @override
@@ -23,7 +23,6 @@ class Brick extends PositionComponent with CollisionCallbacks {
     );
   }
 
-  // 修改 onMount 方法，移除对 position 的硬编码
   @override
   void onMount() {
     super.onMount();
@@ -33,10 +32,26 @@ class Brick extends PositionComponent with CollisionCallbacks {
   @override
   void render(Canvas canvas) {
     // 使用 RRect 绘制圆角矩形
+    anchor = Anchor.topLeft;
     final rrect = RRect.fromRectAndRadius(
       size.toRect(),
       Radius.circular(borderRadius),
     );
-    canvas.drawRRect(rrect, Paint()..color = Colors.orangeAccent);
+
+    // 创建线性渐变
+    final gradient = LinearGradient(
+      colors: [
+        Color.fromARGB(255, 255, 141, 26), // 起始颜色
+        Color.fromARGB(0, 255, 141, 26), // 结束颜色
+      ],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [0.2, 0.8],
+    );
+
+    // 将渐变应用到 Paint 对象
+    final paint = Paint()..shader = gradient.createShader(size.toRect());
+
+    canvas.drawRRect(rrect, paint);
   }
 }
