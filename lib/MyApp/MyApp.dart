@@ -1,5 +1,5 @@
+import 'package:_2d_platformergame/pages/homepage.dart';
 import 'package:flutter/material.dart';
-import 'MainMenu.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '游戏与关卡编辑器',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MainMenu(),
+      home: const HomeScreen(),
     );
   }
 }

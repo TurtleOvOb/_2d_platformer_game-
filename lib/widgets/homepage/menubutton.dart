@@ -51,6 +51,7 @@ Widget buildMenuButton(
                 color: Colors.black,
                 fontSize: width * 0.04,
                 fontWeight: FontWeight.w500,
+                fontFamily: '851ShouShu',
               ),
             ),
           ],

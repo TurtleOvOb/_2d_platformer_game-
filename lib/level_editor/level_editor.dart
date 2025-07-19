@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:_2d_platformergame/player/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';

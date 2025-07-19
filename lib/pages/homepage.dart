@@ -1,9 +1,9 @@
+import 'package:_2d_platformergame/Game/game_ui.dart';
+import 'package:_2d_platformergame/level_editor/level_editor_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';
 import '/ontapthings/homepage/taplevels.dart';
-import '/ontapthings/homepage/tapstart.dart';
 import '/ontapthings/homepage/tapyoutube.dart';
 import '/ontapthings/homepage/tspsettings.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,9 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   'GAME NAME',
-                  style: GoogleFonts.permanentMarker(
-                    // 使用谷歌字体
+                  style: TextStyle(
+                    // 使用自定义字体家族名称
+                    fontFamily: '851ShouShu',
                     color: Colors.white,
                     fontSize: width * 0.08,
                     fontWeight: FontWeight.bold,
@@ -72,7 +73,12 @@ class HomeScreen extends StatelessWidget {
                       width,
                       height,
                       Icons.play_arrow,
-                      tapStart,
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => GameScreen()),
+                        );
+                      },
                     ),
                     SizedBox(height: height * 0.03),
                     buildMenuButton(
@@ -89,6 +95,22 @@ class HomeScreen extends StatelessWidget {
                       height,
                       Icons.settings,
                       tapSettings,
+                    ),
+                    // 新增 LEVEL EDITOR 按钮
+                    SizedBox(height: height * 0.03),
+                    buildMenuButton(
+                      'LEVEL EDITOR',
+                      width,
+                      height,
+                      Icons.edit,
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LevelEditorScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -168,6 +190,7 @@ class HomeScreen extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: width * 0.03,
+                        fontFamily: '851ShouShu',
                       ),
                     ),
                   ),

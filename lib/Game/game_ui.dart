@@ -1,5 +1,6 @@
 // 新增：暂停覆盖页面组件
-import 'package:_2d_platformergame/MyApp/MainMenu.dart';
+
+import 'package:_2d_platformergame/pages/homepage.dart';
 import 'game_logic.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,9 @@ class GameScreen extends StatelessWidget {
                           // 使用 pushReplacement 跳转到主菜单
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => MainMenu()),
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
                           );
                         },
                       ),

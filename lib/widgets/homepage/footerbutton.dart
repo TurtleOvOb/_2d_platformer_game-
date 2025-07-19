@@ -30,6 +30,7 @@ Widget buildFooterButton(
           style: TextStyle(
             color: Colors.white,
             fontSize: width * 0.03,
+            fontFamily: '851ShouShu',
             // decoration: TextDecoration.underline,
           ),
         ),
