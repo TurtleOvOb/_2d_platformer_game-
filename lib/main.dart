@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/pages/levelpage.dart';
+import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LevelScreen(),
+      home: const MusicSettingsPage(),
     );
   }
 }
