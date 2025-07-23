@@ -10,10 +10,10 @@ class PauseOverlay extends StatelessWidget {
   final VoidCallback onReturnToMain;
 
   const PauseOverlay({
-    Key? key,
+    super.key,
     required this.game,
     required this.onReturnToMain,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class PauseOverlay extends StatelessWidget {
 class GameScreen extends StatelessWidget {
   final MyGame game = MyGame();
 
-  GameScreen({Key? key}) : super(key: key);
+  GameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

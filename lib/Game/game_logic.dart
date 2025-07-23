@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/bricks/brick.dart';
+import '../levels/ldtk_parser.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -9,15 +10,13 @@ import 'package:flame/components.dart';
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
   late Player player;
-  bool isLeftPressed = false;
-  bool isRightPressed = false;
-  double cameraMoveSpeed = 5.0;
-  double cameraAcc = 10.0;
+  final Set<LogicalKeyboardKey> pressedKeys = {};
+
   bool isPaused = false; // 新增：暂停状态
 
   MyGame()
     : super(
-        camera: CameraComponent.withFixedResolution(width: 640, height: 600),
+        camera: CameraComponent.withFixedResolution(width: 1280, height: 600),
       );
 
   @override
@@ -34,17 +33,18 @@ class MyGame extends FlameGame
     initial();
   }
 
-  void initial() {
+  Future<void> initial() async {
     world.add(player = Player(spawnPosition: Vector2(0, -100)));
-    BrickGenerator();
+    await BrickGenerator();
     debugMode = true;
   }
 
-  void BrickGenerator() {
-    world.add(Brick(brickpos: Vector2(0, 0)));
-    world.add(Brick(brickpos: Vector2(50, 0)));
-    world.add(Brick(brickpos: Vector2(100, 0)));
-    world.add(Brick(brickpos: Vector2(150, 0)));
+  Future<void> BrickGenerator() async {
+    final parser = LdtkParser();
+    final bricks = await parser.parseLdtkLevel('assets/levels/main_level.ldtk');
+    for (var brick in bricks) {
+      world.add(brick);
+    }
   }
 
   @override
@@ -61,9 +61,9 @@ class MyGame extends FlameGame
     if (!isPaused) {
       // 仅在非暂停状态下更新游戏
       super.update(dt);
-      if (isLeftPressed) {
+      if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
         player.moveLeft();
-      } else if (isRightPressed) {
+      } else if (pressedKeys.contains(LogicalKeyboardKey.arrowRight)) {
         player.moveRight();
       } else {
         player.stopHorizontal();
@@ -78,15 +78,13 @@ class MyGame extends FlameGame
   ) {
     if (!isPaused) {
       // 仅在非暂停状态下处理键盘事件
-      final isKeyDown = event is KeyDownEvent;
-      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        isLeftPressed = isKeyDown;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        isRightPressed = isKeyDown;
-      } else if (event.logicalKey == LogicalKeyboardKey.space) {
-        if (isKeyDown) {
+      if (event is KeyDownEvent) {
+        pressedKeys.add(event.logicalKey);
+        if (event.logicalKey == LogicalKeyboardKey.space) {
           player.jump();
         }
+      } else if (event is KeyUpEvent) {
+        pressedKeys.remove(event.logicalKey);
       }
     }
     return KeyEventResult.handled;

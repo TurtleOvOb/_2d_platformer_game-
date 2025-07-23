@@ -1,5 +1,4 @@
 import 'package:_2d_platformergame/Game/game_ui.dart';
-import 'package:_2d_platformergame/level_editor/level_editor_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';
@@ -96,22 +95,8 @@ class HomeScreen extends StatelessWidget {
                       Icons.settings,
                       tapSettings,
                     ),
+
                     // 新增 LEVEL EDITOR 按钮
-                    SizedBox(height: height * 0.03),
-                    buildMenuButton(
-                      'LEVEL EDITOR',
-                      width,
-                      height,
-                      Icons.edit,
-                      () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LevelEditorScreen(),
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ),

@@ -59,9 +59,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # 添加 assets 配置
   assets:
+    - assets/levels/
     - assets/fonts/
 
   # 添加字体配置
