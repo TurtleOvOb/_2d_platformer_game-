@@ -1,5 +1,4 @@
-import 'package:_2d_platformergame/bricks/brick.dart';
-import '../levels/ldtk_parser.dart';
+import '../identfier/ldtk_parser.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -16,7 +15,7 @@ class MyGame extends FlameGame
 
   MyGame()
     : super(
-        camera: CameraComponent.withFixedResolution(width: 1280, height: 600),
+        camera: CameraComponent.withFixedResolution(width: 320, height: 224),
       );
 
   @override
@@ -30,18 +29,22 @@ class MyGame extends FlameGame
   @override
   void onMount() {
     super.onMount();
+    //debugMode = true;
     initial();
   }
 
   Future<void> initial() async {
-    world.add(player = Player(spawnPosition: Vector2(0, -100)));
+    world.add(player = Player(spawnPosition: Vector2(0, -300)));
+
+    // 设置相机初始位置，使玩家位于屏幕左中边缘
+    camera.viewfinder.position = Vector2(140, -200);
+    /*camera.follow(player); */
     await BrickGenerator();
-    debugMode = true;
   }
 
   Future<void> BrickGenerator() async {
     final parser = LdtkParser();
-    final bricks = await parser.parseLdtkLevel('assets/levels/main_level.ldtk');
+    final bricks = await parser.parseLdtkLevel('assets/levels/Level_0.ldtk');
     for (var brick in bricks) {
       world.add(brick);
     }

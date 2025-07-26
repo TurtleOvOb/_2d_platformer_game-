@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/bricks/brick.dart';
+import 'package:_2d_platformergame/gradient_bricks/brick.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
