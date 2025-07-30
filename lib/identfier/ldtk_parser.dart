@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:_2d_platformergame/gradient_bricks/half_brick.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
 import '../gradient_bricks/brick.dart';
@@ -41,24 +42,48 @@ class LdtkParser {
     final offsetY = layer['pxOffsetY'] as int? ?? 0;
 
     for (final tile in gridTiles) {
+      final tileId = tile['t'] as int;
       final px = tile['px'] as List<dynamic>;
       final x = px[0] as int;
       final y = px[1] as int;
 
       // 转换为Flame坐标系（Y轴翻转）
-      final flameY = layerHeight - y - tileSize + offsetY;
 
-      components.add(
-        Brick(
-          brickpos: Vector2(
-            (x + offsetX).roundToDouble(),
-            flameY.roundToDouble(),
-          ),
-          srcPosition: Vector2.zero(),
-          type: 0,
-          gridSize: tileSize,
-        ),
-      );
+      switch (tileId) {
+        case 33:
+          // 普通砖块
+          components.add(
+            Brick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2.zero(),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+          print('1');
+          break;
+        case 129:
+          // 半砖
+          print('2');
+          components.add(
+            HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2.zero(),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          break;
+        default:
+          // 未知瓦片ID，输出警告
+          print('Unhandled tile ID: $tileId at position ($x, $y)');
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/gradient_bricks/brick.dart';
+import 'package:_2d_platformergame/gradient_bricks/half_brick.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +47,7 @@ class CollisionLogic {
         case CollisionDirection.top:
           playerspeed.y = 0;
           player.position.y = other.toRect().top - player.size.y;
-          setIsGrounded(true); // 玩家落在砖块上方，标记为在地面
+          setIsGrounded(true);
           break;
         case CollisionDirection.bottom:
           playerspeed.y = 0;
@@ -60,6 +61,21 @@ class CollisionLogic {
           playerspeed.x = 0;
           player.position.x = other.toRect().right;
           break;
+      }
+    } else if (other is HalfBrick) {
+      // 半砖特殊穿越逻辑
+      // 只有当玩家速度向下且位置在半砖上方时才允许碰撞
+      if (playerspeed.y > 0 &&
+          player.toRect().bottom <= other.toRect().top + 10) {
+        final collisionDirection = calculateCollisionDirection(
+          player.toRect(),
+          other.toRect(),
+        );
+        if (collisionDirection == CollisionDirection.top) {
+          playerspeed.y = 0;
+          player.position.y = other.toRect().top - player.size.y;
+          setIsGrounded(true);
+        }
       }
     }
   }

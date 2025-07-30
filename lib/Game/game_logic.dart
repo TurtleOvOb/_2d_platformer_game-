@@ -1,5 +1,5 @@
-import '../identfier/ldtk_parser.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class MyGame extends FlameGame
 
   MyGame()
     : super(
-        camera: CameraComponent.withFixedResolution(width: 320, height: 224),
+        camera: CameraComponent.withFixedResolution(width: 512, height: 288),
       );
 
   @override
@@ -34,11 +34,11 @@ class MyGame extends FlameGame
   }
 
   Future<void> initial() async {
-    world.add(player = Player(spawnPosition: Vector2(0, -300)));
+    world.add(player = Player(spawnPosition: Vector2(16, 144)));
 
     // 设置相机初始位置，使玩家位于屏幕左中边缘
-    camera.viewfinder.position = Vector2(140, -200);
-    /*camera.follow(player); */
+    camera.viewfinder.position = Vector2(144, 144);
+    camera.follow(player);
     await BrickGenerator();
   }
 
