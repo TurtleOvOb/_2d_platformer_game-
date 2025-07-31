@@ -62,6 +62,7 @@ flutter:
   assets:
     - assets/levels/
     - assets/fonts/
+    - assets/images/
 
   # 添加字体配置
   fonts:

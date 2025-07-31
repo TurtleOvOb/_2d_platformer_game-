@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:_2d_platformergame/Game/game_logic.dart';
+import 'package:_2d_platformergame/Game/My_Game.dart';
 
 class HalfBrick extends PositionComponent
     with CollisionCallbacks, HasGameReference<MyGame> {

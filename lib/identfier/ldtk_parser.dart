@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'dart:ui';
-import 'package:_2d_platformergame/gradient_bricks/half_brick.dart';
+
+import 'package:_2d_platformergame/objects/half_brick.dart';
+import 'package:_2d_platformergame/objects/spike.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
-import '../gradient_bricks/brick.dart';
+import '../objects/brick.dart';
+import '../objects/key_block.dart';
 
 class LdtkParser {
   Future<List<PositionComponent>> parseLdtkLevel(String path) async {
@@ -41,14 +43,61 @@ class LdtkParser {
     final offsetX = layer['pxOffsetX'] as int? ?? 0;
     final offsetY = layer['pxOffsetY'] as int? ?? 0;
 
+    // 收集所有瓦片数据
+    final tiles = <Map<String, dynamic>>[];
     for (final tile in gridTiles) {
       final tileId = tile['t'] as int;
       final px = tile['px'] as List<dynamic>;
       final x = px[0] as int;
       final y = px[1] as int;
+      tiles.add({
+        'id': tileId,
+        'x': x,
+        'y': y,
+        'offsetX': offsetX,
+        'offsetY': offsetY,
+      });
+    }
 
-      // 转换为Flame坐标系（Y轴翻转）
+    // 处理钥匙块合并逻辑
+    final processedTiles = <int>{};
+    for (int i = 0; i < tiles.length; i++) {
+      if (processedTiles.contains(i)) continue;
 
+      final tile = tiles[i];
+      final tileId = tile['id'] as int;
+      final x = tile['x'] as int;
+      final y = tile['y'] as int;
+      final offsetX = tile['offsetX'] as int;
+      final offsetY = tile['offsetY'] as int;
+
+      // 假设钥匙块上半部分ID为130，下半部分ID为131
+      if (tileId == 290) {
+        // 查找对应的上半部分瓦片
+        final matchingTop = tiles.indexWhere(
+          (t) => t['id'] == 258 && t['x'] == x && t['y'] == y - tileSize,
+        );
+
+        if (matchingTop != -1 && !processedTiles.contains(matchingTop)) {
+          // 添加合并后的钥匙块
+          components.add(
+            KeyBlock(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y - tileSize + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2.zero(),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          processedTiles.add(i);
+          processedTiles.add(matchingTop);
+          continue;
+        }
+      }
+
+      // 处理普通瓦片
       switch (tileId) {
         case 33:
           // 普通砖块
@@ -63,13 +112,41 @@ class LdtkParser {
               gridSize: tileSize,
             ),
           );
-          print('1');
           break;
         case 129:
           // 半砖
-          print('2');
           components.add(
             HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2.zero(),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          break;
+        case 133:
+          // 尖刺
+          print('开始创建Spike实例，位置: ($x, $y)');
+          components.add(
+            Spike(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2.zero(),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          print('Spike实例创建完成');
+          break;
+        case 258:
+          // 未找到匹配的钥匙块下半部分，单独添加
+          components.add(
+            KeyBlock(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
@@ -84,6 +161,7 @@ class LdtkParser {
           // 未知瓦片ID，输出警告
           print('Unhandled tile ID: $tileId at position ($x, $y)');
       }
+      processedTiles.add(i);
     }
   }
 

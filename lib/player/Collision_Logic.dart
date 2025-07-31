@@ -1,5 +1,5 @@
-import 'package:_2d_platformergame/gradient_bricks/brick.dart';
-import 'package:_2d_platformergame/gradient_bricks/half_brick.dart';
+import 'package:_2d_platformergame/objects/brick.dart';
+import 'package:_2d_platformergame/objects/half_brick.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 

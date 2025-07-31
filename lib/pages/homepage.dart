@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/Game/game_ui.dart';
+import 'package:_2d_platformergame/Game/Game_Screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';
