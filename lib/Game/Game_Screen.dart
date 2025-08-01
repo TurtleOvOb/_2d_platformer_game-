@@ -1,6 +1,7 @@
 // 新增：暂停覆盖页面组件
 
 import 'package:_2d_platformergame/pages/homepage.dart';
+import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
 import 'My_Game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -62,33 +63,7 @@ class GameScreen extends StatelessWidget {
       body: Stack(
         children: [
           GameWidget(game: game),
-          Positioned(
-            top: 20,
-            right: 20,
-            child: IconButton(
-              icon: const Icon(Icons.pause),
-              onPressed: () {
-                game.pauseGame();
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder:
-                      (context) => PauseOverlay(
-                        game: game,
-                        onReturnToMain: () {
-                          // 使用 pushReplacement 跳转到主菜单
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                );
-              },
-            ),
-          ),
+          Positioned(top: 0, left: 0, right: 0, child: GameUi()),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/Game/Game_Screen.dart';
 import 'package:_2d_platformergame/MyApp/MyApp.dart';
 import 'package:_2d_platformergame/device_information/screeninfo.dart';
 import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
@@ -22,7 +23,7 @@ void main() {
               ScreenInfo.init(context); //初始化屏幕信息后面直接调用即可
               return Scaffold(
                 backgroundColor: Colors.orange,
-                body: ProviderScope(child: GameUi()),
+                body: ProviderScope(child: GameScreen()),
               );
             },
           ),
