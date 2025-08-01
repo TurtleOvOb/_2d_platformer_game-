@@ -33,52 +33,65 @@ class _GameUiState extends State<GameUi> {
 
         Opacity(
           opacity: 0.4,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(255, 53, 53, 51),
-                width: 2,
+          child: InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  width: 2,
+                ),
               ),
-            ),
-            child: Icon(
-              Icons.library_books,
-              color: const Color.fromARGB(255, 53, 53, 51),
-              size: (ScreenInfo.width ?? 0) * 0.035,
+              child: Icon(
+                Icons.library_books,
+                color: const Color.fromARGB(255, 53, 53, 51),
+                size: (ScreenInfo.width ?? 0) * 0.035,
+              ),
             ),
           ),
         ),
 
         SizedBox(width: (ScreenInfo.width ?? 0) * 0.02),
+
         Opacity(
           opacity: 0.4,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(255, 53, 53, 51),
-                width: 2,
+          child: InkWell(
+            onTap: () {
+              //用inkwell实现点击
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  width: 2,
+                ),
               ),
-            ),
-            child: Icon(
-              Icons.pause_rounded,
-              color: const Color.fromARGB(255, 53, 53, 51),
-              size: (ScreenInfo.width ?? 0) * 0.035,
+              child: Icon(
+                Icons.pause_rounded,
+                color: const Color.fromARGB(255, 53, 53, 51),
+                size: (ScreenInfo.width ?? 0) * 0.035,
+              ),
             ),
           ),
         ),
         SizedBox(width: (ScreenInfo.width ?? 0) * 0.02),
+
         Opacity(
           opacity: 0.4,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(255, 53, 53, 51),
-                width: 2,
+          child: InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  width: 2,
+                ),
               ),
-            ),
-            child: Icon(
-              Icons.settings,
-              color: const Color.fromARGB(255, 53, 53, 51),
-              size: (ScreenInfo.width ?? 0) * 0.035,
+              child: Icon(
+                Icons.settings,
+                color: const Color.fromARGB(255, 53, 53, 51),
+                size: (ScreenInfo.width ?? 0) * 0.035,
+              ),
             ),
           ),
         ),
