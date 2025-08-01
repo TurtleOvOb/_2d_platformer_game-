@@ -4,10 +4,12 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:_2d_platformergame/Game/My_Game.dart';
 
-class HalfBrick extends PositionComponent
+class HalfBrick
+    extends
+        SpriteComponent // 修改1: 继承SpriteComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
   final Vector2 brickpos;
-  final Vector2 srcPosition;
+  final Vector2 srcPosition; // 图块在图集中的位置
   final int type;
   final double gridSize;
 
@@ -16,12 +18,12 @@ class HalfBrick extends PositionComponent
     required this.srcPosition,
     required this.type,
     required this.gridSize,
-  }) {
-    position = brickpos;
-    size = Vector2(gridSize, gridSize / 2);
-  }
+  }) : super(
+         position: brickpos,
+         size: Vector2(gridSize, gridSize), // 半砖高度为gridSize/2
+         anchor: Anchor.topLeft, // 保持与其他块相同的锚点
+       );
 
-  // 保持与Brick类相同的属性和方法
   Vector2 get Brickpos => brickpos;
 
   late RectangleHitbox hitbox;
@@ -29,34 +31,35 @@ class HalfBrick extends PositionComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
+
+    // 修改2: 从图块集加载半砖纹理
+    sprite = await Sprite.load(
+      'tileset.png', // 图块集路径
+      srcPosition: srcPosition, // 从构造函数传入的图块位置
+      srcSize: Vector2(gridSize, gridSize), // 半砖尺寸
+    );
+
+    // 保持原有碰撞箱逻辑
     hitbox = RectangleHitbox(collisionType: CollisionType.passive, size: size);
     add(hitbox);
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    // 绘制半砖矩形，使用红色以便区分
-    final paint = Paint()..color = Color.fromARGB(255, 255, 141, 26);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y), paint);
-  }
+  // 修改3: 移除手动render方法，由SpriteComponent自动渲染
 
   @override
   void update(double dt) {
     super.update(dt);
 
     final player = game.player;
+    if (player == null) return;
 
-    // 计算玩家底部和半砖顶部坐标
+    // 原有碰撞逻辑保持不变
     final playerBottom = player.position.y + player.size.y;
     final brickTop = position.y;
-    final brickBottom = position.y + size.y;
 
     hitbox.collisionType =
-        (playerBottom <= brickTop + 10) // 添加10像素容差
-            ? CollisionType
-                .passive // 使用passive类型配合玩家active碰撞
+        (playerBottom <= brickTop + 10)
+            ? CollisionType.passive
             : CollisionType.inactive;
-    //print('HalfBrick collision type: ${hitbox.collisionType}');
   }
 }

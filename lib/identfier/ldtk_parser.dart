@@ -107,7 +107,7 @@ class LdtkParser {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2.zero(),
+              srcPosition: Vector2(16, 16),
               type: 0,
               gridSize: tileSize,
             ),
@@ -121,7 +121,7 @@ class LdtkParser {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2.zero(),
+              srcPosition: Vector2(1 * 16, 4 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -129,14 +129,14 @@ class LdtkParser {
           break;
         case 133:
           // 尖刺
-          print('开始创建Spike实例，位置: ($x, $y)');
+
           components.add(
             Spike(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2.zero(),
+              srcPosition: Vector2(5 * 16, 4 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),

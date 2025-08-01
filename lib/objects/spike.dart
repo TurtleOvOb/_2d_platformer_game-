@@ -22,16 +22,16 @@ class Spike extends SpriteComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    // 加载图片资源
-    sprite = await Sprite.load('spike1.png');
-    // 设置尺寸为网格大小
-    size = Vector2(gridSize, gridSize);
-    // 保持碰撞盒
-    add(RectangleHitbox(collisionType: CollisionType.passive));
-  }
 
-  // 移除原有的render方法
-  /*   @override
+    // 修改2: 从图块集加载半砖纹理
+    sprite = await Sprite.load(
+      'tileset.png', // 图块集路径
+      srcPosition: srcPosition, // 从构造函数传入的图块位置
+      srcSize: Vector2(gridSize, gridSize), // 半砖尺寸
+    );
+
+    // 移除原有的render方法
+    /*   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is Player) {
@@ -42,4 +42,5 @@ class Spike extends SpriteComponent with CollisionCallbacks {
       );
     }
   }   */
+  }
 }
