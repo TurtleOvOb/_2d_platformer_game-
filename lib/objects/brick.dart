@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
 // 修改类继承，使用SpriteComponent
 class Brick extends SpriteComponent with CollisionCallbacks {

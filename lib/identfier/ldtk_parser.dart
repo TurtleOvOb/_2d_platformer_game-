@@ -141,7 +141,6 @@ class LdtkParser {
               gridSize: tileSize.toDouble(),
             ),
           );
-          print('Spike实例创建完成');
           break;
         case 258:
           // 未找到匹配的钥匙块下半部分，单独添加

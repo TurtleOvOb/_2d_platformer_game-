@@ -1,9 +1,5 @@
 import 'package:_2d_platformergame/Game/Game_Screen.dart';
-import 'package:_2d_platformergame/MyApp/MyApp.dart';
 import 'package:_2d_platformergame/device_information/screeninfo.dart';
-import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
-import 'package:_2d_platformergame/widgets/game_page/timer_count.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

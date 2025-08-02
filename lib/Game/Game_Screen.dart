@@ -1,6 +1,4 @@
 // 新增：暂停覆盖页面组件
-
-import 'package:_2d_platformergame/pages/homepage.dart';
 import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
 import 'My_Game.dart';
 import 'package:flame/game.dart';

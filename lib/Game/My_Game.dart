@@ -8,7 +8,7 @@ import 'package:flame/components.dart';
 
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
-  late Player player;
+  late Player? player;
   final Set<LogicalKeyboardKey> pressedKeys = {};
 
   bool isPaused = false; // 新增：暂停状态
@@ -24,21 +24,25 @@ class MyGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    initial(); // 添加初始调用
   }
 
   @override
   void onMount() {
     super.onMount();
-    //debugMode = true;
-    initial();
+    debugMode = true;
+    //initial();
   }
 
   Future<void> initial() async {
+    // 2. 重新创建玩家
     world.add(player = Player(spawnPosition: Vector2(16, 144)));
 
-    // 设置相机初始位置，使玩家位于屏幕左中边缘
+    // 3. 重置相机
     camera.viewfinder.position = Vector2(144, 144);
-    camera.follow(player);
+    camera.follow(player!);
+
+    // 4. 重新生成砖块
     await BrickGenerator();
   }
 
@@ -55,7 +59,7 @@ class MyGame extends FlameGame
     super.onTapDown(event);
     if (!isPaused) {
       // 仅在非暂停状态下处理点击事件
-      player.jump();
+      player!.jump();
     }
   }
 
@@ -65,11 +69,11 @@ class MyGame extends FlameGame
       // 仅在非暂停状态下更新游戏
       super.update(dt);
       if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
-        player.moveLeft();
+        player!.moveLeft();
       } else if (pressedKeys.contains(LogicalKeyboardKey.arrowRight)) {
-        player.moveRight();
+        player!.moveRight();
       } else {
-        player.stopHorizontal();
+        player!.stopHorizontal();
       }
     }
   }
@@ -84,7 +88,7 @@ class MyGame extends FlameGame
       if (event is KeyDownEvent) {
         pressedKeys.add(event.logicalKey);
         if (event.logicalKey == LogicalKeyboardKey.space) {
-          player.jump();
+          player!.jump();
         }
       } else if (event is KeyUpEvent) {
         pressedKeys.remove(event.logicalKey);
@@ -103,5 +107,19 @@ class MyGame extends FlameGame
   void resumeGame() {
     isPaused = false;
     resumeEngine();
+  }
+
+  // 新增：重置游戏方法
+  void resetLevel() {
+    // 1. 移除所有游戏对象
+    world.removeAll(world.children);
+    pressedKeys.clear();
+    // 2. 移除玩家
+    if (player != null) {
+      player!.removeFromParent();
+      player = null;
+    }
+    // 2. 重新初始化游戏
+    initial();
   }
 }
