@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:_2d_platformergame/objects/half_brick.dart';
+import 'package:_2d_platformergame/objects/key1.dart';
 import 'package:_2d_platformergame/objects/spike.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
 import '../objects/brick.dart';
-import '../objects/key_block.dart';
+import '../objects/key_block1.dart';
 
 class LdtkParser {
   Future<List<PositionComponent>> parseLdtkLevel(String path) async {
@@ -156,9 +157,21 @@ class LdtkParser {
             ),
           );
           break;
+        case 260:
+          // 钥匙1
+          components.add(
+            Key1(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(4 * 16, 8 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          break;
         default:
-          // 未知瓦片ID，输出警告
-          print('Unhandled tile ID: $tileId at position ($x, $y)');
       }
       processedTiles.add(i);
     }

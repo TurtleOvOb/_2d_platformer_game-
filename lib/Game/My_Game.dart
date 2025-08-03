@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/objects/key1.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
@@ -121,5 +122,11 @@ class MyGame extends FlameGame
     }
     // 2. 重新初始化游戏
     initial();
+  }
+
+  void removeKeyBlock(int type) {
+    world.removeWhere(
+      (component) => component is Key1 && component.type == type,
+    );
   }
 }

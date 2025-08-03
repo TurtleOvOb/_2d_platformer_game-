@@ -32,7 +32,10 @@ class KeyBlock extends PositionComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    hitbox = RectangleHitbox(collisionType: CollisionType.passive, size: size);
+    hitbox = RectangleHitbox(
+      collisionType: CollisionType.active,
+      size: Vector2(2 * gridSize, 2 * gridSize),
+    );
     add(hitbox);
     keySprite = await Sprite.load('KeyBlock1.png');
   }
@@ -43,24 +46,5 @@ class KeyBlock extends PositionComponent
     // 通过调整size参数来改变缩放比例
     final scaledSize = Vector2(size.x * 1, size.y * 2); // 示例：放大1.5倍
     keySprite.render(canvas, size: scaledSize);
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    // 可以添加钥匙块的特殊更新逻辑
-  }
-
-  @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    super.onCollisionStart(intersectionPoints, other);
-    if (other is Player) {
-      // 玩家碰到钥匙块后移除钥匙块
-      removeFromParent();
-      // 可以在这里添加获取钥匙的逻辑
-    }
   }
 }
