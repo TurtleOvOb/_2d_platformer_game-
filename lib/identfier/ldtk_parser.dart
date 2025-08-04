@@ -1,12 +1,14 @@
 import 'dart:convert';
 
-import 'package:_2d_platformergame/objects/half_brick.dart';
+import 'package:_2d_platformergame/objects/bricks/LeftTopBrick.dart';
+import 'package:_2d_platformergame/objects/bricks/RightTopBrick.dart';
+import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
 import 'package:_2d_platformergame/objects/key1.dart';
 import 'package:_2d_platformergame/objects/spike.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
-import '../objects/brick.dart';
-import '../objects/key_block1.dart';
+import '../objects/bricks/brick.dart';
+import '../objects/bricks/key_block1.dart';
 
 class LdtkParser {
   Future<List<PositionComponent>> parseLdtkLevel(String path) async {
@@ -39,8 +41,6 @@ class LdtkParser {
   ) async {
     final gridTiles = layer['gridTiles'] as List<dynamic>? ?? [];
     final tileSize = layer['gridSize'] as int? ?? 16;
-    final layerWidth = layer['pxWid'] as int? ?? 0;
-    final layerHeight = layer['pxHei'] as int? ?? 0;
     final offsetX = layer['pxOffsetX'] as int? ?? 0;
     final offsetY = layer['pxOffsetY'] as int? ?? 0;
 
@@ -73,33 +73,37 @@ class LdtkParser {
       final offsetY = tile['offsetY'] as int;
 
       // 假设钥匙块上半部分ID为130，下半部分ID为131
-      if (tileId == 290) {
-        // 查找对应的上半部分瓦片
-        final matchingTop = tiles.indexWhere(
-          (t) => t['id'] == 258 && t['x'] == x && t['y'] == y - tileSize,
-        );
-
-        if (matchingTop != -1 && !processedTiles.contains(matchingTop)) {
-          // 添加合并后的钥匙块
-          components.add(
-            KeyBlock(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y - tileSize + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2.zero(),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          processedTiles.add(i);
-          processedTiles.add(matchingTop);
-          continue;
-        }
-      }
 
       // 处理普通瓦片
       switch (tileId) {
+        case 0:
+          // 普通砖块
+          components.add(
+            LeftTopBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(0, 0),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+          break;
+        case 2:
+          // 普通砖块
+          components.add(
+            RightTopBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 0),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+          break;
         case 33:
           // 普通砖块
           components.add(
@@ -151,7 +155,19 @@ class LdtkParser {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2.zero(),
+              srcPosition: Vector2(2 * 16, 8 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+        case 290:
+          components.add(
+            KeyBlock(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 9 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -182,17 +198,14 @@ class LdtkParser {
     List<PositionComponent> components,
   ) {
     final entities = layer['entities'] as List<dynamic>? ?? [];
-    final tileSize = layer['gridSize'] as int? ?? 16;
-    final layerHeight = layer['pxHei'] as int? ?? 0;
+
 
     for (final entity in entities) {
-      final px = entity['px'] as List<dynamic>;
-      final x = px[0] as int;
-      final y = px[1] as int;
+
       final entityId = entity['__identifier'] as String;
 
       // 转换为Flame坐标系（Y轴翻转）
-      final flameY = layerHeight - y - tileSize;
+  
 
       // 根据实体类型创建不同的组件
       if (entityId == 'PlayerSpawn') {

@@ -1,6 +1,6 @@
-import 'package:_2d_platformergame/objects/brick.dart';
-import 'package:_2d_platformergame/objects/half_brick.dart';
-import 'package:_2d_platformergame/objects/key_block1.dart';
+import 'package:_2d_platformergame/objects/bricks/brick.dart';
+import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
+import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 

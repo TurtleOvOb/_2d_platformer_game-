@@ -16,7 +16,7 @@ void main() {
 
           home: Builder(
             builder: (context) {
-              ScreenInfo.init(context); //初始化屏幕信息后面直接调用即可
+              // 屏幕信息初始化已在My_Game中完成
               return Scaffold(
                 backgroundColor: Colors.orange,
                 body: ProviderScope(child: GameScreen()),

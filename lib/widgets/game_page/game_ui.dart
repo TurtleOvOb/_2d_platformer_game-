@@ -10,25 +10,39 @@ class GameUi extends StatefulWidget {
 }
 
 class _GameUiState extends State<GameUi> {
+  late ScreenInfo _screenInfo;
+  double _width = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _screenInfo = ScreenInfo();
+    _initializeScreenInfo();
+  }
+
+  Future<void> _initializeScreenInfo() async {
+    await _screenInfo.initialize();
+    setState(() {
+      _width = _screenInfo.width ?? 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(width: (ScreenInfo.width ?? 0) * 0.03),
+        SizedBox(width: _width * 0.03),
         Opacity(
           opacity: 0.5,
           child: Icon(
             Icons.hourglass_empty,
             color: const Color.fromARGB(255, 111, 111, 109),
-            size: (ScreenInfo.width ?? 0) * 0.04,
+            size: _width * 0.04,
           ),
         ),
-        SizedBox(width: (ScreenInfo.width ?? 0) * 0.01),
-        Opacity(
-          opacity: 0.5,
-          child: TimerCount(size: (ScreenInfo.width ?? 0) * 0.035),
-        ),
+        SizedBox(width: _width * 0.01),
+        Opacity(opacity: 0.5, child: TimerCount(size: _width * 0.035)),
         Spacer(),
 
         Opacity(
@@ -45,13 +59,13 @@ class _GameUiState extends State<GameUi> {
               child: Icon(
                 Icons.library_books,
                 color: const Color.fromARGB(255, 53, 53, 51),
-                size: (ScreenInfo.width ?? 0) * 0.035,
+                size: _width * 0.035,
               ),
             ),
           ),
         ),
 
-        SizedBox(width: (ScreenInfo.width ?? 0) * 0.02),
+        SizedBox(width: _width * 0.02),
 
         Opacity(
           opacity: 0.4,
@@ -69,12 +83,12 @@ class _GameUiState extends State<GameUi> {
               child: Icon(
                 Icons.pause_rounded,
                 color: const Color.fromARGB(255, 53, 53, 51),
-                size: (ScreenInfo.width ?? 0) * 0.035,
+                size: _width * 0.035,
               ),
             ),
           ),
         ),
-        SizedBox(width: (ScreenInfo.width ?? 0) * 0.02),
+        SizedBox(width: _width * 0.02),
 
         Opacity(
           opacity: 0.4,
@@ -90,12 +104,12 @@ class _GameUiState extends State<GameUi> {
               child: Icon(
                 Icons.settings,
                 color: const Color.fromARGB(255, 53, 53, 51),
-                size: (ScreenInfo.width ?? 0) * 0.035,
+                size: _width * 0.035,
               ),
             ),
           ),
         ),
-        SizedBox(width: (ScreenInfo.width ?? 0) * 0.03),
+        SizedBox(width: _width * 0.03),
       ],
     );
   }

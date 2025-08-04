@@ -1,5 +1,7 @@
-import 'package:_2d_platformergame/objects/key1.dart';
+import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import 'package:flame/camera.dart';
+
 import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -16,7 +18,10 @@ class MyGame extends FlameGame
 
   MyGame()
     : super(
-        camera: CameraComponent.withFixedResolution(width: 512, height: 288),
+        camera: CameraComponent(
+          // 使用自适应分辨率替代固定分辨率
+          viewport: MaxViewport(),
+        ),
       );
 
   @override
@@ -28,11 +33,9 @@ class MyGame extends FlameGame
     initial(); // 添加初始调用
   }
 
-  @override
   void onMount() {
     super.onMount();
-    debugMode = true;
-    //initial();
+    //debugMode = true;
   }
 
   Future<void> initial() async {
@@ -40,8 +43,8 @@ class MyGame extends FlameGame
     world.add(player = Player(spawnPosition: Vector2(16, 144)));
 
     // 3. 重置相机
-    camera.viewfinder.position = Vector2(144, 144);
-    camera.follow(player!);
+    camera.viewfinder.position = Vector2(16 * 16, 9 * 16);
+    //camera.follow(player!);
 
     // 4. 重新生成砖块
     await BrickGenerator();
@@ -126,7 +129,7 @@ class MyGame extends FlameGame
 
   void removeKeyBlock(int type) {
     world.removeWhere(
-      (component) => component is Key1 && component.type == type,
+      (component) => component is KeyBlock && component.type == type,
     );
   }
 }
