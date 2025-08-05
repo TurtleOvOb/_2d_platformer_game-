@@ -61,7 +61,12 @@ class GameScreen extends StatelessWidget {
       body: Stack(
         children: [
           GameWidget(game: game),
-          Positioned(top: 0, left: 0, right: 0, child: GameUi()),
+          Positioned(
+            top: 0, // 垂直居中，假设组件高度为50
+            left: 0,
+            right: 0,
+            child: GameUi(),
+          ),
         ],
       ),
     );

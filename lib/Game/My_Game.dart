@@ -18,10 +18,7 @@ class MyGame extends FlameGame
 
   MyGame()
     : super(
-        camera: CameraComponent(
-          // 使用自适应分辨率替代固定分辨率
-          viewport: MaxViewport(),
-        ),
+        camera: CameraComponent.withFixedResolution(width: 512, height: 288),
       );
 
   @override
@@ -50,12 +47,13 @@ class MyGame extends FlameGame
     await BrickGenerator();
   }
 
-  Future<void> BrickGenerator() async {
+  Future<List<PositionComponent>> BrickGenerator() async {
     final parser = LdtkParser();
     final bricks = await parser.parseLdtkLevel('assets/levels/Level_0.ldtk');
     for (var brick in bricks) {
       world.add(brick);
     }
+    return bricks;
   }
 
   @override

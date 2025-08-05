@@ -29,88 +29,92 @@ class _GameUiState extends State<GameUi> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(width: _width * 0.03),
-        Opacity(
-          opacity: 0.5,
-          child: Icon(
-            Icons.hourglass_empty,
-            color: const Color.fromARGB(255, 111, 111, 109),
-            size: _width * 0.04,
+    // final screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      width: _width * 1.2, // 增加总宽度
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(width: _width * 0.01), // 减小起始间距
+          Opacity(
+            opacity: 0.5,
+            child: Icon(
+              Icons.hourglass_empty,
+              color: const Color.fromARGB(255, 111, 111, 109),
+              size: _width * 0.04,
+            ),
           ),
-        ),
-        SizedBox(width: _width * 0.01),
-        Opacity(opacity: 0.5, child: TimerCount(size: _width * 0.035)),
-        Spacer(),
+          SizedBox(width: _width * 0.005), // 减小图标间距
+          Opacity(opacity: 0.5, child: TimerCount(size: _width * 0.035)),
+          Spacer(flex: 2), // 调整Spacer的权重
 
-        Opacity(
-          opacity: 0.4,
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color.fromARGB(255, 53, 53, 51),
-                  width: 2,
+          Opacity(
+            opacity: 0.4,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 53, 53, 51),
+                    width: 2,
+                  ),
                 ),
-              ),
-              child: Icon(
-                Icons.library_books,
-                color: const Color.fromARGB(255, 53, 53, 51),
-                size: _width * 0.035,
+                child: Icon(
+                  Icons.library_books,
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  size: _width * 0.035,
+                ),
               ),
             ),
           ),
-        ),
 
-        SizedBox(width: _width * 0.02),
+          SizedBox(width: _width * 0.01), // 减小图标间距
 
-        Opacity(
-          opacity: 0.4,
-          child: InkWell(
-            onTap: () {
-              //用inkwell实现点击
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color.fromARGB(255, 53, 53, 51),
-                  width: 2,
+          Opacity(
+            opacity: 0.4,
+            child: InkWell(
+              onTap: () {
+                //用inkwell实现点击
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 53, 53, 51),
+                    width: 2,
+                  ),
                 ),
-              ),
-              child: Icon(
-                Icons.pause_rounded,
-                color: const Color.fromARGB(255, 53, 53, 51),
-                size: _width * 0.035,
+                child: Icon(
+                  Icons.pause_rounded,
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  size: _width * 0.035,
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(width: _width * 0.02),
+          SizedBox(width: _width * 0.01), // 减小图标间距
 
-        Opacity(
-          opacity: 0.4,
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color.fromARGB(255, 53, 53, 51),
-                  width: 2,
+          Opacity(
+            opacity: 0.4,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 53, 53, 51),
+                    width: 2,
+                  ),
                 ),
-              ),
-              child: Icon(
-                Icons.settings,
-                color: const Color.fromARGB(255, 53, 53, 51),
-                size: _width * 0.035,
+                child: Icon(
+                  Icons.settings,
+                  color: const Color.fromARGB(255, 53, 53, 51),
+                  size: _width * 0.035,
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(width: _width * 0.03),
-      ],
+          SizedBox(width: _width * 0.01), // 减小结束间距
+        ],
+      ),
     );
   }
 }

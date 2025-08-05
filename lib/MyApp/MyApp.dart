@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/pages/homepage.dart';
+import 'package:_2d_platformergame/pages/HomeScreen.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {

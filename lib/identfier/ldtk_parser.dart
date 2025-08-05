@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:_2d_platformergame/objects/SpawnPoint.dart';
 import 'package:_2d_platformergame/objects/bricks/LeftTopBrick.dart';
 import 'package:_2d_platformergame/objects/bricks/RightTopBrick.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
@@ -186,6 +187,17 @@ class LdtkParser {
               gridSize: tileSize.toDouble(),
             ),
           );
+        case 289:
+          components.add(
+            SpawnPoint(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
           break;
         default:
       }
@@ -199,13 +211,10 @@ class LdtkParser {
   ) {
     final entities = layer['entities'] as List<dynamic>? ?? [];
 
-
     for (final entity in entities) {
-
       final entityId = entity['__identifier'] as String;
 
       // 转换为Flame坐标系（Y轴翻转）
-  
 
       // 根据实体类型创建不同的组件
       if (entityId == 'PlayerSpawn') {
