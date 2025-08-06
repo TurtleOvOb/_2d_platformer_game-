@@ -204,7 +204,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             ),
           );
           spawnPointPosition = spawnPosition;
-          print('spawnPosition: $spawnPosition');
+
           break;
         default:
       }

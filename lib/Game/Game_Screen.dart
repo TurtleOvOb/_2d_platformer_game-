@@ -51,9 +51,10 @@ class PauseOverlay extends StatelessWidget {
 
 // 新增：游戏界面组件
 class GameScreen extends StatelessWidget {
-  final MyGame game = MyGame();
+  final int? levelId;
+  late final MyGame game;
 
-  GameScreen({super.key});
+  GameScreen({super.key, this.levelId}) : game = MyGame(levelId: levelId);
 
   @override
   Widget build(BuildContext context) {

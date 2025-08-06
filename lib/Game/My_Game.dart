@@ -13,10 +13,11 @@ class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
   late Player? player;
   final Set<LogicalKeyboardKey> pressedKeys = {};
+  final int? levelId; // 添加关卡ID属性(可选)
 
   bool isPaused = false; // 新增：暂停状态
 
-  MyGame()
+  MyGame({this.levelId}) // 修改构造函数
     : super(
         camera: CameraComponent.withFixedResolution(width: 512, height: 288),
       );
@@ -50,9 +51,25 @@ class MyGame extends FlameGame
 
   Future<List<PositionComponent>> BrickGenerator() async {
     final parser = LdtkParser();
-    final bricks = await parser.parseLdtkLevel('assets/levels/Level_0.ldtk');
-    for (var brick in bricks) {
-      world.add(brick);
+    // 根据关卡ID加载对应的LDtk文件，关卡ID比LDtk编号大一
+    // 如果levelId为null，则默认加载Level_0.ldtk
+    final levelPath = 'assets/levels/Level_${levelId! - 1}.ldtk';
+    List<PositionComponent> bricks = [];
+    try {
+      bricks = await parser.parseLdtkLevel(levelPath);
+      for (var brick in bricks) {
+        world.add(brick);
+      }
+    } catch (e) {
+      // 如果关卡文件不存在，加载默认关卡(Level_0.ldtk)
+      print('Failed to load level $levelPath: $e');
+      final defaultBricks = await parser.parseLdtkLevel(
+        'assets/levels/Level_0.ldtk',
+      );
+      for (var brick in defaultBricks) {
+        world.add(brick);
+      }
+      bricks = defaultBricks;
     }
 
     // 设置玩家出生点
