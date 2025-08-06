@@ -45,6 +45,7 @@ class MyGame extends FlameGame
 
     // 4. 重新生成砖块
     await BrickGenerator();
+    print('player spawnPosition:${player!.spawnPosition}');
   }
 
   Future<List<PositionComponent>> BrickGenerator() async {
@@ -53,6 +54,13 @@ class MyGame extends FlameGame
     for (var brick in bricks) {
       world.add(brick);
     }
+
+    // 设置玩家出生点
+    if (parser.spawnPointPosition != null) {
+      player!.spawnPosition = parser.spawnPointPosition!;
+      player!.position = parser.spawnPointPosition!;
+    }
+
     return bricks;
   }
 

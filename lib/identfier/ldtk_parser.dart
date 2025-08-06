@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/objects/SpawnPoint.dart';
 import 'package:_2d_platformergame/objects/bricks/LeftTopBrick.dart';
 import 'package:_2d_platformergame/objects/bricks/RightTopBrick.dart';
@@ -11,7 +12,8 @@ import 'package:flame/components.dart';
 import '../objects/bricks/brick.dart';
 import '../objects/bricks/key_block1.dart';
 
-class LdtkParser {
+class LdtkParser extends Component with HasGameReference<MyGame> {
+  Vector2? spawnPointPosition;
   Future<List<PositionComponent>> parseLdtkLevel(String path) async {
     final jsonString = await rootBundle.loadString(path);
     final jsonData = json.decode(jsonString);
@@ -61,7 +63,6 @@ class LdtkParser {
       });
     }
 
-    // 处理钥匙块合并逻辑
     final processedTiles = <int>{};
     for (int i = 0; i < tiles.length; i++) {
       if (processedTiles.contains(i)) continue;
@@ -187,17 +188,23 @@ class LdtkParser {
               gridSize: tileSize.toDouble(),
             ),
           );
+        // 在LdtkParser类中添加一个属性来存储SpawnPoint位置
+
+        // 在_parseTilesLayer方法中
         case 289:
+          final spawnPosition = Vector2(
+            (x + offsetX).roundToDouble(),
+            (y + offsetY).roundToDouble(),
+          );
           components.add(
             SpawnPoint(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
+              brickpos: spawnPosition,
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
           );
+          spawnPointPosition = spawnPosition;
+          print('spawnPosition: $spawnPosition');
           break;
         default:
       }

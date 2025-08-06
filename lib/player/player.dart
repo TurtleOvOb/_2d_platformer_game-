@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with CollisionCallbacks {
   Player({super.position, required this.spawnPosition});
-  final spawnPosition;
+  Vector2 spawnPosition;
   final Vector2 playersize = Vector2(10.0, 10.0); //玩家大小
   final Vector2 playerspeed = Vector2(0.0, 0.0); //玩家速度
   final double gravity = 980; //重力
