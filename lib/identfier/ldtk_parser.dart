@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/objects/SpawnPoint.dart';
-import 'package:_2d_platformergame/objects/bricks/LeftTopBrick.dart';
-import 'package:_2d_platformergame/objects/bricks/RightTopBrick.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
 import 'package:_2d_platformergame/objects/key1.dart';
 import 'package:_2d_platformergame/objects/spike.dart';
@@ -81,7 +79,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
         case 0:
           // 普通砖块
           components.add(
-            LeftTopBrick(
+            Brick(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
@@ -95,12 +93,26 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
         case 2:
           // 普通砖块
           components.add(
-            RightTopBrick(
+            Brick(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
               srcPosition: Vector2(2 * 16, 0),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+          break;
+        case 32:
+          // 普通砖块
+          components.add(
+            Brick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(0, 16),
               type: 0,
               gridSize: tileSize,
             ),
@@ -120,6 +132,56 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             ),
           );
           break;
+        case 34:
+          // 普通砖块
+          components.add(
+            Brick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 16),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+          break;
+        case 64:
+          components.add(
+            Brick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(0 * 16, 2 * 16),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+        case 66:
+          components.add(
+            Brick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 2 * 16),
+              type: 0,
+              gridSize: tileSize,
+            ),
+          );
+        case 128:
+          components.add(
+            HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(0, 4 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
         case 129:
           // 半砖
           components.add(
@@ -134,9 +196,20 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             ),
           );
           break;
-        case 133:
-          // 尖刺
+        case 130:
+          components.add(
+            HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 4 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
 
+        case 133:
           components.add(
             Spike(
               brickpos: Vector2(
@@ -149,8 +222,32 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             ),
           );
           break;
+        case 160:
+          components.add(
+            HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(0 * 16, 5 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
+          break;
+        case 162:
+          components.add(
+            HalfBrick(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(2 * 16, 5 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
         case 258:
-          // 未找到匹配的钥匙块下半部分，单独添加
           components.add(
             KeyBlock(
               brickpos: Vector2(
@@ -162,6 +259,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
               gridSize: tileSize.toDouble(),
             ),
           );
+          break;
         case 290:
           components.add(
             KeyBlock(
@@ -175,7 +273,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             ),
           );
           break;
-        case 260:
+        case 358:
           // 钥匙1
           components.add(
             Key1(
@@ -206,7 +304,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
           spawnPointPosition = spawnPosition;
 
           break;
-        default:
+        //  default:
       }
       processedTiles.add(i);
     }
