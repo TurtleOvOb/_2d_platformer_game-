@@ -51,7 +51,5 @@ class Key1 extends SpriteComponent
     // 从游戏中移除钥匙
     removeFromParent();
     game.removeKeyBlock(type);
-    // 可以在这里添加钥匙收集后的逻辑
-    // 例如：通知游戏增加钥匙计数、播放音效等
   }
 }

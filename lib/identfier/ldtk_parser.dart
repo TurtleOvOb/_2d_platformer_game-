@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:_2d_platformergame/Game/My_Game.dart';
+import 'package:_2d_platformergame/objects/Orbs/GreenOrb.dart';
 import 'package:_2d_platformergame/objects/SpawnPoint.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
 import 'package:_2d_platformergame/objects/key1.dart';
@@ -227,9 +228,9 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             HalfBrick(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
+                (y + offsetY + 8).roundToDouble(),
               ),
-              srcPosition: Vector2(0 * 16, 5 * 16),
+              srcPosition: Vector2(0, 4 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -240,9 +241,9 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             HalfBrick(
               brickpos: Vector2(
                 (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
+                (y + offsetY + 8).roundToDouble(),
               ),
-              srcPosition: Vector2(2 * 16, 5 * 16),
+              srcPosition: Vector2(2 * 16, 4 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -254,7 +255,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2(2 * 16, 8 * 16),
+              srcPosition: Vector2(4 * 16, 11 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -267,7 +268,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2(2 * 16, 9 * 16),
+              srcPosition: Vector2(4 * 16, 12 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
@@ -281,13 +282,24 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
                 (x + offsetX).roundToDouble(),
                 (y + offsetY).roundToDouble(),
               ),
-              srcPosition: Vector2(4 * 16, 8 * 16),
+              srcPosition: Vector2(6 * 16, 11 * 16),
               type: 0,
               gridSize: tileSize.toDouble(),
             ),
           );
         // 在LdtkParser类中添加一个属性来存储SpawnPoint位置
-
+        case 360:
+          components.add(
+            GreenOrb(
+              brickpos: Vector2(
+                (x + offsetX).roundToDouble(),
+                (y + offsetY).roundToDouble(),
+              ),
+              srcPosition: Vector2(8 * 16, 11 * 16),
+              type: 0,
+              gridSize: tileSize.toDouble(),
+            ),
+          );
         // 在_parseTilesLayer方法中
         case 289:
           final spawnPosition = Vector2(

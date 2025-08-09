@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/objects/Orbs/GreenOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:flame/camera.dart';
@@ -46,13 +47,12 @@ class MyGame extends FlameGame
 
     // 4. 重新生成砖块
     await BrickGenerator();
-    print('player spawnPosition:${player!.spawnPosition}');
   }
 
   Future<List<PositionComponent>> BrickGenerator() async {
     final parser = LdtkParser();
     // 根据关卡ID加载对应的LDtk文件，关卡ID比LDtk编号大一
-    // 如果levelId为null，则默认加载Level_0.ldtk
+
     final levelPath = 'assets/levels/Level_${levelId! - 1}.ldtk';
     List<PositionComponent> bricks = [];
     try {
@@ -62,7 +62,7 @@ class MyGame extends FlameGame
       }
     } catch (e) {
       // 如果关卡文件不存在，加载默认关卡(Level_0.ldtk)
-      print('Failed to load level $levelPath: $e');
+
       final defaultBricks = await parser.parseLdtkLevel(
         'assets/levels/Level_0.ldtk',
       );
@@ -77,6 +77,8 @@ class MyGame extends FlameGame
       player!.spawnPosition = parser.spawnPointPosition!;
       player!.position = parser.spawnPointPosition!;
     }
+
+    print('Player spawn: ${player?.position}');
 
     return bricks;
   }
@@ -153,6 +155,12 @@ class MyGame extends FlameGame
   void removeKeyBlock(int type) {
     world.removeWhere(
       (component) => component is KeyBlock && component.type == type,
+    );
+  }
+
+  void removeGreenOrb(int type) {
+    world.removeWhere(
+      (component) => component is GreenOrb && component.type == type,
     );
   }
 }

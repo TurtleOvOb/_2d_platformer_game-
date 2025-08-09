@@ -65,6 +65,8 @@ flutter:
     - assets/levels/
     - assets/fonts/
     - assets/images/
+    - assets/images/Player/
+
 
   # 添加字体配置
   fonts:

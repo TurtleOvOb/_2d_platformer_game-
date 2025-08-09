@@ -1,5 +1,6 @@
 import 'package:_2d_platformergame/objects/bricks/brick.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
+
 import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class CollisionLogic {
         player.toRect(),
         other.toRect(),
       );
+
       switch (collisionDirection) {
         case CollisionDirection.top:
           playerspeed.y = 0;
@@ -55,12 +57,25 @@ class CollisionLogic {
           player.position.y = other.toRect().bottom;
           break;
         case CollisionDirection.left:
-          playerspeed.x = 0;
+          // 先修正位置
           player.position.x = other.toRect().left - player.size.x;
+          // 只有在地面且速度向右时归零
+          if ((player as dynamic).isGrounded == true && playerspeed.x > 0) {
+            playerspeed.x = 0;
+          }
+          // 防止卡墙：如果修正后仍有重叠，微调出墙体
+          if (player.toRect().right > other.toRect().left) {
+            player.position.x = other.toRect().left - player.size.x - 0.1;
+          }
           break;
         case CollisionDirection.right:
-          playerspeed.x = 0;
           player.position.x = other.toRect().right;
+          if ((player as dynamic).isGrounded == true && playerspeed.x < 0) {
+            playerspeed.x = 0;
+          }
+          if (player.toRect().left < other.toRect().right) {
+            player.position.x = other.toRect().right + 0.1;
+          }
           break;
       }
     } else if (other is HalfBrick) {
