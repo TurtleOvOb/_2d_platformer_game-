@@ -1,15 +1,9 @@
+import '../objects/MoveStar.dart';
 import 'dart:convert';
-
 import 'package:_2d_platformergame/Game/My_Game.dart';
-import 'package:_2d_platformergame/objects/Orbs/GreenOrb.dart';
-import 'package:_2d_platformergame/objects/SpawnPoint.dart';
-import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
-import 'package:_2d_platformergame/objects/key1.dart';
-import 'package:_2d_platformergame/objects/spike.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
-import '../objects/bricks/brick.dart';
-import '../objects/bricks/key_block1.dart';
+import 'compoents.dart';
 
 class LdtkParser extends Component with HasGameReference<MyGame> {
   Vector2? spawnPointPosition;
@@ -73,251 +67,16 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
       final offsetX = tile['offsetX'] as int;
       final offsetY = tile['offsetY'] as int;
 
-      // 假设钥匙块上半部分ID为130，下半部分ID为131
-
-      // 处理普通瓦片
-      switch (tileId) {
-        case 0:
-          // 普通砖块
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(0, 0),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-          break;
-        case 2:
-          // 普通砖块
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(2 * 16, 0),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-          break;
-        case 32:
-          // 普通砖块
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(0, 16),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-          break;
-        case 33:
-          // 普通砖块
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(16, 16),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-          break;
-        case 34:
-          // 普通砖块
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(2 * 16, 16),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-          break;
-        case 64:
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(0 * 16, 2 * 16),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-        case 66:
-          components.add(
-            Brick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(2 * 16, 2 * 16),
-              type: 0,
-              gridSize: tileSize,
-            ),
-          );
-        case 128:
-          components.add(
-            HalfBrick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(0, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-        case 129:
-          // 半砖
-          components.add(
-            HalfBrick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(1 * 16, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          break;
-        case 130:
-          components.add(
-            HalfBrick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(2 * 16, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-
-        case 133:
-          components.add(
-            Spike(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(5 * 16, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          break;
-        case 160:
-          components.add(
-            HalfBrick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY + 8).roundToDouble(),
-              ),
-              srcPosition: Vector2(0, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          break;
-        case 162:
-          components.add(
-            HalfBrick(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY + 8).roundToDouble(),
-              ),
-              srcPosition: Vector2(2 * 16, 4 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-        case 258:
-          components.add(
-            KeyBlock(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(4 * 16, 11 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          break;
-        case 290:
-          components.add(
-            KeyBlock(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(4 * 16, 12 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          break;
-        case 358:
-          // 钥匙1
-          components.add(
-            Key1(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(6 * 16, 11 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-        // 在LdtkParser类中添加一个属性来存储SpawnPoint位置
-        case 360:
-          components.add(
-            GreenOrb(
-              brickpos: Vector2(
-                (x + offsetX).roundToDouble(),
-                (y + offsetY).roundToDouble(),
-              ),
-              srcPosition: Vector2(8 * 16, 11 * 16),
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-        // 在_parseTilesLayer方法中
-        case 289:
-          final spawnPosition = Vector2(
-            (x + offsetX).roundToDouble(),
-            (y + offsetY).roundToDouble(),
-          );
-          components.add(
-            SpawnPoint(
-              brickpos: spawnPosition,
-              type: 0,
-              gridSize: tileSize.toDouble(),
-            ),
-          );
-          spawnPointPosition = spawnPosition;
-
-          break;
-        //  default:
-      }
+      final comp = createComponentForTile(
+        tileId,
+        (x).toDouble(),
+        (y).toDouble(),
+        (offsetX).toDouble(),
+        (offsetY).toDouble(),
+        tileSize,
+        onSpawnPoint: (pos) => spawnPointPosition = pos,
+      );
+      if (comp != null) components.add(comp);
       processedTiles.add(i);
     }
   }
@@ -326,17 +85,49 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
     Map<String, dynamic> layer,
     List<PositionComponent> components,
   ) {
-    final entities = layer['entities'] as List<dynamic>? ?? [];
+    final entities = layer['entityInstances'] as List<dynamic>? ?? [];
 
     for (final entity in entities) {
       final entityId = entity['__identifier'] as String;
 
-      // 转换为Flame坐标系（Y轴翻转）
+      if (entityId == 'Star') {
+        final px = entity['px'] as List<dynamic>? ?? [0, 0];
+        double x = (px[0] as num).toDouble();
+        double y = (px[1] as num).toDouble();
+        double speed = 60;
+        Vector2 start = Vector2(x, y);
+        Vector2 end = Vector2(x + 64, y);
 
-      // 根据实体类型创建不同的组件
-      if (entityId == 'PlayerSpawn') {
-        // 玩家出生点可以在这里处理
-        // 目前游戏逻辑中已设置固定出生点，这里可以留空或添加日志
+        final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
+        for (final field in fields) {
+          final name = field['__identifier'];
+          final value = field['__value'];
+          if (name == 'Speed' && value != null)
+            speed = (value as num).toDouble();
+          if (name == 'StartPos' && value != null) {
+            start = Vector2(
+              16 * (value['cx'] as num).toDouble(),
+              16 * (value['cy'] as num).toDouble(),
+            );
+          }
+          if (name == 'Endpos' && value != null) {
+            end = Vector2(
+              16 * (value['cx'] as num).toDouble(),
+              16 * (value['cy'] as num).toDouble(),
+            );
+          }
+        }
+
+        components.add(
+          MovingStar(
+            position: start.clone(),
+            startPosition: start,
+            endPosition: end,
+            speed: speed,
+            srcPosition: Vector2(0, 0),
+            gridSize: 16,
+          ),
+        );
       }
     }
   }

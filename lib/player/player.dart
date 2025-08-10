@@ -1,10 +1,12 @@
 import 'package:_2d_platformergame/player/collision_logic.dart';
+import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  Color color = Colors.white;
   Player({super.position, required this.spawnPosition})
     : super(size: Vector2(32, 32));
   Vector2 spawnPosition;
@@ -14,6 +16,8 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   final double moveSpeed = 100; // 移动速度
   final double jumpSpeed = 250;
   bool isGrounded = false; // 标记玩家是否在地面
+  // 可用于被WhiteBlock吸收的颜色字段
+  // color 字段已添加
 
   @override
   Future<void> onLoad() async {

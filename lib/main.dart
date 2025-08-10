@@ -1,9 +1,12 @@
 import 'package:_2d_platformergame/pages/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
+  // 关闭图片平滑，防止像素缝隙
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); //屏幕全屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then(
