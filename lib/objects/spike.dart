@@ -33,8 +33,8 @@ class Spike extends SpriteComponent
     // 添加碰撞盒以便检测碰撞
     add(
       RectangleHitbox(
-        size: Vector2(gridSize * 0.8, gridSize),
-        position: Vector2(gridSize * 0.15, gridSize * 0.15),
+        size: Vector2(gridSize * 0.6, gridSize * 0.6), // 宽高都缩小到0.6倍
+        position: Vector2(gridSize * 0.2, gridSize * 0.3), // 水平居中，竖直偏上
       ),
     );
   }

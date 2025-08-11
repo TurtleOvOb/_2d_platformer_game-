@@ -14,7 +14,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   final Vector2 playerspeed = Vector2(0.0, 0.0); // 玩家速度
   final double gravity = 980; // 重力
   final double moveSpeed = 100; // 移动速度
-  final double jumpSpeed = 250;
+  double jumpSpeed = 250; // 移除final使其可修改
   bool isGrounded = false; // 标记玩家是否在地面
   // 可用于被WhiteBlock吸收的颜色字段
   // color 字段已添加

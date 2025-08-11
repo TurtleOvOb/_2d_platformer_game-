@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/objects/Orbs/GreenOrb.dart';
+import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:flame/camera.dart';

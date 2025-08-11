@@ -5,20 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  // 关闭图片平滑，防止像素缝隙
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); //屏幕全屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then(
     (_) {
-      //runApp(const MyApp());
       runApp(
         MaterialApp(
           debugShowCheckedModeBanner: false,
 
           home: Builder(
             builder: (context) {
-              // 屏幕信息初始化已在My_Game中完成
               return Scaffold(
                 backgroundColor: Colors.orange,
                 body: ProviderScope(child: HomeScreen()),

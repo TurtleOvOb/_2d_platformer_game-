@@ -1,5 +1,5 @@
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 
 class ScreenInfo {
@@ -15,7 +15,9 @@ class ScreenInfo {
 
   Future<Size> _getScreenSize() async {
     // 使用Flutter的方法获取屏幕尺寸
-    final data = await SystemChannels.platform.invokeMethod('SystemChrome.getScreenSize');
+    final data = await SystemChannels.platform.invokeMethod(
+      'SystemChrome.getScreenSize',
+    );
     return Size(data['width'] as double, data['height'] as double);
   }
 
