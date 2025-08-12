@@ -85,18 +85,22 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
     Map<String, dynamic> layer,
     List<PositionComponent> components,
   ) {
+    print('开始解析实体层...');
     final entities = layer['entityInstances'] as List<dynamic>? ?? [];
+    print('找到 ${entities.length} 个实体');
 
     for (final entity in entities) {
       final entityId = entity['__identifier'] as String;
 
       if (entityId == 'Star') {
+        print('正在解析 Star 实体...');
         final px = entity['px'] as List<dynamic>? ?? [0, 0];
         double x = (px[0] as num).toDouble();
         double y = (px[1] as num).toDouble();
         double speed = 60;
         Vector2 start = Vector2(x, y);
         Vector2 end = Vector2(x + 64, y);
+        print('初始解析位置: start=$start, end=$end');
 
         final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
         for (final field in fields) {
@@ -118,16 +122,14 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
           }
         }
 
-        components.add(
-          MovingStar(
-            position: start.clone(),
-            startPosition: start,
-            endPosition: end,
-            speed: speed,
-            srcPosition: Vector2(0, 0),
-            gridSize: 16,
-          ),
+        print('最终Star位置: start=$start, end=$end, speed=$speed');
+        final star = MovingStar(
+          startPosition: start,
+          endPosition: end,
+          speed: speed,
         );
+        components.add(star);
+        print('Star 已添加到组件列表');
       }
     }
   }

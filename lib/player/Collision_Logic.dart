@@ -1,6 +1,6 @@
 import 'package:_2d_platformergame/objects/bricks/brick.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
-
+import 'package:_2d_platformergame/objects/bricks/ChargedPlatform.dart';
 import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class CollisionLogic {
     Set<Vector2> points,
     PositionComponent other,
   ) {
-    if (other is Brick || other is KeyBlock) {
+    if (other is Brick || other is KeyBlock1) {
       final collisionDirection = calculateCollisionDirection(
         player.toRect(),
         other.toRect(),
@@ -78,9 +78,9 @@ class CollisionLogic {
           }
           break;
       }
-    } else if (other is HalfBrick) {
-      // 半砖特殊穿越逻辑
-      // 只有当玩家速度向下且位置在半砖上方时才允许碰撞
+    } else if (other is HalfBrick || other is ChargedPlatform) {
+      // 半砖和充能平台的特殊穿越逻辑
+      // 只有当玩家速度向下且位置在平台上方时才允许碰撞
       if (playerspeed.y > 0 &&
           player.toRect().bottom <= other.toRect().top + 10) {
         final collisionDirection = calculateCollisionDirection(
