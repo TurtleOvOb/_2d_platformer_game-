@@ -60,13 +60,14 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
           GameWidget(game: game),
           Positioned(
-            top: 0, // 垂直居中，假设组件高度为50
+            top: 0,
             left: 0,
             right: 0,
-            child: GameUi(),
+            child: SafeArea(child: GameUi()),
           ),
         ],
       ),
