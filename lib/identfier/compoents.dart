@@ -10,7 +10,7 @@ import '../objects/bricks/brick.dart';
 import '../objects/bricks/half_brick.dart';
 import '../objects/bricks/key_block1.dart';
 import '../objects/Specials/key1.dart';
-import '../objects/spike.dart';
+import '../objects/Specials/spike.dart';
 import '../objects/Specials/SpawnPoint.dart';
 import '../objects/Orbs/ChargedOrb.dart';
 

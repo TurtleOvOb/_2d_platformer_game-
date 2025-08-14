@@ -1,8 +1,10 @@
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 
 class Key1 extends SpriteComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
@@ -42,7 +44,11 @@ class Key1 extends SpriteComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is Player) {
-      // 钥匙被玩家收集后的逻辑
+      final burstColor =
+          (other as dynamic).color is Color
+              ? (other as dynamic).color as Color
+              : const Color(0xFFFFD54F);
+      parent?.add(Particles.collectBurst(center.clone(), color: burstColor));
       collectKey();
     }
   }

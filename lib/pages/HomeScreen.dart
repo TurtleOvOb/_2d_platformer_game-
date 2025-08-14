@@ -41,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
               right: 0,
               child: Center(
                 child: Text(
-                  'GAME NAME',
+                  'Game Name',
                   style: TextStyle(
                     fontFamily: '851ShouShu',
                     color: Colors.white,

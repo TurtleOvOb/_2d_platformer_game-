@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
 import 'package:flutter/material.dart';
 import '../../player/player.dart';
+import 'package:_2d_platformergame/utils/particles.dart';
 
 class WhiteBlock extends SpriteComponent with CollisionCallbacks {
   Color color;
@@ -56,6 +57,8 @@ class WhiteBlock extends SpriteComponent with CollisionCallbacks {
     if (other is Player) {
       // 只有玩家颜色不是白色时才吸收
       if (other.color != Colors.white) {
+        // 吸收前在方块中心喷一小圈玩家颜色粒子
+        parent?.add(Particles.collectBurst(center.clone(), color: other.color));
         color = other.color;
         other.color = Colors.white;
       }

@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/player/collision_logic.dart';
+import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -75,6 +76,20 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
 
   void jump() {
     if (isGrounded) {
+      // 起跳灰尘（略带玩家色调）
+      final c = color;
+      final tinted = Color.fromARGB(
+        255,
+        (c.red * 0.8).toInt(),
+        (c.green * 0.8).toInt(),
+        (c.blue * 0.8).toInt(),
+      );
+      parent?.add(
+        Particles.dust(
+          Vector2(position.x + size.x / 2, position.y + size.y),
+          color: tinted,
+        ),
+      );
       playerspeed.y = -jumpSpeed;
       isGrounded = false; // 跳跃后标记为不在地面
     }
