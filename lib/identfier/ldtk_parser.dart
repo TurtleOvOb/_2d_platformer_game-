@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
 import 'compoents.dart';
 
-
 class LdtkParser extends Component with HasGameReference<MyGame> {
   Vector2? spawnPointPosition;
   Future<List<PositionComponent>> parseLdtkLevel(String path) async {
