@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
+import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:_2d_platformergame/providers/menu_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -92,7 +93,12 @@ class HomeScreen extends ConsumerWidget {
                       height,
                       Icons.settings,
                       () {
-                        print('Settings button clicked');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MusicSettingsPage(),
+                          ),
+                        );
                       },
                     ),
                   ],
