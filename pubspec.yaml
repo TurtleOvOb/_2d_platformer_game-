@@ -71,10 +71,9 @@ flutter:
 
   # 添加字体配置
   fonts:
-    - family: 851ShouShu
+    - family: PixelMplus12-Regular
       fonts:
-        - asset: assets/fonts/851ShouShu-2.ttf
-          weight: 700
+        - asset: assets/fonts/PixelMplus12-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

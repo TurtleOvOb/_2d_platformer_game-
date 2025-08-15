@@ -38,7 +38,7 @@ class PauseDialog extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                fontFamily: '851ShouShu',
+                fontFamily: 'PixelMplus12-Regular',
                 color: Color.fromARGB(255, 248, 248, 248),
               ),
             ),
@@ -109,7 +109,7 @@ class PauseDialog extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: '851ShouShu',
+                  fontFamily: 'PixelMplus12-Regular',
                   color: Color.fromARGB(255, 255, 255, 250),
                 ),
               ),

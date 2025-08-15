@@ -1,7 +1,7 @@
 /* import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 import '../Game/Game_Screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 class DeathPage extends StatelessWidget {
   const DeathPage({super.key});
@@ -37,7 +37,7 @@ class DeathPage extends StatelessWidget {
                 child: Text(
                   'GAME OVER',
                   style: TextStyle(
-                    fontFamily: '851ShouShu',
+                    fontFamily: 'PixelMplus12-Regular',
                     color: Colors.white,
                     fontSize: width * 0.12,
                     fontWeight: FontWeight.bold,
@@ -61,7 +61,8 @@ class DeathPage extends StatelessWidget {
               child: Center(
                 child: Text(
                   'You were killed by a spike!',
-                  style: GoogleFonts.roboto(
+                  style: TextStyle(
+                    fontFamily: 'PixelMplus12-Regular',
                     color: Colors.white,
                     fontSize: width * 0.05,
                     fontWeight: FontWeight.w500,
@@ -102,7 +103,7 @@ class DeathPage extends StatelessWidget {
                     child: Text(
                       'PLAY AGAIN',
                       style: TextStyle(
-                        fontFamily: '851ShouShu',
+                        fontFamily: 'PixelMplus12-Regular',
                         color: Colors.white,
                         fontSize: width * 0.05,
                       ),
@@ -136,7 +137,7 @@ class DeathPage extends StatelessWidget {
                     child: Text(
                       'HOME',
                       style: TextStyle(
-                        fontFamily: '851ShouShu',
+                        fontFamily: 'PixelMplus12-Regular',
                         color: Colors.white,
                         fontSize: width * 0.05,
                       ),

@@ -1,7 +1,7 @@
 import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:_2d_platformergame/providers/time_count.dart';
 import 'package:_2d_platformergame/widgets/game_page/pause_dialog.dart';
-import 'package:_2d_platformergame/widgets/game_page/task.dart';
+import 'package:_2d_platformergame/widgets/game_page/TaskPage.dart';
 import 'package:_2d_platformergame/widgets/game_page/timer_count.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

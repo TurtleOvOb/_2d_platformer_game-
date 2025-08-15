@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MusicSettingsPage extends StatefulWidget {
   const MusicSettingsPage({super.key});
@@ -37,7 +36,6 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   onPressed: () {
                     setState(() {
                       _selectedTabIndex = 1;
-                      // 可添加切换到 music 页面的逻辑
                     });
                   },
                   style: TextButton.styleFrom(
@@ -46,7 +44,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   child: Text(
                     'music',
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
+                      fontFamily: 'PixelMplus12-Regular',
                       fontSize: screenWidth * 0.06,
                       color: Colors.white,
                       decoration:
@@ -64,7 +63,6 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   onPressed: () {
                     setState(() {
                       _selectedTabIndex = 2;
-                      // 可添加切换到 other 页面的逻辑
                     });
                   },
                   style: TextButton.styleFrom(
@@ -73,9 +71,9 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   child: Text(
                     'other',
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
+                      fontFamily: 'PixelMplus12-Regular',
                       fontSize: screenWidth * 0.06,
-
                       color: Colors.white,
                       decoration:
                           _selectedTabIndex == 2
@@ -104,7 +102,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   Text(
                     'sound effect',
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
+                      fontFamily: 'PixelMplus12-Regular',
                       fontSize: screenWidth * 0.045,
                       color: Colors.white,
                     ),
@@ -140,7 +139,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   Text(
                     'background music',
-                    style: GoogleFonts.lato(
+                    style: TextStyle(
+                      fontFamily: 'PixelMplus12-Regular',
                       fontSize: screenWidth * 0.045,
                       color: Colors.white,
                     ),
@@ -191,7 +191,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                       SizedBox(width: screenWidth * 0.05),
                       Text(
                         'Language',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
+                          fontFamily: 'PixelMplus12-Regular',
                           fontSize: screenWidth * 0.045,
                           color: Colors.white,
                         ),
@@ -241,6 +242,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                             ),
                           ),
                           style: TextStyle(
+                            fontFamily: 'PixelMplus12-Regular',
                             color: Colors.white,
                             fontSize: screenWidth * 0.02,
                           ),
@@ -259,7 +261,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   SwitchListTile(
                     title: Text(
                       'Particle Effect',
-                      style: GoogleFonts.lato(
+                      style: TextStyle(
+                        fontFamily: 'PixelMplus12-Regular',
                         fontSize: screenWidth * 0.045,
                         color: Colors.white,
                       ),
@@ -294,7 +297,8 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                 ),
                 child: Text(
                   'Exit',
-                  style: GoogleFonts.lato(
+                  style: TextStyle(
+                    fontFamily: 'PixelMplus12-Regular',
                     fontSize: screenWidth * 0.04,
                     color: Colors.black,
                   ),

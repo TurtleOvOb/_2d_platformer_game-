@@ -47,7 +47,7 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(20);
+    final borderRadius = BorderRadius.zero; // 像素风格无圆角
 
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
@@ -64,45 +64,30 @@ class _AnimatedMenuButtonState extends State<AnimatedMenuButton>
           decoration: BoxDecoration(
             color: const Color(0xFFFF9800),
             borderRadius: borderRadius,
-            border: Border.all(
-              color: Colors.white,
-              width: widget.width * 0.004,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 4,
-                offset: const Offset(2, 2),
-              ),
-            ],
+            border: Border.all(color: Colors.white, width: 2),
           ),
-          child: ClipRRect(
-            borderRadius: borderRadius,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(borderRadius: borderRadius),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      widget.icon,
-                      color: Colors.white,
-                      size: widget.width * 0.05,
-                    ),
-                    SizedBox(width: widget.width * 0.02),
-                    Text(
-                      widget.text,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: widget.width * 0.04,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: '851ShouShu',
-                      ),
-                    ),
-                  ],
+          child: Material(
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  widget.icon,
+                  color: Colors.white,
+                  size: widget.width * 0.05,
                 ),
-              ),
+                SizedBox(width: widget.width * 0.02),
+                Text(
+                  widget.text,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: widget.width * 0.04,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'PixelMplus12-Regular',
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
