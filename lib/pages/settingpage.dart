@@ -32,35 +32,6 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // graphic 按钮
-                // TextButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       _selectedTabIndex = 0;
-                //       // 可添加切换到 graphic 页面的逻辑
-                //     });
-                //   },
-                //   style: TextButton.styleFrom(
-                //     padding: EdgeInsets.zero,
-                //     tapTargetSize:
-                //         MaterialTapTargetSize.shrinkWrap, //改变按钮的点击区域与视觉大小一致
-                //   ),
-                //   child: Text(
-                //     'graphic',
-                //     style: GoogleFonts.lato(
-                //       fontSize: screenWidth * 0.06,
-                //       color: Colors.white,
-                //       decoration:
-                //           _selectedTabIndex == 0
-                //               ? TextDecoration.underline
-                //               : TextDecoration.none,
-                //       decorationColor: Colors.white,
-                //       decorationStyle: TextDecorationStyle.solid,
-                //     ),
-                //   ),
-                // ),
-
-                // SizedBox(width: screenWidth * 0.1),
                 // music 按钮（当前选中）
                 TextButton(
                   onPressed: () {
@@ -104,6 +75,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                     'other',
                     style: GoogleFonts.lato(
                       fontSize: screenWidth * 0.06,
+
                       color: Colors.white,
                       decoration:
                           _selectedTabIndex == 2

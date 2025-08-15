@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock2.dart';
@@ -11,16 +13,20 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/components.dart';
+// 无需 geometry import
+import 'package:flame/components.dart';
 
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
   late Player? player;
   final Set<LogicalKeyboardKey> pressedKeys = {};
-  final int? levelId; // 添加关卡ID属性(可选)
+  final int? levelId;
+  final int pxWid;
+  final int pxHei;
 
-  bool isPaused = false; // 新增：暂停状态
+  bool isPaused = false;
 
-  MyGame({this.levelId}) // 修改构造函数
+  MyGame({this.levelId, required this.pxWid, required this.pxHei})
     : super(
         camera: CameraComponent.withFixedResolution(width: 512, height: 288),
       );
@@ -43,31 +49,45 @@ class MyGame extends FlameGame
     // 2. 重新创建玩家
     world.add(player = Player(spawnPosition: Vector2(16, 144)));
 
-    // 3. 重置相机
-    camera.viewfinder.position = Vector2(16 * 16, 9 * 16);
-    //camera.follow(player!);
-
-    // 4. 重新生成砖块
-    await BrickGenerator();
+    // 4. 重新生成砖块并获取实际关卡尺寸
+    final (bricks, realWid, realHei) = await BrickGeneratorWithSize();
+    // 摄像机 viewport 固定为 512x288
+    camera.viewport = FixedResolutionViewport(resolution: Vector2(512, 288));
+    camera.viewfinder.anchor = Anchor.center;
+    // 摄像机运动模式：关卡大于画面则跟随，否则静止居中
+    if (pxWid > 512 || pxHei > 288) {
+      // 关卡大于画面，摄像机跟随玩家，限制边界
+      camera.follow(player!);
+      // 可选：限制边界，防止超出
+      // 这里可根据实际 Flame 版本补充 setBounds 或 clamp 逻辑
+    } else {
+      // 关卡小于等于画面，摄像机静止居中
+      camera.viewfinder.position = Vector2(pxWid / 2, pxHei / 2);
+    }
   }
 
-  Future<List<PositionComponent>> BrickGenerator() async {
+  /// 返回 (砖块列表, 关卡宽, 关卡高)
+  Future<(List<PositionComponent>, int, int)> BrickGeneratorWithSize() async {
     final parser = LdtkParser();
-    // 根据关卡ID加载对应的LDtk文件，关卡ID比LDtk编号大一
-
     final levelPath = 'assets/levels/Level_${levelId! - 1}.ldtk';
     List<PositionComponent> bricks = [];
+    int pxWid = 512, pxHei = 288;
     try {
-      bricks = await parser.parseLdtkLevel(levelPath);
+      final result = await parser.parseLdtkLevelWithSize(levelPath);
+      bricks = result.$1;
+      pxWid = result.$2;
+      pxHei = result.$3;
       for (var brick in bricks) {
         world.add(brick);
       }
     } catch (e) {
       // 如果关卡文件不存在，加载默认关卡(Level_0.ldtk)
-
-      final defaultBricks = await parser.parseLdtkLevel(
+      final result = await parser.parseLdtkLevelWithSize(
         'assets/levels/Level_0.ldtk',
       );
+      final defaultBricks = result.$1;
+      pxWid = result.$2;
+      pxHei = result.$3;
       for (var brick in defaultBricks) {
         world.add(brick);
       }
@@ -81,8 +101,8 @@ class MyGame extends FlameGame
     }
 
     print('Player spawn: ${player?.position}');
-
-    return bricks;
+    print('Camera: \${camera.viewport.resolution}, Level: \${pxWid}x\${pxHei}');
+    return (bricks, pxWid, pxHei);
   }
 
   @override
@@ -90,7 +110,7 @@ class MyGame extends FlameGame
     super.onTapDown(event);
     if (!isPaused) {
       // 仅在非暂停状态下处理点击事件
-      player!.jump();
+      player!.requestJump();
     }
   }
 
@@ -119,10 +139,13 @@ class MyGame extends FlameGame
       if (event is KeyDownEvent) {
         pressedKeys.add(event.logicalKey);
         if (event.logicalKey == LogicalKeyboardKey.space) {
-          player!.jump();
+          player!.requestJump();
         }
       } else if (event is KeyUpEvent) {
         pressedKeys.remove(event.logicalKey);
+        if (event.logicalKey == LogicalKeyboardKey.space) {
+          player!.releaseJump();
+        }
       }
     }
     return KeyEventResult.handled;

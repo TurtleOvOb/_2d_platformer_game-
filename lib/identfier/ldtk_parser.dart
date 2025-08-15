@@ -7,14 +7,18 @@ import 'compoents.dart';
 
 class LdtkParser extends Component with HasGameReference<MyGame> {
   Vector2? spawnPointPosition;
-  Future<List<PositionComponent>> parseLdtkLevel(String path) async {
+
+  /// 返回 (组件列表, 关卡像素宽, 关卡像素高)
+  Future<(List<PositionComponent>, int, int)> parseLdtkLevelWithSize(
+    String path,
+  ) async {
     final jsonString = await rootBundle.loadString(path);
     final jsonData = json.decode(jsonString);
 
-    // 获取第一个关卡数据
     final components = <PositionComponent>[];
+    final int pxWid = jsonData['pxWid'] as int? ?? 512;
+    final int pxHei = jsonData['pxHei'] as int? ?? 288;
 
-    // 处理图层数据
     final layerInstances = jsonData['layerInstances'] as List<dynamic>;
     if (layerInstances.isEmpty) {
       throw Exception('No layer instances found in LDtk file');
@@ -28,7 +32,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
       }
     }
 
-    return components;
+    return (components, pxWid, pxHei);
   }
 
   Future<void> _parseTilesLayer(

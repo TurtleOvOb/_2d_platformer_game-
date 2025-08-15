@@ -50,11 +50,19 @@ class PauseOverlay extends StatelessWidget {
 }
 
 // 新增：游戏界面组件
+
 class GameScreen extends StatelessWidget {
   final int? levelId;
+  final int pxWid;
+  final int pxHei;
   late final MyGame game;
 
-  GameScreen({super.key, this.levelId}) : game = MyGame(levelId: levelId);
+  GameScreen({
+    super.key,
+    this.levelId,
+    required this.pxWid,
+    required this.pxHei,
+  }) : game = MyGame(levelId: levelId, pxWid: pxWid, pxHei: pxHei);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +70,16 @@ class GameScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          GameWidget(game: game),
+          ClipRect(
+            child: FittedBox(
+              fit: BoxFit.cover, // 裁剪并铺满
+              child: SizedBox(
+                width: 512,
+                height: 288,
+                child: GameWidget(game: game),
+              ),
+            ),
+          ),
           Positioned(
             top: 0,
             left: 0,

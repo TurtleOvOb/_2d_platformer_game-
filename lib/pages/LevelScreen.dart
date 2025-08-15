@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/identfier/ldtk_parser.dart';
 import 'package:_2d_platformergame/Game/Game_Screen.dart';
 import 'package:_2d_platformergame/widgets/homepage/backgroundicon.dart';
 import 'package:_2d_platformergame/widgets/levepage/categoryvutton.dart';
@@ -50,7 +51,7 @@ class LevelScreen extends StatelessWidget {
               child: GridView.count(
                 crossAxisCount: 4,
                 padding: EdgeInsets.all(width * 0.03),
-                children: List.generate(12, (index) {
+                children: List.generate(16, (index) {
                   int levelNumber = index + 1; //关卡编号
                   bool isUnlocked = levelNumber <= 6; //是否解锁
                   return AnimatedLevelCard(
@@ -60,13 +61,29 @@ class LevelScreen extends StatelessWidget {
                     height: height,
                     onTap:
                         isUnlocked
-                            ? () {
+                            ? () async {
+                              final ldtkPath =
+                                  'assets/levels/Level_${levelNumber - 1}.ldtk';
+                              int pxWid = 512, pxHei = 288;
+                              try {
+                                final parser = LdtkParser();
+                                final result = await parser
+                                    .parseLdtkLevelWithSize(ldtkPath);
+                                pxWid = result.$2;
+                                pxHei = result.$3;
+                              } catch (e) {
+                                // 读取失败用默认
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder:
                                       (context) => ProviderScope(
-                                        child: GameScreen(levelId: levelNumber),
+                                        child: GameScreen(
+                                          levelId: levelNumber,
+                                          pxWid: pxWid,
+                                          pxHei: pxHei,
+                                        ),
                                       ),
                                 ),
                               );
