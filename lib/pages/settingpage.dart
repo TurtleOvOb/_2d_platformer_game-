@@ -15,7 +15,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
   double _backgroundMusicVolume = 1.0;
   // 新增：记录当前选中的按钮索引（0: graphic, 1: music, 2: other）
   int _selectedTabIndex = 1;
-
+  bool isOn = true;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -30,35 +30,37 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
           children: [
             // 顶部的按钮 Row（替代原本文本）
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // graphic 按钮
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedTabIndex = 0;
-                      // 可添加切换到 graphic 页面的逻辑
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    tapTargetSize:
-                        MaterialTapTargetSize.shrinkWrap, //改变按钮的点击区域与视觉大小一致
-                  ),
-                  child: Text(
-                    'graphic',
-                    style: GoogleFonts.lato(
-                      fontSize: screenWidth * 0.06,
-                      color: Colors.white,
-                      decoration:
-                          _selectedTabIndex == 0
-                              ? TextDecoration.underline
-                              : TextDecoration.none,
-                      decorationColor: Colors.white,
-                      decorationStyle: TextDecorationStyle.solid,
-                    ),
-                  ),
-                ),
-                SizedBox(width: screenWidth * 0.1),
+                // TextButton(
+                //   onPressed: () {
+                //     setState(() {
+                //       _selectedTabIndex = 0;
+                //       // 可添加切换到 graphic 页面的逻辑
+                //     });
+                //   },
+                //   style: TextButton.styleFrom(
+                //     padding: EdgeInsets.zero,
+                //     tapTargetSize:
+                //         MaterialTapTargetSize.shrinkWrap, //改变按钮的点击区域与视觉大小一致
+                //   ),
+                //   child: Text(
+                //     'graphic',
+                //     style: GoogleFonts.lato(
+                //       fontSize: screenWidth * 0.06,
+                //       color: Colors.white,
+                //       decoration:
+                //           _selectedTabIndex == 0
+                //               ? TextDecoration.underline
+                //               : TextDecoration.none,
+                //       decorationColor: Colors.white,
+                //       decorationStyle: TextDecorationStyle.solid,
+                //     ),
+                //   ),
+                // ),
+
+                // SizedBox(width: screenWidth * 0.1),
                 // music 按钮（当前选中）
                 TextButton(
                   onPressed: () {
@@ -190,23 +192,118 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
               ),
             ] else if (_selectedTabIndex == 0) ...[
               // 这里可以添加 graphic 设置的内容
-              Text(
-                'Graphic settings will be here',
-                style: GoogleFonts.lato(
-                  fontSize: screenWidth * 0.045,
-                  color: Colors.white,
-                ),
-              ),
+              // SwitchListTile(
+              //   title: Text(
+              //     'Particle Effect',
+              //     style: GoogleFonts.lato(
+              //       fontSize: screenWidth * 0.045,
+              //       color: Colors.white,
+              //     ),
+              //   ),
+              //   //subtitle: const Text('打开后可以收到消息提醒'),
+              //   value: isOn,
+              //   onChanged: (bool value) {
+              //     setState(() {
+              //       isOn = value;
+              //     });
+              //   },
+              // ),
             ] else if (_selectedTabIndex == 2) ...[
               // 这里可以添加 other 设置的内容
-              Text(
-                'Other settings will be here',
-                style: GoogleFonts.lato(
-                  fontSize: screenWidth * 0.045,
-                  color: Colors.white,
-                ),
+              Column(
+                children: [
+                  Row(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.center, // 改成 center，避免超高
+                    children: [
+                      SizedBox(width: screenWidth * 0.05),
+                      Text(
+                        'Language',
+                        style: GoogleFonts.lato(
+                          fontSize: screenWidth * 0.045,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Spacer(),
+                      SizedBox(
+                        width: 200,
+                        child: DropdownButtonFormField<String>(
+                          value: '2',
+                          items: const [
+                            DropdownMenuItem(value: '1', child: Text('中文')),
+                            DropdownMenuItem(
+                              value: '2',
+                              child: Text('English'),
+                            ),
+                          ],
+                          onChanged: (String? newValue) {
+                            // 处理选中事件
+                            //print('选择了: $newValue');
+                          },
+                          decoration: InputDecoration(
+                            // labelText: '选择语言', // 可选标题
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8), // 圆角
+                              borderSide: const BorderSide(
+                                color: Colors.white, // 边框颜色
+                                width: 2, // 边框宽度
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 0,
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.02,
+                          ),
+                          dropdownColor: const Color.fromARGB(
+                            255,
+                            136,
+                            132,
+                            132,
+                          ), // 下拉列表背景色
+                        ),
+                      ),
+
+                      SizedBox(width: screenWidth * 0.05),
+                    ],
+                  ),
+                  SwitchListTile(
+                    title: Text(
+                      'Particle Effect',
+                      style: GoogleFonts.lato(
+                        fontSize: screenWidth * 0.045,
+                        color: Colors.white,
+                      ),
+                    ),
+                    //subtitle: const Text('打开后可以收到消息提醒'),
+                    value: isOn,
+                    onChanged: (bool value) {
+                      setState(() {
+                        isOn = value;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
+
             const Spacer(),
             // 退出按钮（修改为 TextButton）
             Align(

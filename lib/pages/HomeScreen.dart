@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
+import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:_2d_platformergame/providers/menu_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +11,6 @@ import '../widgets/homepage/backgroundicon.dart';
 import '../widgets/homepage/menubutton.dart';
 import '../widgets/homepage/footerbutton.dart';
 import '../widgets/homepage/selection_border.dart';
-import 'package:_2d_platformergame/pages/LevelScreen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -92,7 +92,25 @@ class HomeScreen extends ConsumerWidget {
                       height,
                       Icons.settings,
                       () {
-                        print('Settings button clicked');
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (dialogContext) {
+                            return Dialog(
+                              backgroundColor: Colors.transparent,
+                              insetPadding: EdgeInsets.symmetric(
+                                horizontal: width * 0.08,
+                                vertical: height * 0.08,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  width * 0.02,
+                                ),
+                                child: const MusicSettingsPage(),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   ],

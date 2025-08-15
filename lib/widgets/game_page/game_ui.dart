@@ -1,15 +1,19 @@
+import 'package:_2d_platformergame/pages/settingpage.dart';
+import 'package:_2d_platformergame/providers/time_count.dart';
 import 'package:_2d_platformergame/widgets/game_page/pause_dialog.dart';
+import 'package:_2d_platformergame/widgets/game_page/task.dart';
 import 'package:_2d_platformergame/widgets/game_page/timer_count.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GameUi extends StatefulWidget {
+class GameUi extends ConsumerStatefulWidget {
   const GameUi({super.key});
 
   @override
-  State<GameUi> createState() => _GameUiState();
+  ConsumerState<GameUi> createState() => _GameUiState();
 }
 
-class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
+class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
   late final Map<String, AnimationController> _controllers = {
     'library': AnimationController(
       duration: const Duration(milliseconds: 100),
@@ -24,6 +28,8 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
       vsync: this,
     ),
   };
+
+  late TimerCount timerCount;
 
   @override
   void dispose() {
@@ -86,7 +92,11 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
             ),
           ),
           SizedBox(width: screenWidth * 0.005), // 减小图标间距
-          Opacity(opacity: 0.5, child: TimerCount(size: screenWidth * 0.035)),
+          Opacity(
+            opacity: 0.5,
+            child: timerCount = TimerCount(size: screenWidth * 0.035),
+          ),
+
           Spacer(flex: 2), // 调整Spacer的权重
 
           Opacity(
@@ -95,7 +105,39 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
               id: 'library',
               icon: Icons.library_books,
               size: screenWidth * 0.035,
-              onTap: () {},
+              onTap: () {
+                ref.read(timeCountProvider.notifier).stop();
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      backgroundColor: const Color.fromARGB(
+                        255,
+                        234,
+                        148,
+                        10,
+                      ), // 背景改成橙色
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // 圆角减少到 8
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Task(true, 'Task 1'),
+                            Task(false, 'Task 2'),
+                            Task(true, 'Task 3'),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ).then((value) {
+                  ref.read(timeCountProvider.notifier).start();
+                });
+              },
             ),
           ),
 
@@ -108,6 +150,8 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
               icon: Icons.pause_rounded,
               size: screenWidth * 0.035,
               onTap: () {
+                ref.read(timeCountProvider.notifier).stop();
+
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -115,6 +159,7 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
                       (dialogContext) => PauseDialog(
                         onResume: () {
                           Navigator.of(dialogContext).pop();
+                          ref.read(timeCountProvider.notifier).start();
                         },
                         parentContext: context,
                       ),
@@ -131,7 +176,31 @@ class _GameUiState extends State<GameUi> with TickerProviderStateMixin {
               id: 'settings',
               icon: Icons.settings,
               size: screenWidth * 0.035,
-              onTap: () {},
+              onTap: () {
+                ref.read(timeCountProvider.notifier).stop();
+                showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (dialogContext) {
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      insetPadding: const EdgeInsets.symmetric(
+                        horizontal: 64,
+                        vertical: 48,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: SizedBox(
+                          // 用现有页面的 UI，不改内部设计
+                          child: const MusicSettingsPage(),
+                        ),
+                      ),
+                    );
+                  },
+                ).then((value) {
+                  ref.read(timeCountProvider.notifier).start();
+                });
+              },
             ),
           ),
           SizedBox(width: screenWidth * 0.01), // 减小结束间距
