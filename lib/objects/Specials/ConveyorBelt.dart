@@ -22,7 +22,7 @@ class ConveyorBelt extends SpriteComponent with CollisionCallbacks {
     required this.type,
     required this.gridSize,
     required this.beltDirection,
-    this.beltSpeed = 60.0, // 默认速度，可调整
+    this.beltSpeed = 128.0, // 默认速度，可调整
   }) : super(size: Vector2.all(gridSize.floorToDouble() + 1)) {
     anchor = Anchor.topLeft;
   }
@@ -70,6 +70,10 @@ class ConveyorBelt extends SpriteComponent with CollisionCallbacks {
     for (final player in _playersOnBelt) {
       // 仅在玩家站在地面时移动
       if (player.isGrounded) {
+        // 记录传送带信息，使玩家起跳时可以继承速度
+        player.conveyorBeltSpeed = beltSpeed;
+        player.conveyorBeltDirection = beltDirection;
+
         // 施加水平力，移动玩家
         // 使用两种力:
         // 1. 直接位移 - 确保玩家一定会移动
@@ -123,9 +127,12 @@ class ConveyorBelt extends SpriteComponent with CollisionCallbacks {
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
 
-    // 玩家离开传送带时，从列表中移除
+    // 玩家离开传送带时，从列表中移除并重置传送带信息
     if (other is Player && _playersOnBelt.contains(other)) {
       _playersOnBelt.remove(other);
+      // 重置传送带数据
+      other.conveyorBeltDirection = 0;
+      other.conveyorBeltSpeed = 0.0;
     }
   }
 }

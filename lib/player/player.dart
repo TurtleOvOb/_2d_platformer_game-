@@ -13,6 +13,9 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   Vector2 spawnPosition;
   final Vector2 playersize = Vector2(16.0, 16.0); // 玩家大小，和图片尺寸一致
   final Vector2 playerspeed = Vector2(0.0, 0.0); // 玩家速度
+  // 当前站立的传送带速度 (如果有)
+  double conveyorBeltSpeed = 0.0;
+  int conveyorBeltDirection = 0;
   // 基础物理参数
   final double gravity = 980; // 基础重力
   final double moveSpeed = 150; // 地面最大移动速度
@@ -69,6 +72,20 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+
+    // 逐渐减弱传送带的影响（当玩家已经离开传送带但保留了部分速度）
+    if (conveyorBeltDirection == 0 &&
+        isGrounded &&
+        playerspeed.x.abs() > moveSpeed) {
+      // 当玩家在地面上且没有站在任何传送带上，但速度超过了普通移动速度，
+      // 这可能是从传送带上跳下来后的情况，应该逐渐减弱这个效果
+      playerspeed.x = _moveToward(
+        playerspeed.x,
+        _desiredDir * moveSpeed,
+        groundFriction * dt * 1.5,
+      );
+    }
+
     // 1) 水平移动：根据期望方向进行加减速与摩擦
     final bool hasInput = _desiredDir != 0;
     final double targetVx = _desiredDir * moveSpeed;
@@ -182,7 +199,20 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
         color: tinted,
       ),
     );
+
+    // 设置跳跃的垂直速度
     playerspeed.y = -jumpSpeed;
+
+    // 如果站在传送带上，跳跃时继承传送带的水平速度
+    if (conveyorBeltDirection != 0) {
+      // 给予额外的水平速度增益 - 增加一个跳跃时的水平速度提升
+      double boostFactor = 0.6; // 提升系数，可以根据需要调整
+      playerspeed.x += conveyorBeltDirection * conveyorBeltSpeed * boostFactor;
+
+      // 记录跳跃速度，但不立即清除传送带方向，让玩家保持一段时间的助推效果
+      // 在 onCollisionEnd 中，传送带会重置这些值
+    }
+
     isGrounded = false;
   }
 
