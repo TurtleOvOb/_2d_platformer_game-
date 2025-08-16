@@ -1,7 +1,9 @@
+import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
+import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/objects/bricks/brick.dart';
 import 'package:_2d_platformergame/objects/bricks/half_brick.dart';
 import 'package:_2d_platformergame/objects/bricks/ChargedPlatform.dart';
-import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +42,7 @@ class CollisionLogic {
     Set<Vector2> points,
     PositionComponent other,
   ) {
-    if (other is Brick || other is KeyBlock1) {
+    if (other is Brick || other is KeyBlock || other is ConveyorBelt) {
       final collisionDirection = calculateCollisionDirection(
         player.toRect(),
         other.toRect(),

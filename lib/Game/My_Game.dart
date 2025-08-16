@@ -1,19 +1,12 @@
-import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
-import 'package:_2d_platformergame/objects/bricks/key_block1.dart';
-import 'package:_2d_platformergame/objects/bricks/KeyBlock2.dart';
-
+import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/player/player.dart';
-import 'package:flame/camera.dart';
-
 import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flame/components.dart';
-// 无需 geometry import
 import 'package:flame/components.dart';
 
 class MyGame extends FlameGame
@@ -179,9 +172,7 @@ class MyGame extends FlameGame
 
   void removeKeyBlock(int type) {
     world.removeWhere(
-      (component) =>
-          (component is KeyBlock1 && component.type == type) ||
-          (component is KeyBlock2 && component.type == type),
+      (component) => component is KeyBlock && component.type == type,
     );
   }
 

@@ -16,23 +16,27 @@ class DoorBlock extends SpriteComponent
     required this.srcPosition,
     required this.type,
     required this.gridSize,
-  }) : super(position: brickpos, anchor: Anchor.topLeft);
+  }) : super(
+         position: brickpos,
+         anchor: Anchor.topLeft,
+         size: Vector2(gridSize, gridSize * 2), // 明确设置为两格高
+       );
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    // 从图块集加载钥匙纹理
+    // 从图块集加载门纹理 (两格高)
     sprite = await Sprite.load(
       'tileset.png',
       srcPosition: srcPosition,
-      srcSize: Vector2(gridSize, gridSize),
+      srcSize: Vector2(gridSize, 2 * gridSize),
     );
 
-    // 添加碰撞箱（可根据需要调整大小）
+    // 添加碰撞箱（调整为两格高）
     add(
       RectangleHitbox(
-        size: Vector2(gridSize * 0.8, gridSize * 0.8),
+        size: Vector2(gridSize * 0.8, gridSize * 1.8), // 高度为两格
         position: Vector2(gridSize * 0.1, gridSize * 0.1),
       ),
     );

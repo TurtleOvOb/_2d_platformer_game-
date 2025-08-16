@@ -1,6 +1,4 @@
 import 'package:_2d_platformergame/pages/HomeScreen.dart';
-import 'package:_2d_platformergame/pages/settingpage.dart';
-import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

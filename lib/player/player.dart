@@ -33,6 +33,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   bool _jumpHeld = false;
   int _desiredDir = 0; // -1 左, 0 停, 1 右
   bool isGrounded = false; // 标记玩家是否在地面
+  bool isDashing = false; // 标记玩家是否在冲刺中
   // 可用于被WhiteBlock吸收的颜色字段
   // color 字段已添加
 
@@ -98,15 +99,20 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       }
     }
 
-    // 2) 垂直移动：重力（可变跳高 + 下落加速）
+    // 2) 垂直移动：重力（可变跳高 + 下落加速 + 冲刺时减弱重力）
     double gScale = 1.0;
-    if (playerspeed.y < 0) {
+
+    if (isDashing) {
+      // 冲刺状态：大幅减弱重力，提供滞空效果
+      gScale = 0.1; // 只有10%的重力
+    } else if (playerspeed.y < 0) {
       // 上升期：若未按住跳跃键，给予更大的重力 -> 短跳
       gScale = _jumpHeld ? 1.0 : shortHopGravityMultiplier;
     } else if (playerspeed.y > 0) {
       // 下落期：加大重力
       gScale = fallGravityMultiplier;
     }
+
     playerspeed.y += gravity * gScale * dt;
     if (playerspeed.y > maxFallSpeed) playerspeed.y = maxFallSpeed;
 

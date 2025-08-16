@@ -1,15 +1,16 @@
-import 'package:_2d_platformergame/objects/Specials/Key2.dart';
+import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
+import 'package:_2d_platformergame/objects/Specials/DashArrow.dart';
+import 'package:_2d_platformergame/objects/Specials/Key.dart';
+import 'package:_2d_platformergame/objects/Specials/Portal.dart';
 import 'package:_2d_platformergame/objects/Specials/face.dart';
 import 'package:_2d_platformergame/objects/bricks/ChargedPlatform.dart';
 import 'package:_2d_platformergame/objects/bricks/DoorBlock.dart';
-import 'package:_2d_platformergame/objects/bricks/KeyBlock2.dart';
+import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/objects/bricks/WhiteBlock.dart';
 import 'package:_2d_platformergame/objects/Specials/line.dart';
 import 'package:flame/components.dart';
 import '../objects/bricks/brick.dart';
 import '../objects/bricks/half_brick.dart';
-import '../objects/bricks/key_block1.dart';
-import '../objects/Specials/key1.dart';
 import '../objects/Specials/spike.dart';
 import '../objects/Specials/SpawnPoint.dart';
 import '../objects/Orbs/ChargedOrb.dart';
@@ -84,6 +85,51 @@ PositionComponent? createComponentForTile(
         type: 0,
         gridSize: tileSize,
       );
+    case 7:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(7 * 16, 0),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        dashDirection: 2, // 向上冲刺
+      );
+    case 38:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(6 * 16, 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        dashDirection: -1, // 向左冲刺
+      );
+    case 40:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(8 * 16, 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        dashDirection: 1, // 向右冲刺
+      );
+    case 71:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(7 * 16, 2 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        dashDirection: -2, // 向下冲刺
+      );
+
     case 64:
       return Brick(
         brickpos: Vector2(
@@ -114,6 +160,30 @@ PositionComponent? createComponentForTile(
         srcPosition: Vector2(2 * 16, 2 * 16),
         type: 0,
         gridSize: tileSize,
+      );
+    // 传送门组1 - 入口（蓝色）
+    case 45:
+      return Portal(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(13 * 16, 1 * 16),
+        VisualType: 0, // 入口传送门
+        portalGroup: 1, // 组1
+        gridSize: tileSize.toDouble(),
+      );
+    // 传送门组1 - 出口（橙色）
+    case 47:
+      return Portal(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        srcPosition: Vector2(15 * 16, 1 * 16),
+        VisualType: 1, // 出口传送门
+        portalGroup: 1, // 组1
+        gridSize: tileSize.toDouble(),
       );
     case 128:
       return HalfBrick(
@@ -174,6 +244,24 @@ PositionComponent? createComponentForTile(
         srcPosition: Vector2(2 * 16, 4 * 16),
         type: 0,
         gridSize: tileSize.toDouble(),
+      );
+    // 向右传送带
+    case 139:
+      return ConveyorBelt(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(11 * 16, 4 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        beltDirection: 1, // 向右
+      );
+    // 向左传送带
+    case 171:
+      return ConveyorBelt(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(11 * 16, 5 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+        beltDirection: -1, // 向左
       );
     case 224:
       return WhiteBlock(
@@ -242,42 +330,42 @@ PositionComponent? createComponentForTile(
         gridSize: tileSize,
       );
     case 356:
-      return KeyBlock1(
+      return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(4 * 16, 11 * 16),
-        type: 0,
+        type: 0, // 需要Key1开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 359:
-      return Key2(
+      return Key(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(7 * 16, 11 * 16),
         type: 1,
         gridSize: tileSize.toDouble(),
       );
     case 388:
-      return KeyBlock1(
+      return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(4 * 16, 12 * 16),
-        type: 0,
+        type: 0, // 需要Key1开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 357:
-      return KeyBlock2(
+      return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(5 * 16, 11 * 16),
-        type: 1,
+        type: 1, // 需要Key2开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 389:
-      return KeyBlock2(
+      return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(5 * 16, 12 * 16),
-        type: 1,
+        type: 1, // 需要Key2开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 358:
-      return Key1(
+      return Key(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(6 * 16, 11 * 16),
         type: 0,
@@ -336,14 +424,6 @@ PositionComponent? createComponentForTile(
         type: 0,
         gridSize: tileSize.toDouble(),
       );
-    case 457:
-      return DoorBlock(
-        brickpos: Vector2((x + offsetX), (y + offsetY)),
-        srcPosition: Vector2(9 * 16, 14 * 16),
-        type: 0,
-        gridSize: tileSize.toDouble(),
-      );
-
     default:
       return null;
   }

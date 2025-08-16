@@ -6,14 +6,16 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-class Key1 extends SpriteComponent
+/// 钥匙组件，用于开启对应类型的钥匙方块
+/// type: 0 - 黄钥匙，1 - 蓝钥匙
+class Key extends SpriteComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
   final Vector2 brickpos;
   final Vector2 srcPosition;
-  final int type;
+  final int type; // 0表示黄钥匙，1表示蓝钥匙
   final double gridSize;
 
-  Key1({
+  Key({
     required this.brickpos,
     required this.srcPosition,
     required this.type,
@@ -44,10 +46,16 @@ class Key1 extends SpriteComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is Player) {
-      final burstColor =
-          (other as dynamic).color is Color
-              ? (other as dynamic).color as Color
-              : const Color(0xFFFFD54F);
+      // 不同类型钥匙的粒子效果颜色
+      Color burstColor;
+      if (type == 0) {
+        // 黄钥匙
+        burstColor = const Color(0xFFFFD54F);
+      } else {
+        // 蓝钥匙
+        burstColor = const Color(0xFF42A5F5);
+      }
+
       parent?.add(Particles.collectBurst(center.clone(), color: burstColor));
       collectKey();
     }
