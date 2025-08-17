@@ -5,13 +5,14 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 /// 传送门组件，根据type区分不同的传送门
 /// type: 0 - 入口传送门（蓝色），1 - 出口传送门（橙色）
 /// portalGroup: 传送门组标识符，只有相同组的传送门才会相互传送
 /// 双向传送：任何传送门都可以传送到同组的其他传送门
-class Portal extends SpriteComponent
+class Portal extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
   final Vector2 brickpos;
   final Vector2 srcPosition;
@@ -38,14 +39,71 @@ class Portal extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
-    // 从图块集加载传送门纹理
-    sprite = await Sprite.load(
-      'tileset.png',
-      srcPosition: srcPosition,
-      srcSize: Vector2(gridSize, gridSize * 2), // 设置为两格高
-    );
+    try {
+      // 基于类型确定传送门颜色文件夹
+      final String portalFolder =
+          VisualType == 0 ? 'PortalBlue' : 'PortalOrange';
+
+      print('开始加载传送门动画，类型: ${portalFolder}');
+
+      try {
+        // 使用与Player相同的方式加载动画
+        final images = [
+          await Flame.images.load('$portalFolder/Frame1.png'),
+          await Flame.images.load('$portalFolder/Frame2.png'),
+          await Flame.images.load('$portalFolder/Frame3.png'),
+        ];
+
+        // 转换为精灵列表
+        final sprites = images.map((img) => Sprite(img)).toList();
+
+        // 创建动画
+        animation = SpriteAnimation.spriteList(
+          sprites,
+          stepTime: 0.15,
+          loop: true,
+        );
+        playing = true; // 确保动画自动播放
+
+        print('成功加载了 ${sprites.length} 帧传送门动画');
+      } catch (e) {
+        print('加载传送门动画失败: $e，使用默认精灵');
+        // 加载失败，回退到默认单帧动画
+        final defaultSprite = await Sprite(
+          await Flame.images.load('images/tileset.png'),
+          srcPosition: srcPosition,
+          srcSize: Vector2(gridSize, gridSize * 2), // 设置为两格高
+        );
+
+        animation = SpriteAnimation.spriteList(
+          [defaultSprite],
+          stepTime: 1.0,
+          loop: true,
+        );
+        playing = true; // 确保动画自动播放
+      }
+    } catch (e) {
+      print('加载传送门动画过程发生错误: $e，使用默认精灵');
+      // 出错时使用原来的精灵图作为单帧动画
+      try {
+        final defaultSprite = await Sprite(
+          await Flame.images.load('images/tileset.png'),
+          srcPosition: srcPosition,
+          srcSize: Vector2(gridSize, gridSize * 2), // 设置为两格高
+        );
+
+        animation = SpriteAnimation.spriteList(
+          [defaultSprite],
+          stepTime: 1.0,
+          loop: true,
+        );
+        playing = true; // 确保动画自动播放
+      } catch (finalError) {
+        print('所有加载尝试都失败了: $finalError');
+      }
+    }
 
     // 添加碰撞箱 - 调整为两格高
     add(
@@ -86,6 +144,9 @@ class Portal extends SpriteComponent
     );
   }
 
+  // 用于调试的标志
+  bool _debugPrinted = false;
+
   @override
   void update(double dt) {
     super.update(dt);
@@ -96,6 +157,14 @@ class Portal extends SpriteComponent
       if (_cooldownTime <= 0) {
         _isActive = true;
       }
+    }
+
+    // 启动后仅打印一次动画状态，确认是否正确加载
+    if (!_debugPrinted && animation != null) {
+      _debugPrinted = true;
+      print(
+        '传送门(类型:${VisualType == 0 ? "蓝" : "橙"}) - 动画帧数: ${animation!.frames.length}, playing=${playing}',
+      );
     }
   }
 

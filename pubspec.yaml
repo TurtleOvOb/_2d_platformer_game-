@@ -67,6 +67,8 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/images/Player/
+    - assets/images/PortalBlue/
+    - assets/images/PortalOrange/
 
 
   # 添加字体配置

@@ -11,13 +11,14 @@ import 'package:flame/components.dart';
 
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
-  late Player? player;
+  Player? player; // 移除 late 关键字，允许为 null
   final Set<LogicalKeyboardKey> pressedKeys = {};
   final int? levelId;
   final int pxWid;
   final int pxHei;
 
   bool isPaused = false;
+  bool isInitialized = false; // 添加标志跟踪初始化状态
 
   MyGame({this.levelId, required this.pxWid, required this.pxHei})
     : super(
@@ -39,23 +40,36 @@ class MyGame extends FlameGame
   }
 
   Future<void> initial() async {
-    // 2. 重新创建玩家
-    world.add(player = Player(spawnPosition: Vector2(16, 144)));
+    try {
+      // 2. 重新创建玩家
+      player = Player(spawnPosition: Vector2(16, 144));
+      world.add(player!);
 
-    // 4. 重新生成砖块并获取实际关卡尺寸
-    final (bricks, realWid, realHei) = await BrickGeneratorWithSize();
-    // 摄像机 viewport 固定为 512x288
-    camera.viewport = FixedResolutionViewport(resolution: Vector2(512, 288));
-    camera.viewfinder.anchor = Anchor.center;
-    // 摄像机运动模式：关卡大于画面则跟随，否则静止居中
-    if (pxWid > 512 || pxHei > 288) {
-      // 关卡大于画面，摄像机跟随玩家，限制边界
-      camera.follow(player!);
-      // 可选：限制边界，防止超出
-      // 这里可根据实际 Flame 版本补充 setBounds 或 clamp 逻辑
-    } else {
-      // 关卡小于等于画面，摄像机静止居中
-      camera.viewfinder.position = Vector2(pxWid / 2, pxHei / 2);
+      // 4. 重新生成砖块并获取实际关卡尺寸
+      await BrickGeneratorWithSize(); // 砖块和关卡尺寸会在函数内部处理
+
+      // 摄像机 viewport 固定为 512x288
+      camera.viewport = FixedResolutionViewport(resolution: Vector2(512, 288));
+      camera.viewfinder.anchor = Anchor.center;
+
+      // 摄像机运动模式：关卡大于画面则跟随，否则静止居中
+      if (pxWid > 512 || pxHei > 288 && player != null) {
+        // 关卡大于画面，摄像机跟随玩家，限制边界
+        camera.follow(player!);
+        // 可选：限制边界，防止超出
+        // 这里可根据实际 Flame 版本补充 setBounds 或 clamp 逻辑
+      } else {
+        // 关卡小于等于画面，摄像机静止居中
+        camera.viewfinder.position = Vector2(pxWid / 2, pxHei / 2);
+      }
+
+      // 初始化完成
+      isInitialized = true;
+      print('游戏初始化完成');
+    } catch (e) {
+      print('游戏初始化失败: $e');
+      // 在初始化失败的情况下，确保标记游戏未初始化
+      isInitialized = false;
     }
   }
 
@@ -88,29 +102,32 @@ class MyGame extends FlameGame
     }
 
     // 设置玩家出生点
-    if (parser.spawnPointPosition != null) {
+    if (parser.spawnPointPosition != null && player != null) {
       player!.spawnPosition = parser.spawnPointPosition!;
       player!.position = parser.spawnPointPosition!;
+      print('设置玩家出生点: ${parser.spawnPointPosition!}');
+    } else {
+      print(
+        '无法设置玩家出生点: ${player == null ? "player为null" : "spawnPosition为null"}',
+      );
     }
 
-    print('Player spawn: ${player?.position}');
-    print('Camera: \${camera.viewport.resolution}, Level: \${pxWid}x\${pxHei}');
     return (bricks, pxWid, pxHei);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    if (!isPaused) {
-      // 仅在非暂停状态下处理点击事件
+    if (!isPaused && isInitialized && player != null) {
+      // 仅在非暂停状态、初始化完成且玩家存在的情况下处理点击事件
       player!.requestJump();
     }
   }
 
   @override
   void update(double dt) {
-    if (!isPaused) {
-      // 仅在非暂停状态下更新游戏
+    if (!isPaused && isInitialized && player != null) {
+      // 仅在非暂停状态且初始化完成且玩家存在的情况下更新游戏
       super.update(dt);
       if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
         player!.moveLeft();
@@ -119,6 +136,9 @@ class MyGame extends FlameGame
       } else {
         player!.stopHorizontal();
       }
+    } else {
+      // 仍然调用super.update确保游戏引擎正常运行
+      super.update(dt);
     }
   }
 
@@ -127,8 +147,8 @@ class MyGame extends FlameGame
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    if (!isPaused) {
-      // 仅在非暂停状态下处理键盘事件
+    if (!isPaused && isInitialized && player != null) {
+      // 仅在非暂停状态、初始化完成且玩家存在的情况下处理键盘事件
       if (event is KeyDownEvent) {
         pressedKeys.add(event.logicalKey);
         if (event.logicalKey == LogicalKeyboardKey.space) {
@@ -181,4 +201,69 @@ class MyGame extends FlameGame
       (component) => component is GreenOrb && component.type == type,
     );
   }
+
+  // 事件回调通知
+  Function(int level, int score)? onLevelComplete;
+  Function(int level)? onPlayerDeath;
+
+  // 添加通关方法 - 不再处理页面跳转
+  void endLevel() {
+    try {
+      // 暂停游戏
+      pauseGame();
+
+      // 获取当前分数（如果有需要可以计算）
+      int score = calculateScore();
+      final currentLevel = levelId ?? 1; // 保存当前关卡ID
+
+      print('触发通关逻辑，当前关卡: $currentLevel, 得分: $score');
+
+      // 使用BuildContext跳转到通关页面
+      if (overlays.isActive('gameUI')) {
+        overlays.remove('gameUI'); // 移除游戏UI（如果有）
+      }
+
+      // 触发回调而不是直接导航
+      if (onLevelComplete != null) {
+        onLevelComplete!(currentLevel, score);
+      } else {
+        print('onLevelComplete回调未设置，无法通知关卡完成');
+      }
+    } catch (e) {
+      print('执行endLevel方法时发生错误: $e');
+    }
+  }
+
+  // 添加玩家死亡方法
+  void playerDeath() {
+    try {
+      // 暂停游戏
+      pauseGame();
+
+      final currentLevel = levelId ?? 1; // 保存当前关卡ID
+      print('玩家死亡，当前关卡: $currentLevel');
+
+      // 使用BuildContext跳转到游戏结束页面
+      if (overlays.isActive('gameUI')) {
+        overlays.remove('gameUI'); // 移除游戏UI（如果有）
+      }
+
+      // 触发回调而不是直接导航
+      if (onPlayerDeath != null) {
+        onPlayerDeath!(currentLevel);
+      } else {
+        print('onPlayerDeath回调未设置，无法通知玩家死亡');
+      }
+    } catch (e) {
+      print('执行playerDeath方法时发生错误: $e');
+    }
+  }
+
+  // 计算游戏得分的方法（可以根据实际需求自定义计分逻辑）
+  int calculateScore() {
+    // 这里可以根据实际需求计算分数，例如基于通关时间、收集物品数量等
+    return 100;
+  }
+
+  // 不再需要存储BuildContext
 }

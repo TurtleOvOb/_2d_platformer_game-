@@ -44,8 +44,8 @@ class Spike extends SpriteComponent
     super.onCollision(points, other);
     // 检测是否与玩家发生碰撞
     if (other is Player) {
-      // 调用游戏重置方法（假设游戏类有此方法）
-      game.resetLevel();
+      // 调用游戏死亡方法，而不是直接重置关卡
+      game.playerDeath();
     }
   }
 }

@@ -51,7 +51,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       await Flame.images.load('Player/Frame4.png'),
     ];
     final sprites = images.map((img) => Sprite(img)).toList();
-    animation = SpriteAnimation.spriteList(sprites, stepTime: 0.12);
+    animation = SpriteAnimation.spriteList(sprites, stepTime: 0.15);
     size = playersize;
     add(
       RectangleHitbox(

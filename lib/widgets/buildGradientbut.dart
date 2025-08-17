@@ -51,7 +51,8 @@ class _GradientButtonState extends State<GradientButton> {
             child: Text(
               widget.text,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 16,
+                fontFamily: 'PixelMplus12-Regular',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 shadows: [

@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/pages/HomeScreen.dart';
+import 'package:_2d_platformergame/pages/LevelCompletePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,16 +11,18 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then(
     (_) {
       runApp(
-        MaterialApp(
-          debugShowCheckedModeBanner: false,
-
-          home: Builder(
-            builder: (context) {
-              return Scaffold(
-                backgroundColor: Colors.orange,
-                body: ProviderScope(child: HomeScreen()),
-              );
-            },
+        ProviderScope(
+          // 将 ProviderScope 移到这里，包裹整个应用
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  backgroundColor: Colors.orange,
+                  body: HomeScreen(), // HomeScreen 不再需要单独的 ProviderScope
+                );
+              },
+            ),
           ),
         ),
       );

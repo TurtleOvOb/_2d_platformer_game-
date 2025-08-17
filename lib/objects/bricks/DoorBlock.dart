@@ -46,12 +46,19 @@ class DoorBlock extends SpriteComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is Player) {
-      // 钥匙被玩家收集后的逻辑
+      // 玩家碰到门时触发通关逻辑
+      endLevel();
     }
   }
 
-  //通过本关卡
-  // void EndLevel() {
-  //   game.endLevel();
-  // }
+  // 通过本关卡
+  void endLevel() {
+    // 确保游戏已经初始化且可以安全地调用endLevel方法
+    if (game.isInitialized) {
+      // 调用游戏中的通关方法
+      game.endLevel();
+    } else {
+      print('游戏尚未完全初始化，无法触发通关逻辑');
+    }
+  }
 }
