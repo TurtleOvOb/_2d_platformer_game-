@@ -43,7 +43,6 @@ class ImageContainer extends StatelessWidget {
   }
 }
 
-/// 构建图像容器的便捷函数
 Widget buildImageContainer({
   required String imagePath,
   required Widget child,

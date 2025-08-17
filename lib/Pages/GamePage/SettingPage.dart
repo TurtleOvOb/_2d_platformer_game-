@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/homepage/image_container.dart';
 
 class MusicSettingsPage extends StatefulWidget {
   const MusicSettingsPage({super.key});
@@ -22,10 +21,9 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: ImageContainer(
-        imagePath: 'assets/images/containers/settings_background.png',
+      body: Container(
+        color: Colors.orange,
         padding: EdgeInsets.all(screenWidth * 0.01),
-        imageFit: BoxFit.cover,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

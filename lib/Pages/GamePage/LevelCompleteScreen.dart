@@ -1,25 +1,26 @@
 import 'package:_2d_platformergame/widgets/buildgradientbut.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:_2d_platformergame/Game/Game_Screen.dart';
-import 'package:_2d_platformergame/pages/HomeScreen.dart';
+import 'package:_2d_platformergame/widgets/game_page/Game_Screen.dart';
+import 'package:_2d_platformergame/widgets/homepage/HomeScreen.dart';
 import 'package:_2d_platformergame/identfier/ldtk_parser.dart';
 import 'dart:math';
 
-class LevelCompletePage extends ConsumerStatefulWidget {
+class LevelCompleteScreen extends ConsumerStatefulWidget {
   final int nowlevel;
   final int score;
-  const LevelCompletePage({
+  const LevelCompleteScreen({
     super.key,
     required this.nowlevel,
     required this.score,
   });
 
   @override
-  ConsumerState<LevelCompletePage> createState() => _LevelCompletePageState();
+  ConsumerState<LevelCompleteScreen> createState() =>
+      _LevelCompleteScreenState();
 }
 
-class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
+class _LevelCompleteScreenState extends ConsumerState<LevelCompleteScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;

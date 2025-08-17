@@ -1,19 +1,19 @@
 import 'package:_2d_platformergame/widgets/buildgradientbut.dart';
 import 'package:flutter/material.dart';
-import 'package:_2d_platformergame/Game/Game_Screen.dart';
-import 'package:_2d_platformergame/pages/HomeScreen.dart';
+import 'package:_2d_platformergame/widgets/game_page/Game_Screen.dart';
+import 'package:_2d_platformergame/widgets/homepage/HomeScreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:_2d_platformergame/identfier/ldtk_parser.dart';
 
-class GameOverPage extends ConsumerStatefulWidget {
+class GameOverScreen extends ConsumerStatefulWidget {
   final int nowlevel;
-  const GameOverPage({super.key, required this.nowlevel});
+  const GameOverScreen({super.key, required this.nowlevel});
 
   @override
-  ConsumerState<GameOverPage> createState() => _GameOverPageState();
+  ConsumerState<GameOverScreen> createState() => _GameOverScreenState();
 }
 
-class _GameOverPageState extends ConsumerState<GameOverPage>
+class _GameOverScreenState extends ConsumerState<GameOverScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnim;

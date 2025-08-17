@@ -1,12 +1,11 @@
-import 'package:_2d_platformergame/pages/LevelScreen.dart';
+import 'package:_2d_platformergame/widgets/levepage/LevelScreen.dart';
 import 'package:flutter/material.dart';
-import '../homepage/image_container.dart';
 
-class PauseDialog extends StatelessWidget {
+class PauseScreen extends StatelessWidget {
   final VoidCallback onResume;
   final BuildContext parentContext; // 父级context用于导航
 
-  const PauseDialog({
+  const PauseScreen({
     super.key,
     required this.onResume,
     required this.parentContext,
@@ -15,12 +14,21 @@ class PauseDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ImageContainer(
-        imagePath: 'assets/images/containers/BackGround1.png',
+      child: Container(
         padding: const EdgeInsets.all(24),
         margin: const EdgeInsets.symmetric(horizontal: 64),
-        width: 280, // 限制最大宽度
-        borderRadius: BorderRadius.circular(16),
+        constraints: const BoxConstraints(maxWidth: 280), // 限制最大宽度
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 255, 141, 26).withAlpha(200),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -1,8 +1,8 @@
-import 'package:_2d_platformergame/pages/settingpage.dart';
+import 'package:_2d_platformergame/widgets/game_page/SettingPage.dart';
 import 'package:_2d_platformergame/providers/time_count.dart';
-import 'package:_2d_platformergame/widgets/game_page/pause_dialog.dart';
+import 'package:_2d_platformergame/widgets/game_page/PauseScreen.dart';
 import 'package:_2d_platformergame/widgets/game_page/TaskPage.dart';
-import 'package:_2d_platformergame/widgets/game_page/timer_count.dart';
+import 'package:_2d_platformergame/providers/timer_count.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -156,7 +156,7 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
                   context: context,
                   barrierDismissible: false,
                   builder:
-                      (dialogContext) => PauseDialog(
+                      (dialogContext) => PauseScreen(
                         onResume: () {
                           Navigator.of(dialogContext).pop();
                           ref.read(timeCountProvider.notifier).start();

@@ -1,7 +1,7 @@
-import 'package:_2d_platformergame/pages/LevelCompletePage.dart';
-import 'package:_2d_platformergame/pages/GameOverPage.dart';
-import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
-import 'My_Game.dart';
+import 'package:_2d_platformergame/widgets/game_page/LevelCompleteScreen.dart';
+import 'package:_2d_platformergame/widgets/game_page/GameOverScreen.dart';
+import 'package:_2d_platformergame/widgets/game_page/GameUI.dart';
+import '../../Game/My_Game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +61,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
           builder:
-              (context) => LevelCompletePage(nowlevel: level, score: score),
+              (context) => LevelCompleteScreen(nowlevel: level, score: score),
         );
       }
     };
@@ -73,7 +73,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
         showDialog(
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
-          builder: (context) => GameOverPage(nowlevel: level),
+          builder: (context) => GameOverScreen(nowlevel: level),
         );
       }
     };

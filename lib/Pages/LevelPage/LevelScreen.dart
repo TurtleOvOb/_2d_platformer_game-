@@ -1,9 +1,9 @@
 import 'package:_2d_platformergame/identfier/ldtk_parser.dart';
-import 'package:_2d_platformergame/Game/Game_Screen.dart';
+import 'package:_2d_platformergame/widgets/game_page/Game_Screen.dart';
 import 'package:_2d_platformergame/widgets/homepage/backgroundicon.dart';
-import 'package:_2d_platformergame/widgets/levepage/categoryvutton.dart';
-import 'package:_2d_platformergame/widgets/levepage/animated_levelcard.dart';
-import 'package:_2d_platformergame/pages/HomeScreen.dart';
+import 'package:_2d_platformergame/utils/BuildButton/BuildCategoryButton.dart';
+import 'package:_2d_platformergame/widgets/levepage/AnimatedLevelCard .dart';
+import 'package:_2d_platformergame/widgets/homepage/HomeScreen.dart';
 import 'package:flutter/material.dart';
 
 class LevelScreen extends StatelessWidget {
