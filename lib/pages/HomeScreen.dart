@@ -1,15 +1,13 @@
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
 import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:_2d_platformergame/providers/menu_provider.dart';
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';
 import '/ontapthings/homepage/tapyoutube.dart';
 import 'package:flutter/material.dart';
 import '../widgets/homepage/backgroundicon.dart';
-import '../widgets/homepage/menubutton.dart';
-import '../widgets/homepage/footerbutton.dart';
-import '../widgets/homepage/selection_border.dart';
+import '../widgets/homepage/image_text_button.dart';
+import '../widgets/homepage/image_container.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -19,11 +17,6 @@ class HomeScreen extends ConsumerWidget {
     final screenSize = MediaQuery.of(context).size; //获取屏幕尺寸
     final width = screenSize.width; //屏幕宽度
     final height = screenSize.height; //屏幕高度
-
-    // 获取选择边框的位置和大小
-    final menuState = ref.watch(menuProvider);
-    final selectionPosition = menuState.selectionPosition;
-    final selectionSize = menuState.selectionSize;
 
     return Stack(
       children: [
@@ -54,31 +47,26 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                // 3. 菜单按钮和容器
+                // 3. 菜单按钮和容器 - 使用图像容器
                 Positioned(
                   top: height * 0.4,
                   left: width * 0.3,
                   right: width * 0.3,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(width * 0.025),
-                      color: const Color.fromARGB(255, 255, 142, 26),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: width * 0.008,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
+                  child: ImageContainer(
+                    imagePath:
+                        'assets/images/containers/BackGround1.png', // 使用像素风格的背景图片
+
                     padding: EdgeInsets.all(width * 0.03),
+                    imageFit: BoxFit.fill,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        buildMenuButton(
-                          'START',
-                          width,
-                          height,
-                          Icons.play_arrow,
-                          () {
+                        // 使用新的ImageTextButton替换原来的按钮
+                        ImageTextButton(
+                          text: 'START',
+                          imagePath:
+                              'assets/images/buttons/Button1.png', // 你需要创建此图片
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -86,14 +74,29 @@ class HomeScreen extends ConsumerWidget {
                               ),
                             );
                           },
+                          animationType: ButtonAnimationType.bounce,
+                          width: width * 0.2, // 增加宽度从0.3到0.4
+                          height: height * 0.12, // 增加高度从0.1到0.12
+                          imageFit: BoxFit.fill, // 添加imageFit参数，使图片填充整个按钮
+                          icon: Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                            size: width * 0.04,
+                          ),
+                          textStyle: TextStyle(
+                            fontFamily: 'PixelMplus12-Regular',
+                            color: Colors.white,
+                            fontSize: width * 0.03,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         SizedBox(height: height * 0.06),
-                        buildMenuButton(
-                          'SETTINGS',
-                          width,
-                          height,
-                          Icons.settings,
-                          () {
+                        // 使用新的ImageTextButton替换SETTINGS按钮
+                        ImageTextButton(
+                          text: 'SETTINGS',
+                          imagePath:
+                              'assets/images/buttons/Button1.png', // 需要创建此图片
+                          onTap: () {
                             showDialog(
                               context: context,
                               barrierDismissible: true,
@@ -114,6 +117,20 @@ class HomeScreen extends ConsumerWidget {
                               },
                             );
                           },
+                          animationType: ButtonAnimationType.pulse, // 使用脉冲动画效果
+                          width: width * 0.4, // 增加宽度从0.3到0.4
+                          height: height * 0.12, // 增加高度从0.1到0.12
+                          icon: Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                            size: width * 0.04,
+                          ),
+                          textStyle: TextStyle(
+                            fontFamily: 'PixelMplus12-Regular',
+                            color: Colors.white,
+                            fontSize: width * 0.03,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -122,8 +139,8 @@ class HomeScreen extends ConsumerWidget {
 
                 // 左侧按钮
                 Positioned(
-                  top: height * 0.75,
-                  //  left: width * 0.005,
+                  top: height * 0.65, // 位置调高，从0.75改为0.65
+                  left: width * 0.05, // 确保有一些左边距
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -135,7 +152,7 @@ class HomeScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontFamily: 'PixelMplus12-Regular',
                               color: Colors.white,
-                              fontSize: width * 0.045,
+                              fontSize: width * 0.04, // 稍微减小字体
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,
                               decorationColor: Colors.white,
@@ -144,29 +161,66 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                           SizedBox(width: width * 0.01),
-                          Icon(
-                            Icons.arrow_downward,
-                            size: width * 0.06,
-                            color: Colors.white,
-                          ),
                         ],
                       ),
 
-                      SizedBox(height: height * 0.03),
-                      Row(
+                      SizedBox(height: height * 0.02), // 减小垂直间距
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          buildFooterButton(
-                            'GITHUB',
-                            width,
-                            Icons.code,
-                            tapGithub,
+                          InkWell(
+                            onTap: tapGithub,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ), // 增加点击区域
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.code,
+                                    color: Colors.white,
+                                    size: width * 0.04,
+                                  ),
+                                  SizedBox(width: width * 0.01),
+                                  Text(
+                                    'GITHUB',
+                                    style: TextStyle(
+                                      fontFamily: 'PixelMplus12-Regular',
+                                      color: Colors.white,
+                                      fontSize: width * 0.03,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          SizedBox(width: width * 0.02),
-                          buildFooterButton(
-                            'YOUTUBE',
-                            width,
-                            Icons.play_circle,
-                            tapYouTube,
+                          InkWell(
+                            onTap: tapYouTube,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ), // 增加点击区域
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.play_circle,
+                                    color: Colors.white,
+                                    size: width * 0.04,
+                                  ),
+                                  SizedBox(width: width * 0.01),
+                                  Text(
+                                    'YOUTUBE',
+                                    style: TextStyle(
+                                      fontFamily: 'PixelMplus12-Regular',
+                                      color: Colors.white,
+                                      fontSize: width * 0.03,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -174,35 +228,27 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
 
-                // Exit按钮
+                // Exit按钮 - 使用图片按钮
                 Positioned(
                   top: height * 0.05,
                   right: width * 0.03,
-                  child: InkWell(
+                  child: ImageTextButton(
+                    text: 'Exit',
+                    imagePath: 'assets/images/buttons/Button1.png', // 需要创建此图片
                     onTap: tapexit,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF9800),
-                        borderRadius: BorderRadius.circular(width * 0.02),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: width * 0.006,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.02,
-                          vertical: height * 0.005,
-                        ),
-                        child: Text(
-                          'Exit',
-                          style: TextStyle(
-                            fontFamily: 'PixelMplus12-Regular',
-                            color: Colors.white,
-                            fontSize: width * 0.03,
-                          ),
-                        ),
-                      ),
+                    animationType: ButtonAnimationType.shake, // 使用抖动动画效果
+                    width: width * 0.1, // 较小的宽度
+                    height: height * 0.06, // 较小的高度
+                    textStyle: TextStyle(
+                      fontFamily: 'PixelMplus12-Regular',
+                      color: Colors.white,
+                      fontSize: width * 0.03,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    icon: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.white,
+                      size: width * 0.03,
                     ),
                   ),
                 ),
@@ -219,16 +265,6 @@ class HomeScreen extends ConsumerWidget {
                       fontSize: width * 0.03,
                     ),
                   ),
-                ),
-
-                // 7. 菜单选择边框
-                SelectionBorder(
-                  width: width,
-                  position: selectionPosition,
-                  size: selectionSize,
-                  borderRadius: width * 0.025,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOutCirc,
                 ),
               ],
             ),

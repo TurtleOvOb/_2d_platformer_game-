@@ -1,10 +1,10 @@
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../homepage/image_container.dart';
 
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;
-  final BuildContext parentContext; // 添加 context 参数用于导航
+  final BuildContext parentContext; // 父级context用于导航
 
   const PauseDialog({
     super.key,
@@ -15,21 +15,12 @@ class PauseDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: ImageContainer(
+        imagePath: 'assets/images/containers/BackGround1.png',
         padding: const EdgeInsets.all(24),
         margin: const EdgeInsets.symmetric(horizontal: 64),
-        constraints: const BoxConstraints(maxWidth: 280), // 限制最大宽度
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, 141, 26).withAlpha(200),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+        width: 280, // 限制最大宽度
+        borderRadius: BorderRadius.circular(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -54,13 +45,19 @@ class PauseDialog extends StatelessWidget {
               icon: Icons.format_list_bulleted,
               label: 'Level Select',
               onTap: () {
-                Navigator.of(parentContext).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder:
-                        (context) => const ProviderScope(child: LevelScreen()),
-                  ),
-                  (route) => false,
-                );
+                // 首先关闭当前对话框
+                Navigator.of(context).pop();
+
+                // 使用Future.microtask确保对话框完全关闭后再导航
+                Future.microtask(() {
+                  // 使用父上下文进行导航
+                  Navigator.of(parentContext).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LevelScreen(),
+                    ),
+                    (route) => false,
+                  );
+                });
               },
               isPrimary: false,
             ),

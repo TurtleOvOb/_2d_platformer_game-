@@ -15,7 +15,7 @@ list(APPEND FLUTTER_TOOL_ENVIRONMENT
   "FLUTTER_ROOT=C:\\src\\flutter"
   "FLUTTER_EPHEMERAL_DIR=D:\\flutter_project\\_2d_platformergame(2)\\windows\\flutter\\ephemeral"
   "PROJECT_DIR=D:\\flutter_project\\_2d_platformergame(2)"
-  "FLUTTER_TARGET=D:\\flutter_project\\_2d_platformergame(2)\\lib\\main.dart"
+  "FLUTTER_TARGET=D:\\flutter_project\\_2d_platformergame(2)\\lib/tools/main_tileset_viewer.dart"
   "DART_OBFUSCATION=false"
   "TRACK_WIDGET_CREATION=true"
   "TREE_SHAKE_ICONS=false"

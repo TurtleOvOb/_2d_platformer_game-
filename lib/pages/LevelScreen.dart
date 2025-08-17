@@ -5,7 +5,6 @@ import 'package:_2d_platformergame/widgets/levepage/categoryvutton.dart';
 import 'package:_2d_platformergame/widgets/levepage/animated_levelcard.dart';
 import 'package:_2d_platformergame/pages/HomeScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LevelScreen extends StatelessWidget {
   const LevelScreen({super.key});
@@ -81,12 +80,10 @@ class LevelScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder:
-                                      (context) => ProviderScope(
-                                        child: GameScreen(
-                                          levelId: levelNumber,
-                                          pxWid: pxWid,
-                                          pxHei: pxHei,
-                                        ),
+                                      (context) => GameScreen(
+                                        levelId: levelNumber,
+                                        pxWid: pxWid,
+                                        pxHei: pxHei,
                                       ),
                                 ),
                               );
@@ -104,10 +101,7 @@ class LevelScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => ProviderScope(child: const HomeScreen()),
-                    ),
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
                     (route) => false, // 清除所有路由历史
                   );
                 },
