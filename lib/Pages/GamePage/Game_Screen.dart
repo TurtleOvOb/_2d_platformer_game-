@@ -1,7 +1,8 @@
-import 'package:_2d_platformergame/widgets/game_page/LevelCompleteScreen.dart';
-import 'package:_2d_platformergame/widgets/game_page/GameOverScreen.dart';
-import 'package:_2d_platformergame/widgets/game_page/GameUI.dart';
-import '../../Game/My_Game.dart';
+import 'package:_2d_platformergame/Game/My_Game.dart';
+import 'package:_2d_platformergame/Pages/GamePage/GameOverScreen.dart';
+import 'package:_2d_platformergame/Pages/GamePage/GameUI.dart';
+import 'package:_2d_platformergame/Pages/GamePage/LevelCompleteScreen.dart';
+
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 

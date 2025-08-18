@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/widgets/homepage/HomeScreen.dart';
+import 'package:_2d_platformergame/Pages/HomePage/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

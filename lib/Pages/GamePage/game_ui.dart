@@ -1,7 +1,8 @@
-import 'package:_2d_platformergame/widgets/game_page/SettingPage.dart';
+import 'package:_2d_platformergame/Pages/GamePage/PauseScreen.dart';
+import 'package:_2d_platformergame/Pages/GamePage/SettingPage.dart';
+import 'package:_2d_platformergame/Pages/GamePage/TaskPage.dart';
 import 'package:_2d_platformergame/providers/time_count.dart';
-import 'package:_2d_platformergame/widgets/game_page/PauseScreen.dart';
-import 'package:_2d_platformergame/widgets/game_page/TaskPage.dart';
+
 import 'package:_2d_platformergame/providers/timer_count.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

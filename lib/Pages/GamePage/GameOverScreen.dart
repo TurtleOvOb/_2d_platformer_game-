@@ -1,7 +1,8 @@
-import 'package:_2d_platformergame/widgets/buildgradientbut.dart';
+import 'package:_2d_platformergame/Pages/GamePage/Game_Screen.dart';
+import 'package:_2d_platformergame/Pages/HomePage/HomeScreen.dart';
+import 'package:_2d_platformergame/utils/BuildButton/buildGradientbut.dart';
 import 'package:flutter/material.dart';
-import 'package:_2d_platformergame/widgets/game_page/Game_Screen.dart';
-import 'package:_2d_platformergame/widgets/homepage/HomeScreen.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:_2d_platformergame/identfier/ldtk_parser.dart';
 
