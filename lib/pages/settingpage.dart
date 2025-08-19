@@ -23,7 +23,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
 
     return Scaffold(
       body: ImageContainer(
-        imagePath: 'assets/images/containers/settings_background.png',
+        imagePath: 'assets/images/containers/BackGround1.png',
         padding: EdgeInsets.all(screenWidth * 0.01),
         imageFit: BoxFit.cover,
         child: Column(
