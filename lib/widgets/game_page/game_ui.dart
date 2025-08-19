@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/pages/settingpage.dart';
+import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
 import 'package:_2d_platformergame/providers/time_count.dart';
 import 'package:_2d_platformergame/widgets/game_page/pause_dialog.dart';
 import 'package:_2d_platformergame/widgets/game_page/TaskPage.dart';

@@ -1,5 +1,5 @@
+import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
-import 'package:_2d_platformergame/pages/settingpage.dart';
 import 'package:_2d_platformergame/Animation/animated_entry_widget.dart';
 import 'package:_2d_platformergame/Animation/page_transitions.dart';
 import 'package:_2d_platformergame/Animation/synchronized_animation.dart';

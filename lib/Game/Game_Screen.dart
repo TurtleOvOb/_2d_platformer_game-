@@ -5,6 +5,8 @@ import 'My_Game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
 // 使用自定义的GameUI组件，移除不再需要的PauseOverlay
 
 // 新增：游戏界面组件
@@ -26,6 +28,8 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
+  Timer? _leftTimer;
+  Timer? _rightTimer;
   // 注意：不使用late final，而是使用普通变量
   late MyGame game;
   bool isGameCreated = false;
@@ -83,6 +87,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _leftTimer?.cancel();
+    _rightTimer?.cancel();
     // 在销毁 widget 时正确清理游戏实例
     if (isGameCreated) {
       // 确保游戏引擎停止
@@ -133,8 +139,108 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
             right: 0,
             child: SafeArea(child: GameUi()),
           ),
+          Positioned(
+            left: 30,
+            bottom: 30,
+            child: Row(
+              children: [
+                _buildCircleButton(
+                  icon: Icons.arrow_left,
+                  onTapDown: (_) {
+                    _leftTimer?.cancel();
+                    game.player?.moveLeft();
+                    _leftTimer = Timer.periodic(
+                      const Duration(milliseconds: 16),
+                      (_) {
+                        game.player?.moveLeft();
+                      },
+                    );
+                  },
+                  onTapUp: (_) {
+                    _leftTimer?.cancel();
+                    game.player?.stopHorizontal();
+                  },
+                  onTapCancel: () {
+                    _leftTimer?.cancel();
+                    game.player?.stopHorizontal();
+                  },
+                ),
+                SizedBox(width: 30),
+                _buildCircleButton(
+                  icon: Icons.arrow_right,
+                  onTapDown: (_) {
+                    _rightTimer?.cancel();
+                    game.player?.moveRight();
+                    _rightTimer = Timer.periodic(
+                      const Duration(milliseconds: 16),
+                      (_) {
+                        game.player?.moveRight();
+                      },
+                    );
+                  },
+                  onTapUp: (_) {
+                    _rightTimer?.cancel();
+                    game.player?.stopHorizontal();
+                  },
+                  onTapCancel: () {
+                    _rightTimer?.cancel();
+                    game.player?.stopHorizontal();
+                  },
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 30,
+            bottom: 30,
+            child: _buildCircleButton(
+              icon: Icons.arrow_upward,
+              onTapDown: (_) {
+                game.player?.requestJump();
+              },
+              onTapUp: (_) {
+                game.player?.releaseJump();
+              },
+              onLongPressStart: (_) {
+                game.player?.requestJump();
+              },
+              onLongPressEnd: (_) {
+                game.player?.releaseJump();
+              },
+            ),
+          ),
           // 其他游戏UI组件可以在这里添加
         ],
+      ),
+    );
+  }
+
+  // 构建圆形半透明按钮
+  Widget _buildCircleButton({
+    required IconData icon,
+    VoidCallback? onPressed,
+    GestureTapDownCallback? onTapDown,
+    GestureTapUpCallback? onTapUp,
+    VoidCallback? onTapCancel,
+    GestureLongPressStartCallback? onLongPressStart,
+    GestureLongPressEndCallback? onLongPressEnd,
+  }) {
+    return GestureDetector(
+      onTap: onPressed,
+      onTapDown: onTapDown,
+      onTapUp: onTapUp,
+      onTapCancel: onTapCancel,
+      onLongPressStart: onLongPressStart,
+      onLongPressEnd: onLongPressEnd,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white.withOpacity(0.15),
+          border: Border.all(color: Colors.white.withOpacity(0.7), width: 3),
+        ),
+        child: Icon(icon, color: Colors.white.withOpacity(0.85), size: 36),
       ),
     );
   }

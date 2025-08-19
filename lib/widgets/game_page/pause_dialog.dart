@@ -1,6 +1,7 @@
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
 import 'package:flutter/material.dart';
 import '../homepage/image_container.dart';
+import '../homepage/image_text_button.dart';
 
 class PauseDialog extends StatelessWidget {
   final VoidCallback onResume;
@@ -16,7 +17,7 @@ class PauseDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ImageContainer(
-        imagePath: 'assets/images/containers/BackGround1.png',
+        imagePath: 'assets/images/containers/BackGround2.png',
         padding: const EdgeInsets.all(24),
         margin: const EdgeInsets.symmetric(horizontal: 64),
         width: 280, // 限制最大宽度
@@ -34,16 +35,29 @@ class PauseDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            _buildButton(
-              icon: Icons.play_arrow_outlined,
-              label: 'Continue',
+            ImageTextButton(
+              text: 'Continue',
+              imagePath: 'assets/images/buttons/Button1.png',
               onTap: onResume,
-              isPrimary: false,
+              icon: Icon(
+                Icons.play_arrow_outlined,
+                color: Color.fromARGB(255, 255, 255, 250),
+                size: 20,
+              ),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'PixelMplus12-Regular',
+                color: Color.fromARGB(255, 255, 255, 250),
+              ),
+              width: 150,
+              height: 48,
+              imageFit: BoxFit.fill,
             ),
             const SizedBox(height: 16),
-            _buildButton(
-              icon: Icons.format_list_bulleted,
-              label: 'Level Select',
+            ImageTextButton(
+              text: 'Level Select',
+              imagePath: 'assets/images/buttons/Button1.png',
               onTap: () {
                 // 首先关闭当前对话框
                 Navigator.of(context).pop();
@@ -59,59 +73,22 @@ class PauseDialog extends StatelessWidget {
                   );
                 });
               },
-              isPrimary: false,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-    bool isPrimary = true,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: const Color.fromARGB(255, 255, 255, 250),
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(8),
-            color:
-                isPrimary
-                    ? const Color.fromARGB(255, 53, 53, 51)
-                    : Colors.transparent,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: const Color.fromARGB(255, 255, 255, 250),
+              icon: Icon(
+                Icons.format_list_bulleted,
+                color: Color.fromARGB(255, 255, 255, 250),
                 size: 20,
               ),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'PixelMplus12-Regular',
-                  color: Color.fromARGB(255, 255, 255, 250),
-                ),
+              textStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'PixelMplus12-Regular',
+                color: Color.fromARGB(255, 255, 255, 250),
               ),
-            ],
-          ),
+              width: 150,
+              height: 48,
+              imageFit: BoxFit.fill,
+            ),
+          ],
         ),
       ),
     );
