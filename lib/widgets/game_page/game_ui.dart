@@ -1,13 +1,17 @@
-import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
+import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/providers/time_count.dart';
 import 'package:_2d_platformergame/widgets/game_page/pause_dialog.dart';
 import 'package:_2d_platformergame/widgets/game_page/TaskPage.dart';
 import 'package:_2d_platformergame/widgets/game_page/timer_count.dart';
+import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:_2d_platformergame/Game/mission_system.dart';
 
 class GameUi extends ConsumerStatefulWidget {
-  const GameUi({super.key});
+  final Mission? mission;
+  final MyGame game;
+  const GameUi({super.key, this.mission, required this.game});
 
   @override
   ConsumerState<GameUi> createState() => _GameUiState();
@@ -75,6 +79,8 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print('GameUi widget.mission: ${widget.mission}');
+    print('GameUi widget.game.player: ${widget.game.player}');
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       width: screenWidth, // 使用实际屏幕宽度
@@ -122,14 +128,35 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Task(true, 'Task 1'),
-                            Task(false, 'Task 2'),
-                            Task(true, 'Task 3'),
-                          ],
+                        child: Builder(
+                          builder: (context) {
+                            if (widget.mission != null &&
+                                widget.game.player != null) {
+                              final result = widget.mission!.check(
+                                widget.game.player!,
+                              );
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Task(
+                                    result.timeOk,
+                                    '限时通关: ${widget.mission!.maxTime.toStringAsFixed(0)}秒',
+                                  ),
+                                  Task(
+                                    result.deathOk,
+                                    '死亡不超过: ${widget.mission!.maxDeath}次',
+                                  ),
+                                  Task(
+                                    result.collectOk,
+                                    '收集物不少于: ${widget.mission!.minCollectibles}个',
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const Text('无任务目标');
+                            }
+                          },
                         ),
                       ),
                     );

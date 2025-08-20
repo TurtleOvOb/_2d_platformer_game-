@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/pages/LevelScreen.dart';
+import 'package:_2d_platformergame/Pages/LevelScreen.dart';
 import 'package:flutter/material.dart';
 import '../homepage/image_container.dart';
 import '../homepage/image_text_button.dart';

@@ -1,4 +1,5 @@
-import 'package:_2d_platformergame/widgets/buildgradientbut.dart';
+
+import 'package:_2d_platformergame/widgets/buildGradientbut.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:_2d_platformergame/Game/Game_Screen.dart';

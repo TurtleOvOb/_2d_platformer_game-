@@ -137,7 +137,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
             top: 0,
             left: 0,
             right: 0,
-            child: SafeArea(child: GameUi()),
+            child: SafeArea(child: GameUi(game: game)),
           ),
           Positioned(
             left: 30,

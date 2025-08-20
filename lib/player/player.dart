@@ -37,8 +37,9 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   int _desiredDir = 0; // -1 左, 0 停, 1 右
   bool isGrounded = false; // 标记玩家是否在地面
   bool isDashing = false; // 标记玩家是否在冲刺中
-  // 可用于被WhiteBlock吸收的颜色字段
-  // color 字段已添加
+  double levelTime = 0; // 当前关卡已用时间（秒）
+  int deathCount = 0; // 当前关卡死亡次数
+  int collectiblesCount = 0; // 当前关卡收集品数量
 
   @override
   Future<void> onLoad() async {
