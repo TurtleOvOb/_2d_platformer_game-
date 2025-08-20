@@ -1,10 +1,19 @@
+<<<<<<< HEAD:lib/Pages/GamePage/Game_Screen.dart
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/Pages/GamePage/GameOverScreen.dart';
 import 'package:_2d_platformergame/Pages/GamePage/GameUI.dart';
 import 'package:_2d_platformergame/Pages/GamePage/LevelCompleteScreen.dart';
 
+=======
+import 'package:_2d_platformergame/pages/LevelCompletePage.dart';
+import 'package:_2d_platformergame/pages/GameOverPage.dart';
+import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
+import 'package:_2d_platformergame/Game/mission_system.dart';
+import 'My_Game.dart';
+>>>>>>> overlay-refactor:lib/Game/Game_Screen.dart
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 // 使用自定义的GameUI组件，移除不再需要的PauseOverlay
 
@@ -27,6 +36,8 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
+  Timer? _leftTimer;
+  Timer? _rightTimer;
   // 注意：不使用late final，而是使用普通变量
   late MyGame game;
   bool isGameCreated = false;
@@ -84,6 +95,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _leftTimer?.cancel();
+    _rightTimer?.cancel();
     // 在销毁 widget 时正确清理游戏实例
     if (isGameCreated) {
       // 确保游戏引擎停止
@@ -108,34 +121,54 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       _createNewGame();
     }
 
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRect(
-            child: FittedBox(
-              fit: BoxFit.cover, // 裁剪并铺满
-              child: SizedBox(
-                width: 512,
-                height: 288,
-                // 使用key来确保每次构建都刷新GameWidget
-                child: GameWidget.controlled(
-                  gameFactory: () => game,
-                  key: ValueKey(
-                    'game-${widget.levelId}-${DateTime.now().millisecondsSinceEpoch}',
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(child: GameUi()),
-          ),
-          // 其他游戏UI组件可以在这里添加
-        ],
+    // 关卡任务表
+    final Map<int, Mission> missionMap = {
+      1: Mission(maxTime: 60, maxDeath: 3, minCollectibles: 2),
+      2: Mission(maxTime: 80, maxDeath: 2, minCollectibles: 3),
+      3: Mission(maxTime: 100, maxDeath: 1, minCollectibles: 4),
+      // 可继续添加更多关卡
+    };
+    final mission = missionMap[widget.levelId ?? 1];
+
+    print('GameScreen game.player: ${game.player}');
+
+      return Scaffold(
+        body: GameWidget(
+          game: game,
+          overlayBuilderMap: {
+            'GameUi': (context, game) => SafeArea(child: GameUi(mission: mission, game: game as MyGame)),
+          },
+          initialActiveOverlays: const ['GameUi'],
+        ),
+      );
+  }
+
+  // 构建圆形半透明按钮
+  Widget _buildCircleButton({
+    required IconData icon,
+    VoidCallback? onPressed,
+    GestureTapDownCallback? onTapDown,
+    GestureTapUpCallback? onTapUp,
+    VoidCallback? onTapCancel,
+    GestureLongPressStartCallback? onLongPressStart,
+    GestureLongPressEndCallback? onLongPressEnd,
+  }) {
+    return GestureDetector(
+      onTap: onPressed,
+      onTapDown: onTapDown,
+      onTapUp: onTapUp,
+      onTapCancel: onTapCancel,
+      onLongPressStart: onLongPressStart,
+      onLongPressEnd: onLongPressEnd,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white.withOpacity(0.15),
+          border: Border.all(color: Colors.white.withOpacity(0.7), width: 3),
+        ),
+        child: Icon(icon, color: Colors.white.withOpacity(0.85), size: 36),
       ),
     );
   }

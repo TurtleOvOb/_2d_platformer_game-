@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:_2d_platformergame/Pages/HomePage/HomeScreen.dart';
+=======
+import 'package:_2d_platformergame/pages/HomeScreen.dart';
+>>>>>>> overlay-refactor
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
