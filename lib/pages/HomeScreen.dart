@@ -2,7 +2,6 @@ import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
 import 'package:_2d_platformergame/Animation/animated_entry_widget.dart';
 import 'package:_2d_platformergame/Animation/page_transitions.dart';
-import 'package:_2d_platformergame/Animation/synchronized_animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';

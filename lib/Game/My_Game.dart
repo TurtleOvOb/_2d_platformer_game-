@@ -1,7 +1,7 @@
+import 'package:_2d_platformergame/player/player.dart' show Player;
 import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
-import 'package:_2d_platformergame/player/player.dart';
 import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';

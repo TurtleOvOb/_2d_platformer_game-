@@ -7,16 +7,18 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  // 任务系统相关属性
+  double levelTime = 0; // 当前关卡已用时间（秒）
+  int deathCount = 0; // 当前关卡死亡次数
+  int collectiblesCount = 0; // 当前关卡收集品数量
   Color color = Colors.white;
   Player({super.position, required this.spawnPosition})
     : super(size: Vector2(32, 32));
   Vector2 spawnPosition;
   final Vector2 playersize = Vector2(16.0, 16.0); // 玩家大小，和图片尺寸一致
   final Vector2 playerspeed = Vector2(0.0, 0.0); // 玩家速度
-  // 当前站立的传送带速度 (如果有)
-  double conveyorBeltSpeed = 0.0;
+  double conveyorBeltSpeed = 0.0; // 当前站立的传送带速度 (如果有)
   int conveyorBeltDirection = 0;
-  // 基础物理参数
   final double gravity = 980; // 基础重力
   final double moveSpeed = 150; // 地面最大移动速度
   double jumpSpeed = 250; // 跳跃速度（向上为负）
@@ -37,8 +39,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   int _desiredDir = 0; // -1 左, 0 停, 1 右
   bool isGrounded = false; // 标记玩家是否在地面
   bool isDashing = false; // 标记玩家是否在冲刺中
-  // 可用于被WhiteBlock吸收的颜色字段
-  // color 字段已添加
 
   @override
   Future<void> onLoad() async {

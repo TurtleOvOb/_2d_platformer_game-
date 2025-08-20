@@ -1,10 +1,10 @@
 import 'package:_2d_platformergame/pages/LevelCompletePage.dart';
 import 'package:_2d_platformergame/pages/GameOverPage.dart';
 import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
+import 'package:_2d_platformergame/Game/mission_system.dart';
 import 'My_Game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
 import 'dart:async';
 
 // 使用自定义的GameUI组件，移除不再需要的PauseOverlay
@@ -113,106 +113,26 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       _createNewGame();
     }
 
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRect(
-            child: FittedBox(
-              fit: BoxFit.cover, // 裁剪并铺满
-              child: SizedBox(
-                width: 512,
-                height: 288,
-                // 使用key来确保每次构建都刷新GameWidget
-                child: GameWidget.controlled(
-                  gameFactory: () => game,
-                  key: ValueKey(
-                    'game-${widget.levelId}-${DateTime.now().millisecondsSinceEpoch}',
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(child: GameUi()),
-          ),
-          Positioned(
-            left: 30,
-            bottom: 30,
-            child: Row(
-              children: [
-                _buildCircleButton(
-                  icon: Icons.arrow_left,
-                  onTapDown: (_) {
-                    _leftTimer?.cancel();
-                    game.player?.moveLeft();
-                    _leftTimer = Timer.periodic(
-                      const Duration(milliseconds: 16),
-                      (_) {
-                        game.player?.moveLeft();
-                      },
-                    );
-                  },
-                  onTapUp: (_) {
-                    _leftTimer?.cancel();
-                    game.player?.stopHorizontal();
-                  },
-                  onTapCancel: () {
-                    _leftTimer?.cancel();
-                    game.player?.stopHorizontal();
-                  },
-                ),
-                SizedBox(width: 30),
-                _buildCircleButton(
-                  icon: Icons.arrow_right,
-                  onTapDown: (_) {
-                    _rightTimer?.cancel();
-                    game.player?.moveRight();
-                    _rightTimer = Timer.periodic(
-                      const Duration(milliseconds: 16),
-                      (_) {
-                        game.player?.moveRight();
-                      },
-                    );
-                  },
-                  onTapUp: (_) {
-                    _rightTimer?.cancel();
-                    game.player?.stopHorizontal();
-                  },
-                  onTapCancel: () {
-                    _rightTimer?.cancel();
-                    game.player?.stopHorizontal();
-                  },
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 30,
-            bottom: 30,
-            child: _buildCircleButton(
-              icon: Icons.arrow_upward,
-              onTapDown: (_) {
-                game.player?.requestJump();
-              },
-              onTapUp: (_) {
-                game.player?.releaseJump();
-              },
-              onLongPressStart: (_) {
-                game.player?.requestJump();
-              },
-              onLongPressEnd: (_) {
-                game.player?.releaseJump();
-              },
-            ),
-          ),
-          // 其他游戏UI组件可以在这里添加
-        ],
-      ),
-    );
+    // 关卡任务表
+    final Map<int, Mission> missionMap = {
+      1: Mission(maxTime: 60, maxDeath: 3, minCollectibles: 2),
+      2: Mission(maxTime: 80, maxDeath: 2, minCollectibles: 3),
+      3: Mission(maxTime: 100, maxDeath: 1, minCollectibles: 4),
+      // 可继续添加更多关卡
+    };
+    final mission = missionMap[widget.levelId ?? 1];
+
+    print('GameScreen game.player: ${game.player}');
+
+      return Scaffold(
+        body: GameWidget(
+          game: game,
+          overlayBuilderMap: {
+            'GameUi': (context, game) => SafeArea(child: GameUi(mission: mission, game: game as MyGame)),
+          },
+          initialActiveOverlays: const ['GameUi'],
+        ),
+      );
   }
 
   // 构建圆形半透明按钮
