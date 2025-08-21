@@ -25,26 +25,30 @@ Route createRoute(
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       // 使用 Curves.ease 作为所有动画的默认缓动曲线
 
+      final linear = CurveTween(curve: Curves.easeInOutSine);
       switch (type) {
         case PageTransitionType.fade:
-          return FadeTransition(opacity: animation, child: child);
+          return FadeTransition(opacity: animation.drive(linear), child: child);
         case PageTransitionType.scale:
           return ScaleTransition(
-            scale: animation,
+            scale: animation.drive(linear),
             child: child,
             alignment: Alignment.center,
           );
         case PageTransitionType.rotate:
           return RotationTransition(
-            turns: animation,
-            child: FadeTransition(opacity: animation, child: child),
+            turns: animation.drive(linear),
+            child: FadeTransition(
+              opacity: animation.drive(linear),
+              child: child,
+            ),
           );
         case PageTransitionType.slideRight:
           return SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(1.0, 0.0),
               end: Offset.zero,
-            ).animate(animation),
+            ).animate(animation.drive(linear)),
             child: child,
           );
         case PageTransitionType.slideLeft:
@@ -52,7 +56,7 @@ Route createRoute(
             position: Tween<Offset>(
               begin: const Offset(-1.0, 0.0),
               end: Offset.zero,
-            ).animate(animation),
+            ).animate(animation.drive(linear)),
             child: child,
           );
         case PageTransitionType.slideBottom:
@@ -60,7 +64,7 @@ Route createRoute(
             position: Tween<Offset>(
               begin: const Offset(0.0, 1.0),
               end: Offset.zero,
-            ).animate(animation),
+            ).animate(animation.drive(linear)),
             child: child,
           );
         case PageTransitionType.slideTop:
@@ -68,7 +72,7 @@ Route createRoute(
             position: Tween<Offset>(
               begin: const Offset(0.0, -1.0),
               end: Offset.zero,
-            ).animate(animation),
+            ).animate(animation.drive(linear)),
             child: child,
           );
         case PageTransitionType.rightToLeftWithFade:
@@ -76,16 +80,22 @@ Route createRoute(
             position: Tween<Offset>(
               begin: const Offset(0.2, 0.0),
               end: Offset.zero,
-            ).animate(animation),
-            child: FadeTransition(opacity: animation, child: child),
+            ).animate(animation.drive(linear)),
+            child: FadeTransition(
+              opacity: animation.drive(linear),
+              child: child,
+            ),
           );
         case PageTransitionType.leftToRightWithFade:
           return SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(-0.2, 0.0),
               end: Offset.zero,
-            ).animate(animation),
-            child: FadeTransition(opacity: animation, child: child),
+            ).animate(animation.drive(linear)),
+            child: FadeTransition(
+              opacity: animation.drive(linear),
+              child: child,
+            ),
           );
       }
     },

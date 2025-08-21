@@ -76,7 +76,7 @@ class MyGame extends FlameGame
   /// 返回 (砖块列表, 关卡宽, 关卡高)
   Future<(List<PositionComponent>, int, int)> BrickGeneratorWithSize() async {
     final parser = LdtkParser();
-    final levelPath = 'assets/levels/Level_${levelId! - 1}.ldtk';
+    final levelPath = 'assets/levels/Level_${levelId!}.ldtk';
     List<PositionComponent> bricks = [];
     int pxWid = 512, pxHei = 288;
     try {

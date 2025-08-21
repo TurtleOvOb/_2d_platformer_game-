@@ -42,3 +42,11 @@ class MissionResult {
   /// 是否所有任务都完成
   bool get allOk => timeOk && deathOk && collectOk;
 }
+
+/// 关卡任务配置
+final Map<int, Mission> missionMap = {
+  0: Mission(maxTime: 60, maxDeath: 3, minCollectibles: 0),
+  1: Mission(maxTime: 80, maxDeath: 2, minCollectibles: 8),
+  2: Mission(maxTime: 100, maxDeath: 5, minCollectibles: 10),
+  // 可继续添加更多关卡任务
+};

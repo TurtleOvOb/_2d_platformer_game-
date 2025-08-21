@@ -162,24 +162,6 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                 ],
               ),
-            ] else if (_selectedTabIndex == 0) ...[
-              // 这里可以添加 graphic 设置的内容
-              // SwitchListTile(
-              //   title: Text(
-              //     'Particle Effect',
-              //     style: GoogleFonts.lato(
-              //       fontSize: screenWidth * 0.045,
-              //       color: Colors.white,
-              //     ),
-              //   ),
-              //   //subtitle: const Text('打开后可以收到消息提醒'),
-              //   value: isOn,
-              //   onChanged: (bool value) {
-              //     setState(() {
-              //       isOn = value;
-              //     });
-              //   },
-              // ),
             ] else if (_selectedTabIndex == 2) ...[
               // 这里可以添加 other 设置的内容
               Column(

@@ -33,6 +33,7 @@ dependencies:
   path_provider: ^2.0.15
   shared_preferences: ^2.2.2
   flame_audio: ^2.0.4
+  url_launcher: ^6.2.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -72,6 +73,8 @@ flutter:
     - assets/images/PortalOrange/
     - assets/images/buttons/
     - assets/images/containers/
+    - assets/images/containers/BackGround3.png
+
 
 
   # 添加字体配置

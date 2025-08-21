@@ -17,7 +17,7 @@ void main() {
             home: Builder(
               builder: (context) {
                 return Scaffold(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Color.fromARGB(255, 255, 112, 67),
                   body: HomeScreen(), // HomeScreen 不再需要单独的 ProviderScope
                 );
               },

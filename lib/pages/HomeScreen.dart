@@ -2,12 +2,12 @@ import 'package:_2d_platformergame/Pages/MusicSettingsPage.dart';
 import 'package:_2d_platformergame/pages/LevelScreen.dart';
 import 'package:_2d_platformergame/Animation/animated_entry_widget.dart';
 import 'package:_2d_platformergame/Animation/page_transitions.dart';
+import 'package:_2d_platformergame/utils/MovingBackground.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/ontapthings/homepage/tapexit.dart';
 import '/ontapthings/homepage/tapgithub.dart';
 import '/ontapthings/homepage/tapyoutube.dart';
 import 'package:flutter/material.dart';
-import '../widgets/homepage/backgroundicon.dart';
 import '../widgets/homepage/image_text_button.dart';
 import '../widgets/homepage/image_container.dart';
 
@@ -22,16 +22,22 @@ class HomeScreen extends ConsumerWidget {
 
     return Stack(
       children: [
+        MovingBackground(
+          imagePath: 'assets/images/containers/BackGround3.png',
+          width: width,
+          height: height,
+          speed: 30,
+          scale: 1.2,
+        ),
         // 原有 Scaffold
         Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
           body: Container(
-            color: const Color(0xFFFFC107),
+            color: Colors.transparent,
             child: Stack(
               children: [
-                // 1. 背景图案（最底层）
-                createPatternBackground(width, height),
-
-                // 2. 标题
+                // 标题
                 Positioned(
                   top: height * 0.05,
                   left: 0,
@@ -42,7 +48,7 @@ class HomeScreen extends ConsumerWidget {
                     delay: const Duration(milliseconds: 100),
                     child: Center(
                       child: Text(
-                        'Game Name',
+                        'Cube Jump',
                         style: TextStyle(
                           fontFamily: 'PixelMplus12-Regular',
                           color: Colors.white,
@@ -82,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
                                   context,
                                   createRoute(
                                     const LevelScreen(),
-                                    type: PageTransitionType.slideRight,
+                                    type: PageTransitionType.fade,
                                   ),
                                 );
                               },
@@ -196,7 +202,7 @@ class HomeScreen extends ConsumerWidget {
                                   children: [
                                     Icon(
                                       Icons.code,
-                                      color: Colors.white,
+                                      color: Colors.blueGrey,
                                       size: width * 0.04,
                                     ),
                                     SizedBox(width: width * 0.01),
@@ -221,7 +227,7 @@ class HomeScreen extends ConsumerWidget {
                                   children: [
                                     Icon(
                                       Icons.play_circle,
-                                      color: Colors.white,
+                                      color: Colors.red,
                                       size: width * 0.04,
                                     ),
                                     SizedBox(width: width * 0.01),
