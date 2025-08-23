@@ -31,10 +31,12 @@ class Spike extends SpriteComponent
     );
 
     // 添加碰撞盒以便检测碰撞
+    // type==0: 地面spike，碰撞箱靠下；type==1: 悬挂spike，碰撞箱靠上
+    final hitboxY = (type == 1) ? gridSize * 0.0 : gridSize * 0.4;
     add(
       RectangleHitbox(
-        size: Vector2(gridSize * 0.6, gridSize * 0.6), // 宽高都缩小到0.6倍
-        position: Vector2(gridSize * 0.2, gridSize * 0.3), // 水平居中，竖直偏上
+        size: Vector2(gridSize * 0.6, gridSize * 0.6),
+        position: Vector2(gridSize * 0.2, hitboxY),
       ),
     );
   }

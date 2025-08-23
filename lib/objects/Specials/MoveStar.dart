@@ -46,19 +46,25 @@ class MovingStar extends SpriteComponent
       srcSize: Vector2.all(16),
     );
 
-    // 添加碰撞箱
-    add(RectangleHitbox(size: size, anchor: Anchor.center));
+    // 添加更小的碰撞箱（缩小为0.6倍并居中）
+    final double hitboxScale = 0.6;
+    final Vector2 hitboxSize = size * hitboxScale;
+    final Vector2 hitboxPos = (size - hitboxSize) / 2;
+    add(
+      RectangleHitbox(
+        size: hitboxSize,
+        position: hitboxPos,
+        anchor: Anchor.topLeft,
+      ),
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    // 更新时间累加器
-    _timeAccumulator += dt;
-
-    // 使用正弦函数计算当前速度（在30到100之间变化）
-    double currentSpeed = _baseSpeed + _speedRange * sin(_timeAccumulator * 2);
+    // 匀速运动，速度为构造参数speed
+    double currentSpeed = speed;
 
     if (!movingToStart) {
       // 向终点移动
@@ -88,6 +94,8 @@ class MovingStar extends SpriteComponent
     super.onCollisionStart(points, other);
     if (other is Player) {
       playersOnPlatform.add(other);
+      // 玩家碰到MoveStar判定为死亡
+      game.playerDeath();
     }
   }
 

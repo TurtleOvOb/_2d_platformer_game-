@@ -118,7 +118,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
               16 * (value['cy'] as num).toDouble(),
             );
           }
-          if (name == 'Endpos' && value != null) {
+          if (name == 'EndPos' && value != null) {
             end = Vector2(
               16 * (value['cx'] as num).toDouble(),
               16 * (value['cy'] as num).toDouble(),

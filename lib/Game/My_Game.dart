@@ -31,6 +31,15 @@ class MyGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    // 添加背景图片精灵到world底层
+    final bg =
+        SpriteComponent()
+          ..sprite = await Sprite.load('containers/BackGround4.png')
+          ..size = Vector2(512, 288)
+          ..anchor = Anchor.topLeft
+          ..position = Vector2.zero()
+          ..priority = -100;
+    world.add(bg);
     initial(); // 添加初始调用
   }
 
@@ -136,10 +145,29 @@ class MyGame extends FlameGame
       } else {
         player!.stopHorizontal();
       }
+
+      // 检测玩家是否超出屏幕边界
+      if (_isPlayerOutOfScreen()) {
+        playerDeath();
+      }
     } else {
       // 仍然调用super.update确保游戏引擎正常运行
       super.update(dt);
     }
+  }
+
+  // 检测玩家是否超出屏幕外
+  bool _isPlayerOutOfScreen() {
+    if (player == null) return false;
+    final px = player!.position.x;
+    final py = player!.position.y;
+    final sx = player!.size.x;
+    final sy = player!.size.y;
+    // 判定条件可根据实际关卡尺寸调整
+    if (px + sx < 0 || px > pxWid || py + sy < 0 || py > pxHei) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -211,23 +239,15 @@ class MyGame extends FlameGame
     try {
       // 暂停游戏
       pauseGame();
-
       // 获取当前分数（如果有需要可以计算）
       int score = calculateScore();
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
-
-      print('触发通关逻辑，当前关卡: $currentLevel, 得分: $score');
-
-      // 使用BuildContext跳转到通关页面
       if (overlays.isActive('gameUI')) {
-        overlays.remove('gameUI'); // 移除游戏UI（如果有）
+        overlays.remove('gameUI');
       }
 
-      // 触发回调而不是直接导航
       if (onLevelComplete != null) {
         onLevelComplete!(currentLevel, score);
-      } else {
-        print('onLevelComplete回调未设置，无法通知关卡完成');
       }
     } catch (e) {
       print('执行endLevel方法时发生错误: $e');
@@ -241,18 +261,13 @@ class MyGame extends FlameGame
       pauseGame();
 
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
-      print('玩家死亡，当前关卡: $currentLevel');
 
-      // 使用BuildContext跳转到游戏结束页面
       if (overlays.isActive('gameUI')) {
         overlays.remove('gameUI'); // 移除游戏UI（如果有）
       }
-
       // 触发回调而不是直接导航
       if (onPlayerDeath != null) {
         onPlayerDeath!(currentLevel);
-      } else {
-        print('onPlayerDeath回调未设置，无法通知玩家死亡');
       }
     } catch (e) {
       print('执行playerDeath方法时发生错误: $e');
@@ -264,6 +279,4 @@ class MyGame extends FlameGame
     // 这里可以根据实际需求计算分数，例如基于通关时间、收集物品数量等
     return 100;
   }
-
-  // 不再需要存储BuildContext
 }

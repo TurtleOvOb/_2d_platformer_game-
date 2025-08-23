@@ -1,3 +1,5 @@
+import 'package:_2d_platformergame/Objects/bricks/WhiteBlock.dart';
+import 'package:_2d_platformergame/Objects/Specials/invisibleBlock.dart';
 import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/objects/bricks/brick.dart';
@@ -42,7 +44,11 @@ class CollisionLogic {
     Set<Vector2> points,
     PositionComponent other,
   ) {
-    if (other is Brick || other is KeyBlock || other is ConveyorBelt) {
+    if (other is Brick ||
+        other is KeyBlock ||
+        other is ConveyorBelt ||
+        other is WhiteBlock ||
+        other is InvisibleBlock) {
       final collisionDirection = calculateCollisionDirection(
         player.toRect(),
         other.toRect(),
@@ -57,18 +63,17 @@ class CollisionLogic {
         case CollisionDirection.bottom:
           playerspeed.y = 0;
           player.position.y = other.toRect().bottom;
+          setIsGrounded(false);
           break;
         case CollisionDirection.left:
-          // 先修正位置
           player.position.x = other.toRect().left - player.size.x;
-          // 只有在地面且速度向右时归零
           if ((player as dynamic).isGrounded == true && playerspeed.x > 0) {
             playerspeed.x = 0;
           }
-          // 防止卡墙：如果修正后仍有重叠，微调出墙体
           if (player.toRect().right > other.toRect().left) {
             player.position.x = other.toRect().left - player.size.x - 0.1;
           }
+          setIsGrounded(false);
           break;
         case CollisionDirection.right:
           player.position.x = other.toRect().right;
@@ -78,6 +83,7 @@ class CollisionLogic {
           if (player.toRect().left < other.toRect().right) {
             player.position.x = other.toRect().right + 0.1;
           }
+          setIsGrounded(false);
           break;
       }
     } else if (other is HalfBrick || other is ChargedPlatform) {
@@ -103,8 +109,8 @@ class CollisionLogic {
     bool Function(bool) setIsGrounded,
     PositionComponent other,
   ) {
-    if (other is Brick) {
-      // 当玩家离开砖块时，标记为不在地面
+    if (other is Brick || other is WhiteBlock || other is InvisibleBlock) {
+      // 当玩家离开砖块、白块或隐形块时，标记为不在地面
       setIsGrounded(false);
     }
   }

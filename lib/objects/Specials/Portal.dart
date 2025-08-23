@@ -39,107 +39,37 @@ class Portal extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    // 添加上下浮动动画
+    add(
+      MoveEffect.by(
+        Vector2(0, -4),
+        EffectController(
+          duration: 0.7,
+          reverseDuration: 0.7,
+          infinite: true,
+          curve: Curves.easeInOut,
+        ),
+      ),
+    );
     await super.onLoad();
-
-    try {
-      // 基于类型确定传送门颜色文件夹
-      final String portalFolder =
-          VisualType == 0 ? 'PortalBlue' : 'PortalOrange';
-
-      print('开始加载传送门动画，类型: ${portalFolder}');
-
-      try {
-        // 使用与Player相同的方式加载动画
-        final images = [
-          await Flame.images.load('$portalFolder/Frame1.png'),
-          await Flame.images.load('$portalFolder/Frame2.png'),
-          await Flame.images.load('$portalFolder/Frame3.png'),
-        ];
-
-        // 转换为精灵列表
-        final sprites = images.map((img) => Sprite(img)).toList();
-
-        // 创建动画
-        animation = SpriteAnimation.spriteList(
-          sprites,
-          stepTime: 0.15,
-          loop: true,
-        );
-        playing = true; // 确保动画自动播放
-
-        print('成功加载了 ${sprites.length} 帧传送门动画');
-      } catch (e) {
-        print('加载传送门动画失败: $e，使用默认精灵');
-        // 加载失败，回退到默认单帧动画
-        final defaultSprite = await Sprite(
-          await Flame.images.load('images/tileset.png'),
-          srcPosition: srcPosition,
-          srcSize: Vector2(gridSize, gridSize * 2), // 设置为两格高
-        );
-
-        animation = SpriteAnimation.spriteList(
-          [defaultSprite],
-          stepTime: 1.0,
-          loop: true,
-        );
-        playing = true; // 确保动画自动播放
-      }
-    } catch (e) {
-      print('加载传送门动画过程发生错误: $e，使用默认精灵');
-      // 出错时使用原来的精灵图作为单帧动画
-      try {
-        final defaultSprite = await Sprite(
-          await Flame.images.load('images/tileset.png'),
-          srcPosition: srcPosition,
-          srcSize: Vector2(gridSize, gridSize * 2), // 设置为两格高
-        );
-
-        animation = SpriteAnimation.spriteList(
-          [defaultSprite],
-          stepTime: 1.0,
-          loop: true,
-        );
-        playing = true; // 确保动画自动播放
-      } catch (finalError) {
-        print('所有加载尝试都失败了: $finalError');
-      }
-    }
-
+    // 只加载静态图片
+    final String portalFolder = VisualType == 0 ? 'PortalBlue' : 'PortalOrange';
+    Sprite portalSprite;
+    portalSprite = await Sprite.load(
+      'tileset.png',
+      srcPosition: srcPosition,
+      srcSize: Vector2(gridSize, gridSize * 2),
+    );
+    animation = SpriteAnimation.spriteList(
+      [portalSprite],
+      stepTime: 1.0,
+      loop: false,
+    );
     // 添加碰撞箱 - 调整为两格高
     add(
       RectangleHitbox(
-        size: Vector2(gridSize * 0.8, gridSize * 1.8), // 碰撞箱高度调整为两格高
+        size: Vector2(gridSize * 0.8, gridSize * 1.8),
         position: Vector2(gridSize * 0.1, gridSize * 0.1),
-      ),
-    );
-
-    // 添加呼吸效果（轻微缩放）- 保留但减弱效果
-    add(
-      ScaleEffect.to(
-        Vector2(1.05, 1.05), // 减小缩放比例
-        EffectController(
-          duration: 0.7,
-          reverseDuration: 0.7,
-          infinite: true,
-          curve: Curves.easeInOut,
-        ),
-      ),
-    );
-
-    // 添加光效
-    add(
-      ColorEffect(
-        VisualType == 0
-            ? const Color(0xFF42A5F5)
-            : const Color(0xFFFF7043), // 入口蓝色，出口橙色
-        EffectController(
-          duration: 0.7,
-          reverseDuration: 0.7,
-          infinite: true,
-          curve: Curves.easeInOut,
-        ),
-        opacityFrom: 0.6,
-        opacityTo: 0.9,
       ),
     );
   }

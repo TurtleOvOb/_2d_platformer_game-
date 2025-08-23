@@ -7,20 +7,19 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  bool _locked = false; // 是否锁定控制
   Color color = Colors.white;
+  bool isCharged = false; // 充能状态
   Player({super.position, required this.spawnPosition})
     : super(size: Vector2(32, 32));
   Vector2 spawnPosition;
-  final Vector2 playersize = Vector2(16.0, 16.0); // 玩家大小，和图片尺寸一致
+  final Vector2 playersize = Vector2(12.0, 12.0); // 玩家大小，和图片尺寸一致
   final Vector2 playerspeed = Vector2(0.0, 0.0); // 玩家速度
-  // 当前站立的传送带速度 (如果有)
   double conveyorBeltSpeed = 0.0;
   int conveyorBeltDirection = 0;
-  // 基础物理参数
   final double gravity = 980; // 基础重力
   final double moveSpeed = 150; // 地面最大移动速度
   double jumpSpeed = 250; // 跳跃速度（向上为负）
-  // 手感增强参数
   final double groundAccel = 2100; // 地面加速度
   final double groundDecel = 300; // 地面减速度
   final double groundFriction = 1400; // 地面摩擦（无输入时）
@@ -29,7 +28,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   final double fallGravityMultiplier = 1.6; // 下落时加重力
   final double shortHopGravityMultiplier = 2.0; // 松开跳跃键时的上升重力
   final double maxFallSpeed = 900; // 最大下落速度
-  final double coyoteTime = 0.2; // 土狼时间（离地后仍可跳）
+  final double coyoteTime = 0.1; // 土狼时间（离地后仍可跳）
   final double jumpBufferTime = 0.12; // 跳跃缓冲（落地前按跳跃）
   double _coyoteTimer = 0;
   double _jumpBufferTimer = 0;
@@ -74,6 +73,10 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   void update(double dt) {
     super.update(dt);
 
+    if (_locked) {
+      playerspeed.setValues(0, 0);
+      return;
+    }
     // 逐渐减弱传送带的影响（当玩家已经离开传送带但保留了部分速度）
     if (conveyorBeltDirection == 0 &&
         isGrounded &&
@@ -116,10 +119,9 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
         playerspeed.x = _moveToward(playerspeed.x, 0, airDecel * 0.5 * dt);
       }
     }
+    // 锁定玩家控制，禁止移动和跳跃
 
-    // 2) 垂直移动：重力（可变跳高 + 下落加速 + 冲刺时减弱重力）
     double gScale = 1.0;
-
     if (isDashing) {
       // 冲刺状态：大幅减弱重力，提供滞空效果
       gScale = 0.1; // 只有10%的重力
@@ -171,6 +173,15 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     CollisionLogic.handleCollisionEnd((value) => isGrounded = value, other);
   }
 
+  // 充能状态切换
+  void charge() {
+    isCharged = true;
+  }
+
+  void discharge() {
+    isCharged = false;
+  }
+
   // 旧 jump() 保持兼容，改为发出跳跃请求
   void jump() => requestJump();
 
@@ -211,7 +222,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       playerspeed.x += conveyorBeltDirection * conveyorBeltSpeed * boostFactor;
 
       // 记录跳跃速度，但不立即清除传送带方向，让玩家保持一段时间的助推效果
-      // 在 onCollisionEnd 中，传送带会重置这些值
     }
 
     isGrounded = false;
@@ -230,6 +240,15 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   // 停止水平移动
   void stopHorizontal() {
     _desiredDir = 0;
+  }
+
+  void lockControl() {
+    _locked = true;
+    _desiredDir = 0;
+    _jumpHeld = false;
+    _jumpBufferTimer = 0;
+    isDashing = false;
+    playerspeed.setValues(0, 0);
   }
 
   // 工具函数：逐步靠近
