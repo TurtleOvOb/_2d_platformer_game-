@@ -116,124 +116,128 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
               // 内容区域
               Padding(
                 padding: EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: ScaleTransition(
-                        scale: _floatAnim,
-                        child: FadeTransition(
-                          opacity: _fadeAnim,
-                          child: const Text(
-                            'Level Completed!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'PixelMplus12-Regular',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.yellowAccent,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(3, 3),
-                                  blurRadius: 5,
-                                  color: Colors.black,
-                                ),
-                              ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Center(
+                        child: ScaleTransition(
+                          scale: _floatAnim,
+                          child: FadeTransition(
+                            opacity: _fadeAnim,
+                            child: const Text(
+                              'Level Completed!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontFamily: 'PixelMplus12-Regular',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.yellowAccent,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(3, 3),
+                                    blurRadius: 5,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    Center(
-                      child: ScaleTransition(
-                        scale: _floatAnim,
-                        child: FadeTransition(
-                          opacity: _fadeAnim,
-                          child: Text(
-                            'Score: ${widget.score}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'PixelMplus12-Regular',
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1, 1),
-                                  blurRadius: 4,
-                                  color: Colors.black,
-                                ),
-                              ],
+                      const SizedBox(height: 15),
+                      Center(
+                        child: ScaleTransition(
+                          scale: _floatAnim,
+                          child: FadeTransition(
+                            opacity: _fadeAnim,
+                            child: Text(
+                              'Score: ${widget.score}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontFamily: 'PixelMplus12-Regular',
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: 4,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 25),
-                    // 下一关按钮
-                    ImageTextButton(
-                      text: 'Next Level',
-                      imagePath: 'assets/images/buttons/Button1.png',
-                      onTap: () async {
-                        final nextLevelId = widget.nowlevel + 1;
-                        final ldtkPath =
-                            'assets/levels/Level_${nextLevelId}.ldtk';
-                        int pxWid = 512, pxHei = 288;
-                        try {
-                          final parser = LdtkParser();
-                          final result = await parser.parseLdtkLevelWithSize(
-                            ldtkPath,
+                      const SizedBox(height: 25),
+                      // 下一关按钮
+                      ImageTextButton(
+                        text: 'Next Level',
+                        imagePath: 'assets/images/buttons/Button1.png',
+                        onTap: () async {
+                          final nextLevelId = widget.nowlevel + 1;
+                          final ldtkPath =
+                              'assets/levels/Level_${nextLevelId}.ldtk';
+                          int pxWid = 512, pxHei = 288;
+                          try {
+                            final parser = LdtkParser();
+                            final result = await parser.parseLdtkLevelWithSize(
+                              ldtkPath,
+                            );
+                            pxWid = result.$2;
+                            pxHei = result.$3;
+                          } catch (e) {}
+                          if (!mounted) return;
+                          Navigator.of(context).pop();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => GameScreen(
+                                    levelId: nextLevelId,
+                                    pxWid: pxWid,
+                                    pxHei: pxHei,
+                                  ),
+                            ),
                           );
-                          pxWid = result.$2;
-                          pxHei = result.$3;
-                        } catch (e) {}
-                        if (!mounted) return;
-                        Navigator.of(context).pop();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => GameScreen(
-                                  levelId: nextLevelId,
-                                  pxWid: pxWid,
-                                  pxHei: pxHei,
-                                ),
-                          ),
-                        );
-                      },
-                      width: 180,
-                      height: 60,
-                      animationType: ButtonAnimationType.bounce,
-                      textStyle: const TextStyle(
-                        fontFamily: 'PixelMplus12-Regular',
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                        },
+                        width: 180,
+                        height: 60,
+                        animationType: ButtonAnimationType.bounce,
+                        textStyle: const TextStyle(
+                          fontFamily: 'PixelMplus12-Regular',
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    // 返回主页按钮
-                    ImageTextButton(
-                      text: 'Home',
-                      imagePath: 'assets/images/buttons/Button1.png',
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                          (route) => false,
-                        );
-                      },
-                      width: 180,
-                      height: 60,
-                      animationType: ButtonAnimationType.bounce,
-                      textStyle: const TextStyle(
-                        fontFamily: 'PixelMplus12-Regular',
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10),
+                      // 返回主页按钮
+                      ImageTextButton(
+                        text: 'Home',
+                        imagePath: 'assets/images/buttons/Button1.png',
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        },
+                        width: 180,
+                        height: 60,
+                        animationType: ButtonAnimationType.bounce,
+                        textStyle: const TextStyle(
+                          fontFamily: 'PixelMplus12-Regular',
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

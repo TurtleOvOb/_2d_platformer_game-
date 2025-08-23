@@ -82,6 +82,8 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
     print('GameUi widget.mission: ${widget.mission}');
     print('GameUi widget.game.player: ${widget.game.player}');
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       width: screenWidth, // 使用实际屏幕宽度
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -211,16 +213,13 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
                   builder: (dialogContext) {
                     return Dialog(
                       backgroundColor: Colors.transparent,
-                      insetPadding: const EdgeInsets.symmetric(
-                        horizontal: 64,
-                        vertical: 48,
+                      insetPadding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.08,
+                        vertical: screenHeight * 0.08,
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: SizedBox(
-                          // 用现有页面的 UI，不改内部设计
-                          child: const MusicSettingsPage(),
-                        ),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                        child: const MusicSettingsPage(),
                       ),
                     );
                   },
