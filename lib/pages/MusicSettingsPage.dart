@@ -1,5 +1,49 @@
 import 'package:flutter/material.dart';
 
+// 自定义正方形滑块（带白色边缘）
+class SquareThumbShape extends SliderComponentShape {
+  final double thumbSize;
+  const SquareThumbShape({this.thumbSize = 18});
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      Size(thumbSize, thumbSize);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final Canvas canvas = context.canvas;
+    final Paint borderPaint =
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4;
+    final Paint fillPaint =
+        Paint()
+          ..color = sliderTheme.thumbColor ?? Colors.yellow
+          ..style = PaintingStyle.fill;
+    final rect = Rect.fromCenter(
+      center: center,
+      width: thumbSize,
+      height: thumbSize,
+    );
+    canvas.drawRect(rect, fillPaint);
+    canvas.drawRect(rect, borderPaint);
+  }
+}
+
 class MusicSettingsPage extends StatefulWidget {
   const MusicSettingsPage({super.key});
 
@@ -109,18 +153,24 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                     ),
                   ),
                   Expanded(
-                    child: Slider(
-                      value: _soundEffectVolume,
-                      onChanged:
-                          _isSoundEffectEnabled
-                              ? (value) {
-                                setState(() {
-                                  _soundEffectVolume = value;
-                                });
-                              }
-                              : null,
-                      activeColor: Colors.yellow,
-                      inactiveColor: Colors.white.withOpacity(0.3),
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        thumbShape: const SquareThumbShape(thumbSize: 18),
+                        thumbColor: Colors.yellow,
+                      ),
+                      child: Slider(
+                        value: _soundEffectVolume,
+                        onChanged:
+                            _isSoundEffectEnabled
+                                ? (value) {
+                                  setState(() {
+                                    _soundEffectVolume = value;
+                                  });
+                                }
+                                : null,
+                        activeColor: Colors.yellow,
+                        inactiveColor: Colors.white.withOpacity(0.3),
+                      ),
                     ),
                   ),
                 ],
@@ -146,18 +196,24 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                     ),
                   ),
                   Expanded(
-                    child: Slider(
-                      value: _backgroundMusicVolume,
-                      onChanged:
-                          _isBackgroundMusicEnabled
-                              ? (value) {
-                                setState(() {
-                                  _backgroundMusicVolume = value;
-                                });
-                              }
-                              : null,
-                      activeColor: Colors.yellow,
-                      inactiveColor: Colors.white.withOpacity(0.3),
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        thumbShape: const SquareThumbShape(thumbSize: 18),
+                        thumbColor: Colors.yellow,
+                      ),
+                      child: Slider(
+                        value: _backgroundMusicVolume,
+                        onChanged:
+                            _isBackgroundMusicEnabled
+                                ? (value) {
+                                  setState(() {
+                                    _backgroundMusicVolume = value;
+                                  });
+                                }
+                                : null,
+                        activeColor: Colors.yellow,
+                        inactiveColor: Colors.white.withOpacity(0.3),
+                      ),
                     ),
                   ),
                 ],
@@ -262,28 +318,39 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
             ],
 
             const Spacer(),
-            // 退出按钮（修改为 TextButton）
+            // 退出按钮（图片背景）
             Align(
               alignment: Alignment.bottomRight,
-              child: TextButton(
-                onPressed: () {
-                  // 可添加退出逻辑
+              child: GestureDetector(
+                onTap: () {
                   Navigator.pop(context);
                 },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.yellow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ), //按钮的形状和圆角
-                  padding: EdgeInsets.all(screenWidth * 0.02),
-                ),
-                child: Text(
-                  'Exit',
-                  style: TextStyle(
-                    fontFamily: 'PixelMplus12-Regular',
-                    fontSize: screenWidth * 0.04,
-                    color: Colors.black,
-                  ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/buttons/Button1.png',
+                      width: screenWidth * 0.18,
+                      height: screenWidth * 0.07,
+                      fit: BoxFit.contain,
+                    ),
+                    Text(
+                      'Exit',
+                      style: TextStyle(
+                        fontFamily: 'PixelMplus12-Regular',
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(1, 1),
+                            blurRadius: 4,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

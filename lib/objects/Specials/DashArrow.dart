@@ -9,13 +9,12 @@ import 'package:flutter/material.dart';
 class DashArrow extends SpriteComponent with CollisionCallbacks {
   // 冲刺物品的基本参数
   final Vector2 brickpos; // 图块位置
-  final Vector2 srcPosition; // 在图块集中的位置
   final int type;
   final double gridSize; // 网格大小
   final int dashDirection; // 冲刺方向: 1=右, -1=左, 2=上, -2=下
 
-  final double dashPower = 350.0; // 冲刺力度
-  final double dashDuration = 0.3; // 冲刺持续时间(秒)
+  double get dashPower => type == 1 ? 320.0 : 200.0; // type=1冲刺更远
+  double get dashDuration => 0.3; // 可根据type扩展
 
   // 视觉效果参数
   bool _collected = false;
@@ -24,10 +23,9 @@ class DashArrow extends SpriteComponent with CollisionCallbacks {
   // 构造函数，使用与其他图块一致的构造方法
   DashArrow({
     required this.brickpos,
-    required this.srcPosition,
     required this.type,
     required this.gridSize,
-    required this.dashDirection, // 新增方向参数
+    required this.dashDirection,
   }) : super(size: Vector2(gridSize.toDouble(), gridSize.toDouble())) {
     anchor = Anchor.topLeft;
   }
@@ -39,13 +37,36 @@ class DashArrow extends SpriteComponent with CollisionCallbacks {
     // 设置位置
     position = Vector2(brickpos.x.floorToDouble(), brickpos.y.floorToDouble());
 
-    // 使用图块集渲染
+    // 根据type和dashDirection自动决定贴图坐标
+    Vector2 arrowSrcPos = Vector2(48, 0); // 默认右箭头
+    if (type == 0) {
+      // type=1为特殊大箭头，假设tileset中不同方向有不同图块
+      if (dashDirection == 1) {
+        arrowSrcPos = Vector2(8 * 16, 16); // 右大箭头
+      } else if (dashDirection == -1) {
+        arrowSrcPos = Vector2(6 * 16, 16); // 左大箭头
+      } else if (dashDirection == 2) {
+        arrowSrcPos = Vector2(7 * 16, 0); // 上大箭头
+      } else if (dashDirection == -2) {
+        arrowSrcPos = Vector2(7 * 16, 2 * 16); // 下大箭头
+      }
+    } else {
+      // type=0普通箭头，假设tileset中右箭头在(48,0)，左(32,0)，上(48,16)，下(32,16)
+      if (dashDirection == 1) {
+        arrowSrcPos = Vector2(11 * 16, 16); // 右
+      } else if (dashDirection == -1) {
+        arrowSrcPos = Vector2(9 * 16, 16); // 左
+      } else if (dashDirection == 2) {
+        arrowSrcPos = Vector2(10 * 16, 0); // 上
+      } else if (dashDirection == -2) {
+        arrowSrcPos = Vector2(10 * 16, 2 * 16); // 下
+      } else {
+        arrowSrcPos = Vector2(48, 0); // 默认右
+      }
+    }
     sprite = await Sprite.load(
       'tileset.png',
-      srcPosition: Vector2(
-        srcPosition.x.floorToDouble(),
-        srcPosition.y.floorToDouble(),
-      ),
+      srcPosition: arrowSrcPos,
       srcSize: Vector2.all(gridSize.floorToDouble()),
     );
 
@@ -119,10 +140,13 @@ class DashArrow extends SpriteComponent with CollisionCallbacks {
     // 设置玩家为冲刺状态（减弱重力影响）
     player.isDashing = true;
 
+    // type=1时冲刺距离更大
+    double power = dashPower;
+
     // 根据方向设置冲刺速度
     if (direction.abs() == 1) {
       // 水平冲刺 (1=右, -1=左)
-      player.playerspeed.x = direction * dashPower;
+      player.playerspeed.x = direction * power;
       player.playerspeed.y = 0; // 取消垂直速度
     } else if (direction.abs() == 2) {
       // 垂直冲刺 (2=上, -2=下)
@@ -130,7 +154,7 @@ class DashArrow extends SpriteComponent with CollisionCallbacks {
       player.playerspeed.y =
           -1 *
           (direction / direction.abs()) *
-          dashPower; // 确保 2 = 上 (负值), -2 = 下 (正值)
+          power; // 确保 2 = 上 (负值), -2 = 下 (正值)
     }
 
     // 添加冲刺视觉效果

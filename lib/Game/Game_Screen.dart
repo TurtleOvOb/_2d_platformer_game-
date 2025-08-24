@@ -52,17 +52,14 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     );
 
     // 设置游戏通关回调
-    game.onLevelComplete = (level, score) {
+    game.onLevelComplete = (level) {
       if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
           builder:
-              (context) => LevelCompletePage(
-                nowlevel: level,
-                score: score,
-                player: game.player,
-              ),
+              (context) =>
+                  LevelCompletePage(nowlevel: level, player: game.player),
         );
       }
     };
@@ -121,8 +118,8 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
             child: FittedBox(
               fit: BoxFit.cover, // 裁剪并铺满
               child: SizedBox(
-                width: 512,
-                height: 288,
+                width: widget.pxWid.toDouble(),
+                height: widget.pxHei.toDouble(),
                 // 使用key来确保每次构建都刷新GameWidget
                 child: GameWidget.controlled(
                   gameFactory: () => game,

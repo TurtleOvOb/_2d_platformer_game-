@@ -1,11 +1,13 @@
+import 'package:_2d_platformergame/Game/mission_system.dart';
 import 'package:_2d_platformergame/pages/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await unlockAllLevels(maxLevel: 20); // 一键解锁所有关卡
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); //屏幕全屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]).then(
     (_) {

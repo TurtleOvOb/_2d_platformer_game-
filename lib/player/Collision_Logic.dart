@@ -1,3 +1,5 @@
+import 'package:_2d_platformergame/Objects/Specials/MovePlat.dart';
+import 'package:_2d_platformergame/Objects/bricks/DangerousPlat.dart';
 import 'package:_2d_platformergame/Objects/bricks/WhiteBlock.dart';
 import 'package:_2d_platformergame/Objects/Specials/invisibleBlock.dart';
 import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
@@ -86,7 +88,10 @@ class CollisionLogic {
           setIsGrounded(false);
           break;
       }
-    } else if (other is HalfBrick || other is ChargedPlatform) {
+    } else if (other is HalfBrick ||
+        other is ChargedPlatform ||
+        other is DangerousPlat ||
+        other is MovePlat) {
       // 半砖和充能平台的特殊穿越逻辑
       // 只有当玩家速度向下且位置在平台上方时才允许碰撞
       if (playerspeed.y > 0 &&

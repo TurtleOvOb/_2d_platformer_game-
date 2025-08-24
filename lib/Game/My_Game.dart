@@ -11,6 +11,10 @@ import 'package:flame/components.dart';
 
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, KeyboardEvents {
+  // 死区参数
+  final double deadzoneWidth = 512 / 8;
+  final double deadzoneHeight = 288 / 8;
+  bool useDeadzone = false;
   Player? player; // 移除 late 关键字，允许为 null
   final Set<LogicalKeyboardKey> pressedKeys = {};
   final int? levelId;
@@ -55,21 +59,30 @@ class MyGame extends FlameGame
       world.add(player!);
 
       // 4. 重新生成砖块并获取实际关卡尺寸
-      await BrickGeneratorWithSize(); // 砖块和关卡尺寸会在函数内部处理
+      final result = await BrickGeneratorWithSize();
+      final int levelWidth = result.$2;
+      final int levelHeight = result.$3;
 
-      // 摄像机 viewport 固定为 512x288
-      camera.viewport = FixedResolutionViewport(resolution: Vector2(512, 288));
-      camera.viewfinder.anchor = Anchor.center;
-
-      // 摄像机运动模式：关卡大于画面则跟随，否则静止居中
-      if (pxWid > 512 || pxHei > 288 && player != null) {
-        // 关卡大于画面，摄像机跟随玩家，限制边界
-        camera.follow(player!);
-        // 可选：限制边界，防止超出
-        // 这里可根据实际 Flame 版本补充 setBounds 或 clamp 逻辑
+      // 嵌合相机viewport分辨率逻辑
+      if (pxWid > 600 && player != null) {
+        // 关卡大于画面，摄像机分辨率固定为512x288，手动实现死区跟随
+        camera.viewport = FixedResolutionViewport(
+          resolution: Vector2(512, 288),
+        );
+        camera.viewfinder.anchor = Anchor.center;
+        useDeadzone = true;
+        // 摄像机初始居中
+        camera.viewfinder.position = player!.position.clone();
+        print('当前摄影机大小: 512 x 288 (固定)');
       } else {
-        // 关卡小于等于画面，摄像机静止居中
-        camera.viewfinder.position = Vector2(pxWid / 2, pxHei / 2);
+        // 关卡小于等于画面，摄像机分辨率等于关卡大小，静止居中
+        camera.viewport = FixedResolutionViewport(
+          resolution: Vector2(levelWidth.toDouble(), levelHeight.toDouble()),
+        );
+        camera.viewfinder.anchor = Anchor.center;
+        camera.viewfinder.position = Vector2(levelWidth / 2, levelHeight / 2);
+        useDeadzone = false;
+        print('当前摄影机大小: \\${levelWidth} x \\${levelHeight} (自适应关卡)');
       }
 
       // 初始化完成
@@ -146,6 +159,29 @@ class MyGame extends FlameGame
         player!.stopHorizontal();
       }
 
+      // 手动实现摄像机死区机制
+      if (useDeadzone) {
+        final camPos = camera.viewfinder.position;
+        final playerPos = player!.position;
+        final left = camPos.x - deadzoneWidth / 2;
+        final right = camPos.x + deadzoneWidth / 2;
+        final top = camPos.y - deadzoneHeight / 2;
+        final bottom = camPos.y + deadzoneHeight / 2;
+        double newCamX = camPos.x;
+        double newCamY = camPos.y;
+        if (playerPos.x < left) {
+          newCamX = playerPos.x + deadzoneWidth / 2;
+        } else if (playerPos.x > right) {
+          newCamX = playerPos.x - deadzoneWidth / 2;
+        }
+        if (playerPos.y < top) {
+          newCamY = playerPos.y + deadzoneHeight / 2;
+        } else if (playerPos.y > bottom) {
+          newCamY = playerPos.y - deadzoneHeight / 2;
+        }
+        camera.viewfinder.position = Vector2(newCamX, newCamY);
+      }
+
       // 检测玩家是否超出屏幕边界
       if (_isPlayerOutOfScreen()) {
         playerDeath();
@@ -219,9 +255,19 @@ class MyGame extends FlameGame
   }
 
   void removeKeyBlock(int type) {
-    world.removeWhere(
-      (component) => component is KeyBlock && component.type == type,
-    );
+    if (type == 0 || type == 2) {
+      world.removeWhere(
+        (component) =>
+            component is KeyBlock &&
+            (component.type == 0 || component.type == 2),
+      );
+    } else if (type == 1 || type == 3) {
+      world.removeWhere(
+        (component) =>
+            component is KeyBlock &&
+            (component.type == 1 || component.type == 3),
+      );
+    }
   }
 
   void removeGreenOrb(int type) {
@@ -231,7 +277,7 @@ class MyGame extends FlameGame
   }
 
   // 事件回调通知
-  Function(int level, int score)? onLevelComplete;
+  Function(int level)? onLevelComplete;
   Function(int level)? onPlayerDeath;
 
   // 添加通关方法 - 不再处理页面跳转
@@ -240,14 +286,13 @@ class MyGame extends FlameGame
       // 暂停游戏
       pauseGame();
       // 获取当前分数（如果有需要可以计算）
-      int score = calculateScore();
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
       if (overlays.isActive('gameUI')) {
         overlays.remove('gameUI');
       }
 
       if (onLevelComplete != null) {
-        onLevelComplete!(currentLevel, score);
+        onLevelComplete!(currentLevel);
       }
     } catch (e) {
       print('执行endLevel方法时发生错误: $e');
@@ -275,8 +320,4 @@ class MyGame extends FlameGame
   }
 
   // 计算游戏得分的方法（可以根据实际需求自定义计分逻辑）
-  int calculateScore() {
-    // 这里可以根据实际需求计算分数，例如基于通关时间、收集物品数量等
-    return 100;
-  }
 }

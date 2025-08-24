@@ -1,4 +1,7 @@
+import 'package:_2d_platformergame/Objects/Specials/Portal.dart';
+
 import '../objects/Specials/MoveStar.dart';
+import '../Objects/Specials/MovePlat.dart';
 import 'dart:convert';
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +21,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
     final components = <PositionComponent>[];
     final int pxWid = jsonData['pxWid'] as int? ?? 512;
     final int pxHei = jsonData['pxHei'] as int? ?? 288;
+    print('当前关卡大小: ${pxWid} x ${pxHei}');
 
     final layerInstances = jsonData['layerInstances'] as List<dynamic>;
     if (layerInstances.isEmpty) {
@@ -91,21 +95,19 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
   ) {
     print('开始解析实体层...');
     final entities = layer['entityInstances'] as List<dynamic>? ?? [];
-    print('找到 ${entities.length} 个实体');
+    print('找到 \\${entities.length} 个实体');
 
     for (final entity in entities) {
       final entityId = entity['__identifier'] as String;
 
       if (entityId == 'Star') {
-        print('正在解析 Star 实体...');
+        // ...existing code...
         final px = entity['px'] as List<dynamic>? ?? [0, 0];
         double x = (px[0] as num).toDouble();
         double y = (px[1] as num).toDouble();
         double speed = 60;
         Vector2 start = Vector2(x, y);
         Vector2 end = Vector2(x + 64, y);
-        print('初始解析位置: start=$start, end=$end');
-
         final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
         for (final field in fields) {
           final name = field['__identifier'];
@@ -125,15 +127,75 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
             );
           }
         }
-
-        print('最终Star位置: start=$start, end=$end, speed=$speed');
         final star = MovingStar(
           startPosition: start,
           endPosition: end,
           speed: speed,
         );
         components.add(star);
-        print('Star 已添加到组件列表');
+      }
+
+      // 新增MovePlat实体解析
+      if (entityId == 'Movable_plat') {
+        final px = entity['px'] as List<dynamic>? ?? [0, 0];
+        double x = (px[0] as num).toDouble();
+        double y = (px[1] as num).toDouble();
+        double speed = 60;
+        Vector2 start = Vector2(x, y);
+        Vector2 end = Vector2(x + 64, y);
+        final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
+        for (final field in fields) {
+          final name = field['__identifier'];
+          final value = field['__value'];
+          if (name == 'Speed' && value != null)
+            speed = (value as num).toDouble();
+          if (name == 'StartPos' && value != null) {
+            start = Vector2(
+              16 * (value['cx'] as num).toDouble(),
+              16 * (value['cy'] as num).toDouble(),
+            );
+          }
+          if (name == 'EndPos' && value != null) {
+            end = Vector2(
+              16 * (value['cx'] as num).toDouble(),
+              16 * (value['cy'] as num).toDouble(),
+            );
+          }
+        }
+        final movePlat = MovePlat(
+          startPosition: start,
+          endPosition: end,
+          speed: speed,
+        );
+        components.add(movePlat);
+      }
+
+      // 新增Portal实体解析
+      if (entityId == 'Portal') {
+        final px = entity['px'] as List<dynamic>? ?? [0, 0];
+        double x = (px[0] as num).toDouble();
+        double y = (px[1] as num).toDouble();
+        int portalGroup = 0;
+        int visualType = 0;
+        final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
+        for (final field in fields) {
+          final name = field['__identifier'];
+          final value = field['__value'];
+          if (name == 'Group' && value != null) {
+            portalGroup = (value as num).toInt();
+          }
+          if (name == 'VisualType' && value != null) {
+            visualType = (value as num).toInt();
+          }
+        }
+        // srcPosition和gridSize可根据你的Portal构造函数调整
+        final portal = Portal(
+          brickpos: Vector2(x, y),
+          VisualType: visualType,
+          portalGroup: portalGroup,
+          gridSize: 16.0, // 如有动态tileSize可替换
+        );
+        components.add(portal);
       }
     }
   }

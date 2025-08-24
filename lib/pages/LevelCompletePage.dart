@@ -11,12 +11,10 @@ import 'package:_2d_platformergame/player/player.dart';
 
 class LevelCompletePage extends ConsumerStatefulWidget {
   final int nowlevel;
-  final int score;
   final Player? player;
   const LevelCompletePage({
     super.key,
     required this.nowlevel,
-    required this.score,
     required this.player,
   });
 
@@ -136,31 +134,6 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                                 Shadow(
                                   offset: Offset(3, 3),
                                   blurRadius: 5,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Center(
-                      child: ScaleTransition(
-                        scale: _floatAnim,
-                        child: FadeTransition(
-                          opacity: _fadeAnim,
-                          child: Text(
-                            'Score: ${widget.score}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'PixelMplus12-Regular',
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(1, 1),
-                                  blurRadius: 4,
                                   color: Colors.black,
                                 ),
                               ],

@@ -7,6 +7,9 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  // 动画缓存
+  SpriteAnimation? _normalAnimation;
+  SpriteAnimation? _chargedAnimation;
   bool _locked = false; // 是否锁定控制
   Color color = Colors.white;
   bool isCharged = false; // 充能状态
@@ -43,15 +46,34 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // 加载动画帧
-    final images = [
+    // 加载未充能动画
+    final normalImages = [
       await Flame.images.load('Player/Frame1.png'),
       await Flame.images.load('Player/Frame2.png'),
       await Flame.images.load('Player/Frame3.png'),
       await Flame.images.load('Player/Frame4.png'),
     ];
-    final sprites = images.map((img) => Sprite(img)).toList();
-    animation = SpriteAnimation.spriteList(sprites, stepTime: 0.15);
+    final normalSprites = normalImages.map((img) => Sprite(img)).toList();
+    _normalAnimation = SpriteAnimation.spriteList(
+      normalSprites,
+      stepTime: 0.15,
+    );
+
+    // 加载充能动画
+    final chargedImages = [
+      await Flame.images.load('Player2/Frame1.png'),
+      await Flame.images.load('Player2/Frame2.png'),
+      await Flame.images.load('Player2/Frame3.png'),
+      await Flame.images.load('Player2/Frame4.png'),
+    ];
+    final chargedSprites = chargedImages.map((img) => Sprite(img)).toList();
+    _chargedAnimation = SpriteAnimation.spriteList(
+      chargedSprites,
+      stepTime: 0.15,
+    );
+
+    // 默认未充能
+    animation = _normalAnimation;
     size = playersize;
     add(
       RectangleHitbox(
@@ -72,6 +94,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+
+    // 动画切换：充能状态用Player2帧，未充能用Player帧
+    if (isCharged && animation != _chargedAnimation) {
+      animation = _chargedAnimation;
+    } else if (!isCharged && animation != _normalAnimation) {
+      animation = _normalAnimation;
+    }
 
     if (_locked) {
       playerspeed.setValues(0, 0);

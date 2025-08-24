@@ -69,6 +69,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/images/Player/
+    - assets/images/Player2/
     - assets/images/buttons/
     - assets/images/containers/
     - assets/images/containers/BackGround3.png

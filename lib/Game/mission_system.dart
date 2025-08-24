@@ -1,4 +1,13 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:_2d_platformergame/player/player.dart';
+
+Future<void> unlockAllLevels({int maxLevel = 20}) async {
+  final prefs = await SharedPreferences.getInstance();
+  for (int i = 0; i < maxLevel; i++) {
+    await prefs.setBool('level_${i}_unlocked', true);
+  }
+  print('所有关卡已解锁');
+}
 
 /// 关卡任务目标
 class Mission {

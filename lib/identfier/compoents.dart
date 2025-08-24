@@ -1,8 +1,8 @@
 import 'package:_2d_platformergame/Objects/Specials/invisibleBlock.dart';
+import 'package:_2d_platformergame/Objects/bricks/DangerousPlat.dart';
 import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
 import 'package:_2d_platformergame/objects/Specials/DashArrow.dart';
 import 'package:_2d_platformergame/objects/Specials/Key.dart';
-import 'package:_2d_platformergame/objects/Specials/Portal.dart';
 import 'package:_2d_platformergame/objects/Specials/face.dart';
 import 'package:_2d_platformergame/objects/bricks/ChargedPlatform.dart';
 import 'package:_2d_platformergame/objects/bricks/DoorBlock.dart';
@@ -92,7 +92,7 @@ PositionComponent? createComponentForTile(
           (x + offsetX).floorToDouble(),
           (y + offsetY).floorToDouble(),
         ),
-        srcPosition: Vector2(7 * 16, 0),
+
         type: 0,
         gridSize: tileSize.toDouble(),
         dashDirection: 2, // 向上冲刺
@@ -103,7 +103,7 @@ PositionComponent? createComponentForTile(
           (x + offsetX).floorToDouble(),
           (y + offsetY).floorToDouble(),
         ),
-        srcPosition: Vector2(6 * 16, 16),
+
         type: 0,
         gridSize: tileSize.toDouble(),
         dashDirection: -1, // 向左冲刺
@@ -114,7 +114,7 @@ PositionComponent? createComponentForTile(
           (x + offsetX).floorToDouble(),
           (y + offsetY).floorToDouble(),
         ),
-        srcPosition: Vector2(8 * 16, 16),
+
         type: 0,
         gridSize: tileSize.toDouble(),
         dashDirection: 1, // 向右冲刺
@@ -125,12 +125,54 @@ PositionComponent? createComponentForTile(
           (x + offsetX).floorToDouble(),
           (y + offsetY).floorToDouble(),
         ),
-        srcPosition: Vector2(7 * 16, 2 * 16),
+
         type: 0,
         gridSize: tileSize.toDouble(),
         dashDirection: -2, // 向下冲刺
       );
+    case 10:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+        type: 1,
+        gridSize: tileSize.toDouble(),
+        dashDirection: 2, // 向下冲刺
+      );
+    case 41:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
 
+        type: 1,
+        gridSize: tileSize.toDouble(),
+        dashDirection: -1, // 向下冲刺
+      );
+    case 43:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+
+        type: 1,
+        gridSize: tileSize.toDouble(),
+        dashDirection: 1, // 向下冲刺
+      );
+    case 74:
+      return DashArrow(
+        brickpos: Vector2(
+          (x + offsetX).floorToDouble(),
+          (y + offsetY).floorToDouble(),
+        ),
+
+        type: 1,
+        gridSize: tileSize.toDouble(),
+        dashDirection: -2, // 向下冲刺
+      );
     case 64:
       return Brick(
         brickpos: Vector2(
@@ -163,7 +205,7 @@ PositionComponent? createComponentForTile(
         gridSize: tileSize,
       );
     // 传送门组1 - 入口（蓝色）
-    case 45:
+    /* case 45:
       return Portal(
         brickpos: Vector2(
           (x + offsetX).floorToDouble(),
@@ -185,7 +227,7 @@ PositionComponent? createComponentForTile(
         VisualType: 1, // 出口传送门
         portalGroup: 1, // 组1
         gridSize: tileSize.toDouble(),
-      );
+      ); */
     case 128:
       return HalfBrick(
         brickpos: Vector2(
@@ -237,6 +279,34 @@ PositionComponent? createComponentForTile(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
         srcPosition: Vector2(7 * 16, 4 * 16),
         type: 1,
+        gridSize: tileSize.toDouble(),
+      );
+    case 136:
+      return Spike(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(8 * 16, 4 * 16),
+        type: 2,
+        gridSize: tileSize.toDouble(),
+      );
+    case 137:
+      return Spike(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(9 * 16, 4 * 16),
+        type: 2,
+        gridSize: tileSize.toDouble(),
+      );
+    case 168:
+      return Spike(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(9 * 16, 5 * 16),
+        type: 3,
+        gridSize: tileSize.toDouble(),
+      );
+    case 169:
+      return Spike(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+        srcPosition: Vector2(9 * 16, 5 * 16),
+        type: 3,
         gridSize: tileSize.toDouble(),
       );
     case 160:
@@ -347,6 +417,48 @@ PositionComponent? createComponentForTile(
         type: 0,
         gridSize: tileSize.toDouble(),
       );
+    case 242:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY),
+        srcPosition: Vector2(18 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
+    case 243:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY),
+        srcPosition: Vector2(19 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
+    case 244:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY),
+        srcPosition: Vector2(20 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
+    case 274:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY + 8),
+        srcPosition: Vector2(20 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
+    case 275:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY + 8),
+        srcPosition: Vector2(20 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
+    case 276:
+      return DangerousPlat(
+        brickpos: Vector2(x + offsetX, y + offsetY + 8),
+        srcPosition: Vector2(20 * 16, 7 * 16),
+        type: 0,
+        gridSize: tileSize.toDouble(),
+      );
     case 268:
       return ChargedPlatform(
         brickpos: Vector2(x + offsetX, y + offsetY + 8),
@@ -396,13 +508,7 @@ PositionComponent? createComponentForTile(
         type: 0,
         gridSize: tileSize,
       );
-    case 356:
-      return KeyBlock(
-        brickpos: Vector2((x + offsetX), (y + offsetY)),
-        srcPosition: Vector2(4 * 16, 11 * 16),
-        type: 0, // 需要Key1开启的钥匙块
-        gridSize: tileSize.toDouble(),
-      );
+
     case 359:
       return Key(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
@@ -410,25 +516,30 @@ PositionComponent? createComponentForTile(
         type: 1,
         gridSize: tileSize.toDouble(),
       );
-    case 388:
+    case 356:
       return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
-        srcPosition: Vector2(4 * 16, 12 * 16),
         type: 0, // 需要Key1开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 357:
       return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
-        srcPosition: Vector2(5 * 16, 11 * 16),
+
         type: 1, // 需要Key2开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
-    case 389:
+    case 420:
       return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),
-        srcPosition: Vector2(5 * 16, 12 * 16),
-        type: 1, // 需要Key2开启的钥匙块
+        type: 2, // 需要Key2开启的钥匙块
+        gridSize: tileSize.toDouble(),
+      );
+    case 422:
+      return KeyBlock(
+        brickpos: Vector2((x + offsetX), (y + offsetY)),
+
+        type: 3, // 需要Key2开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
     case 358:

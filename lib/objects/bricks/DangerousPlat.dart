@@ -2,6 +2,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/animation.dart';
 
 class DangerousPlat extends SpriteComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
@@ -77,14 +79,35 @@ class DangerousPlat extends SpriteComponent
     super.onCollision(points, other);
     if (isFalling || isDisappeared) return;
     if (other is Player) {
-      // 玩家站上去后计时下落
-      _fallTimer?.removeFromParent();
-      _fallTimer = TimerComponent(
-        period: fallDelay,
-        repeat: false,
-        onTick: _startFalling,
-      );
-      add(_fallTimer!);
+      // 玩家碰到时播放抖动动画，同时开始倒计时（只触发一次）
+      if (_fallTimer == null) {
+        // 抖动动画：左右快速移动几次
+        final shakeDistance = 6.0;
+        final shakeDuration = 0.04;
+        final effects = <MoveEffect>[];
+        for (int i = 0; i < 4; i++) {
+          effects.add(
+            MoveEffect.by(
+              Vector2(i % 2 == 0 ? shakeDistance : -shakeDistance, 0),
+              EffectController(duration: shakeDuration, curve: Curves.ease),
+            ),
+          );
+        }
+        effects.add(
+          MoveEffect.to(
+            originalPosition!,
+            EffectController(duration: shakeDuration, curve: Curves.ease),
+          ),
+        );
+        add(SequenceEffect(effects));
+        // 开始倒计时
+        _fallTimer = TimerComponent(
+          period: fallDelay,
+          repeat: false,
+          onTick: _startFalling,
+        );
+        add(_fallTimer!);
+      }
     }
   }
 

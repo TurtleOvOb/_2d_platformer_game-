@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 class Portal extends SpriteAnimationComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
   final Vector2 brickpos;
-  final Vector2 srcPosition;
   final int VisualType; // 0表示入口传送门（蓝色），1表示出口传送门（橙色）
   final double gridSize;
   final int portalGroup; // 传送门组标识符，默认为0，相同组的传送门相互连接
@@ -27,7 +26,6 @@ class Portal extends SpriteAnimationComponent
 
   Portal({
     required this.brickpos,
-    required this.srcPosition,
     required this.VisualType,
     required this.gridSize,
     this.portalGroup = 0, // 默认为组0
@@ -52,12 +50,18 @@ class Portal extends SpriteAnimationComponent
       ),
     );
     await super.onLoad();
-    // 只加载静态图片
-    final String portalFolder = VisualType == 0 ? 'PortalBlue' : 'PortalOrange';
-    Sprite portalSprite;
-    portalSprite = await Sprite.load(
+    // 根据VisualType选择不同的srcPosition（tileset中的不同图块）
+    Vector2 tileSrcPos;
+    if (VisualType == 0) {
+      // 蓝色传送门在tileset.png的(0,16)
+      tileSrcPos = Vector2(13 * 16, 16);
+    } else {
+      // 橙色传送门在tileset.png的(32,16)
+      tileSrcPos = Vector2(15 * 16, 16);
+    }
+    Sprite portalSprite = await Sprite.load(
       'tileset.png',
-      srcPosition: srcPosition,
+      srcPosition: tileSrcPos,
       srcSize: Vector2(gridSize, gridSize * 2),
     );
     animation = SpriteAnimation.spriteList(

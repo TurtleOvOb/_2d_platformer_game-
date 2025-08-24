@@ -9,6 +9,8 @@ class Spike extends SpriteComponent
   // 移除spikeSize硬编码，使用gridSize计算
   final Vector2 brickpos;
   final Vector2 srcPosition;
+
+  /// type: 0-地面, 1-天花板, 2-左墙, 3-右墙
   final int type;
   final double gridSize;
 
@@ -23,20 +25,32 @@ class Spike extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
 
-    // 修改2: 从图块集加载半砖纹理
+    // 不旋转碰撞箱，type只影响碰撞箱在本格内的位置
+    Vector2 hitboxPos;
+    if (type == 0) {
+      // 地面
+      hitboxPos = Vector2(gridSize * 0.2, gridSize * 0.4);
+    } else if (type == 1) {
+      // 天花板
+      hitboxPos = Vector2(gridSize * 0.2, 0);
+    } else if (type == 2) {
+      // 左墙
+      hitboxPos = Vector2(0, gridSize * 0.2);
+    } else if (type == 3) {
+      // 右墙
+      hitboxPos = Vector2(gridSize * 0.4, gridSize * 0.2);
+    } else {
+      hitboxPos = Vector2(gridSize * 0.2, gridSize * 0.4);
+    }
     sprite = await Sprite.load(
-      'tileset.png', // 图块集路径
-      srcPosition: srcPosition, // 从构造函数传入的图块位置
-      srcSize: Vector2(gridSize, gridSize), // 半砖尺寸
+      'tileset.png',
+      srcPosition: srcPosition,
+      srcSize: Vector2(gridSize, gridSize),
     );
-
-    // 添加碰撞盒以便检测碰撞
-    // type==0: 地面spike，碰撞箱靠下；type==1: 悬挂spike，碰撞箱靠上
-    final hitboxY = (type == 1) ? gridSize * 0.0 : gridSize * 0.4;
     add(
       RectangleHitbox(
         size: Vector2(gridSize * 0.6, gridSize * 0.6),
-        position: Vector2(gridSize * 0.2, hitboxY),
+        position: hitboxPos,
       ),
     );
   }
