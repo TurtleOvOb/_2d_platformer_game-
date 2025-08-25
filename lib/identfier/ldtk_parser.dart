@@ -1,6 +1,7 @@
 import 'package:_2d_platformergame/Objects/Specials/Portal.dart';
 
 import '../objects/Specials/MoveStar.dart';
+import '../Objects/Specials/Star_Dynamic.dart';
 import '../Objects/Specials/MovePlat.dart';
 import 'dart:convert';
 import 'package:_2d_platformergame/Game/My_Game.dart';
@@ -133,6 +134,38 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
           speed: speed,
         );
         components.add(star);
+      }
+
+      // 新增Star_Dynamic实体解析
+      if (entityId == 'Star_Dynamic') {
+        final px = entity['px'] as List<dynamic>? ?? [0, 0];
+        double x = (px[0] as num).toDouble();
+        double y = (px[1] as num).toDouble();
+        double speed = 60;
+        List<Vector2> pathPoints = [];
+        final fields = entity['fieldInstances'] as List<dynamic>? ?? [];
+        for (final field in fields) {
+          final name = field['__identifier'];
+          final value = field['__value'];
+          if (name == 'PathPoint' && value != null && value is List) {
+            for (final pt in value) {
+              if (pt is Map && pt.containsKey('cx') && pt.containsKey('cy')) {
+                pathPoints.add(
+                  Vector2(
+                    16 * (pt['cx'] as num).toDouble(),
+                    16 * (pt['cy'] as num).toDouble(),
+                  ),
+                );
+              }
+            }
+          }
+        }
+        // 若未配置路径点，默认加当前位置
+        if (pathPoints.isEmpty) {
+          pathPoints.add(Vector2(x, y));
+        }
+        final starDynamic = StarDynamic(pathPoints: pathPoints, speed: speed);
+        components.add(starDynamic);
       }
 
       // 新增MovePlat实体解析

@@ -27,45 +27,45 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   Timer? _leftTimer;
   Timer? _rightTimer;
 
-  late MyGame game;
+  MyGame? game;
   bool isGameCreated = false;
+  Future<void>? _gameLoadFuture;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    // 每次初始化时创建一个全新的游戏实例
-    _createNewGame();
+    // 每次初始化时创建一个全新的游戏实例（异步加载）
+    _gameLoadFuture = _createNewGame();
   }
 
-  // 创建新游戏实例的方法
-  void _createNewGame() {
-    if (isGameCreated) {
-      game.pauseEngine();
+  // 创建新游戏实例的方法（异步）
+  Future<void> _createNewGame() async {
+    if (isGameCreated && game != null) {
+      game?.pauseEngine();
     }
     // 初始化游戏
-    game = MyGame(
+    final newGame = MyGame(
       levelId: widget.levelId,
       pxWid: widget.pxWid,
       pxHei: widget.pxHei,
     );
 
     // 设置游戏通关回调
-    game.onLevelComplete = (level) {
+    newGame.onLevelComplete = (level) {
       if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
           builder:
               (context) =>
-                  LevelCompletePage(nowlevel: level, player: game.player),
+                  LevelCompletePage(nowlevel: level, player: newGame.player),
         );
       }
     };
 
     // 设置玩家死亡回调
-    game.onPlayerDeath = (level) {
+    newGame.onPlayerDeath = (level) {
       if (mounted) {
         showDialog(
           context: context,
@@ -75,7 +75,13 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       }
     };
 
-    isGameCreated = true;
+    // 等待资源加载完成
+    await newGame.onLoad();
+    if (!mounted) return;
+    setState(() {
+      game = newGame;
+      isGameCreated = true;
+    });
   }
 
   @override
@@ -84,7 +90,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     _rightTimer?.cancel();
     // 在销毁 widget 时正确清理游戏实例
     if (isGameCreated) {
-      game.pauseEngine();
+      game?.pauseEngine();
     }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -97,117 +103,136 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // 确保每次构建都有有效的游戏实例
-    if (!isGameCreated) {
-      _createNewGame();
-    }
-
     final mission = widget.levelId != null ? missionMap[widget.levelId!] : null;
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // 新增背景图片层
-          Image.asset(
-            'assets/images/containers/BackGround4.png',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          ClipRect(
-            child: FittedBox(
-              fit: BoxFit.cover, // 裁剪并铺满
-              child: SizedBox(
-                width: widget.pxWid.toDouble(),
-                height: widget.pxHei.toDouble(),
-                // 使用key来确保每次构建都刷新GameWidget
-                child: GameWidget.controlled(
-                  gameFactory: () => game,
-                  key: ValueKey(
-                    'game-${widget.levelId}-${DateTime.now().millisecondsSinceEpoch}',
+      body: FutureBuilder<void>(
+        future: _gameLoadFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done ||
+              !isGameCreated ||
+              game == null) {
+            // 加载动画
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text(
+                    '正在加载关卡资源...',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ],
+              ),
+            );
+          }
+          // 游戏内容
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              // 新增背景图片层
+              Image.asset(
+                'assets/images/containers/BackGround4.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              ClipRect(
+                child: FittedBox(
+                  fit: BoxFit.cover, // 裁剪并铺满
+                  child: SizedBox(
+                    width: widget.pxWid.toDouble(),
+                    height: widget.pxHei.toDouble(),
+                    // 使用key来确保每次构建都刷新GameWidget
+                    child: GameWidget.controlled(
+                      gameFactory: () => game!,
+                      key: ValueKey(
+                        'game-${widget.levelId}-${DateTime.now().millisecondsSinceEpoch}',
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(child: GameUi(game: game, mission: mission)),
-          ),
-          Positioned(
-            left: 30,
-            bottom: 30,
-            child: Row(
-              children: [
-                _buildCircleButton(
-                  icon: Icons.arrow_left,
-                  onTapDown: (_) {
-                    _leftTimer?.cancel();
-                    game.player?.moveLeft();
-                    _leftTimer = Timer.periodic(
-                      const Duration(milliseconds: 16),
-                      (_) {
-                        game.player?.moveLeft();
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: SafeArea(child: GameUi(game: game!, mission: mission)),
+              ),
+              Positioned(
+                left: 30,
+                bottom: 30,
+                child: Row(
+                  children: [
+                    _buildCircleButton(
+                      icon: Icons.arrow_left,
+                      onTapDown: (_) {
+                        _leftTimer?.cancel();
+                        game!.player?.moveLeft();
+                        _leftTimer = Timer.periodic(
+                          const Duration(milliseconds: 16),
+                          (_) {
+                            game!.player?.moveLeft();
+                          },
+                        );
                       },
-                    );
+                      onTapUp: (_) {
+                        _leftTimer?.cancel();
+                        game!.player?.stopHorizontal();
+                      },
+                      onTapCancel: () {
+                        _leftTimer?.cancel();
+                        game!.player?.stopHorizontal();
+                      },
+                    ),
+                    SizedBox(width: 30),
+                    _buildCircleButton(
+                      icon: Icons.arrow_right,
+                      onTapDown: (_) {
+                        _rightTimer?.cancel();
+                        game!.player?.moveRight();
+                        _rightTimer = Timer.periodic(
+                          const Duration(milliseconds: 16),
+                          (_) {
+                            game!.player?.moveRight();
+                          },
+                        );
+                      },
+                      onTapUp: (_) {
+                        _rightTimer?.cancel();
+                        game!.player?.stopHorizontal();
+                      },
+                      onTapCancel: () {
+                        _rightTimer?.cancel();
+                        game!.player?.stopHorizontal();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 30,
+                bottom: 30,
+                child: _buildCircleButton(
+                  icon: Icons.arrow_upward,
+                  onTapDown: (_) {
+                    game!.player?.requestJump();
                   },
                   onTapUp: (_) {
-                    _leftTimer?.cancel();
-                    game.player?.stopHorizontal();
+                    game!.player?.releaseJump();
                   },
-                  onTapCancel: () {
-                    _leftTimer?.cancel();
-                    game.player?.stopHorizontal();
+                  onLongPressStart: (_) {
+                    game!.player?.requestJump();
                   },
-                ),
-                SizedBox(width: 30),
-                _buildCircleButton(
-                  icon: Icons.arrow_right,
-                  onTapDown: (_) {
-                    _rightTimer?.cancel();
-                    game.player?.moveRight();
-                    _rightTimer = Timer.periodic(
-                      const Duration(milliseconds: 16),
-                      (_) {
-                        game.player?.moveRight();
-                      },
-                    );
-                  },
-                  onTapUp: (_) {
-                    _rightTimer?.cancel();
-                    game.player?.stopHorizontal();
-                  },
-                  onTapCancel: () {
-                    _rightTimer?.cancel();
-                    game.player?.stopHorizontal();
+                  onLongPressEnd: (_) {
+                    game!.player?.releaseJump();
                   },
                 ),
-              ],
-            ),
-          ),
-          Positioned(
-            right: 30,
-            bottom: 30,
-            child: _buildCircleButton(
-              icon: Icons.arrow_upward,
-              onTapDown: (_) {
-                game.player?.requestJump();
-              },
-              onTapUp: (_) {
-                game.player?.releaseJump();
-              },
-              onLongPressStart: (_) {
-                game.player?.requestJump();
-              },
-              onLongPressEnd: (_) {
-                game.player?.releaseJump();
-              },
-            ),
-          ),
-          // 其他游戏UI组件可以在这里添加
-        ],
+              ),
+              // 其他游戏UI组件可以在这里添加
+            ],
+          );
+        },
       ),
     );
   }

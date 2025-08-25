@@ -13,7 +13,7 @@ class DashArrow extends SpriteComponent with CollisionCallbacks {
   final double gridSize; // 网格大小
   final int dashDirection; // 冲刺方向: 1=右, -1=左, 2=上, -2=下
 
-  double get dashPower => type == 1 ? 320.0 : 200.0; // type=1冲刺更远
+  double get dashPower => type == 1 ? 320.0 : 250.0; // type=1冲刺更远
   double get dashDuration => 0.3; // 可根据type扩展
 
   // 视觉效果参数

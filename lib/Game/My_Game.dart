@@ -54,6 +54,11 @@ class MyGame extends FlameGame
 
   Future<void> initial() async {
     try {
+      // 防止重复添加玩家
+      if (player != null) {
+        player!.removeFromParent();
+        player = null;
+      }
       // 2. 重新创建玩家
       player = Player(spawnPosition: Vector2(16, 144));
       world.add(player!);
