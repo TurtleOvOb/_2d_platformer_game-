@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:_2d_platformergame/audiomanage.dart';
 
 enum ButtonAnimationType {
   scale, // 缩放动画
@@ -259,39 +260,28 @@ class _ImageTextButtonState extends State<ImageTextButton>
     return GestureDetector(
       onTapDown: (_) => _handleButtonAnimation(pressed: true),
       onTapUp: (_) {
-        // 不再使用_handleButtonAnimation方法，直接处理动画和回调
-
+        // 先播放音效
+        AudioManage().playclick();
         // 判断是否需要等待动画完成后再执行回调
         if (widget.animationType != ButtonAnimationType.none) {
-          // 确保动画控制器准备好
           if (_animationController.isAnimating) {
             _animationController.stop();
           }
-
-          // 创建一个一次性的动画状态监听器
           AnimationStatusListener? listener;
           listener = (status) {
             if (status == AnimationStatus.completed) {
-              // 动画完成后执行回调
               widget.onTap();
-              // 移除监听器，避免重复调用
               _animationController.removeStatusListener(listener!);
             }
           };
-
-          // 添加监听器
           _animationController.addStatusListener(listener);
-
-          // 开始动画
           _animationController.reset();
           _animationController.forward();
         } else {
-          // 无动画时直接执行回调
           widget.onTap();
         }
       },
       onTapCancel: () {
-        // 取消点击时，重置动画
         _animationController.reset();
       },
       child: buttonContent(),

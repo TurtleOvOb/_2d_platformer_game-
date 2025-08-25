@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedLevelCard extends StatefulWidget {
@@ -53,7 +54,13 @@ class _AnimatedLevelCardState extends State<AnimatedLevelCard>
     final cardWidth = widget.width * 0.01;
 
     return GestureDetector(
-      onTapDown: widget.isUnlocked ? (_) => _controller.forward() : null,
+      onTapDown:
+          widget.isUnlocked
+              ? (_) {
+                AudioManage().playclick();
+                _controller.forward();
+              }
+              : null,
       onTapUp:
           widget.isUnlocked
               ? (_) {

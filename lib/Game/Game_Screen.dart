@@ -1,13 +1,16 @@
 import 'package:_2d_platformergame/pages/LevelCompletePage.dart';
 import 'package:_2d_platformergame/pages/GameOverPage.dart';
+import 'package:_2d_platformergame/providers/time_count.dart';
 import 'package:_2d_platformergame/widgets/game_page/game_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'My_Game.dart';
 import 'package:_2d_platformergame/Game/mission_system.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:riverpod/riverpod.dart';
 
-class GameScreen extends StatefulWidget {
+class GameScreen extends ConsumerStatefulWidget {
   final int? levelId;
   final int pxWid;
   final int pxHei;
@@ -20,10 +23,11 @@ class GameScreen extends StatefulWidget {
   });
 
   @override
-  State<GameScreen> createState() => _GameScreenState();
+  ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
+class _GameScreenState extends ConsumerState<GameScreen>
+    with WidgetsBindingObserver {
   Timer? _leftTimer;
   Timer? _rightTimer;
 
@@ -54,6 +58,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     // 设置游戏通关回调
     newGame.onLevelComplete = (level) {
       if (mounted) {
+        ref.read(timeCountProvider.notifier).stop();
         showDialog(
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
@@ -67,11 +72,15 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
     // 设置玩家死亡回调
     newGame.onPlayerDeath = (level) {
       if (mounted) {
+        ref.read(timeCountProvider.notifier).stop();
+
         showDialog(
           context: context,
           barrierDismissible: false, // 禁止点击外部关闭
           builder: (context) => GameOverPage(nowlevel: level),
-        );
+        ).then((value) {
+          ref.read(timeCountProvider.notifier).reset();
+        });
       }
     };
 

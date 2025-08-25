@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
   path_provider: ^2.0.15
   shared_preferences: ^2.2.2
-  flame_audio: ^2.0.4
+  flame_audio: ^2.11.8
   url_launcher: ^6.2.5
 
   # The following adds the Cupertino Icons font to your application.
@@ -73,7 +73,7 @@ flutter:
     - assets/images/buttons/
     - assets/images/containers/
     - assets/images/containers/BackGround3.png
-
+    - assets/audio/
 
 
   # 添加字体配置

@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:_2d_platformergame/player/collision_logic.dart';
 import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flutter/material.dart';
@@ -227,6 +228,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
 
   void _doJump() {
     // 起跳灰尘（略带玩家色调）
+    AudioManage().playjump3();
     final c = color;
     final tinted = Color.fromARGB(
       255,

@@ -1,4 +1,8 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flutter/material.dart';
+import 'package:flame_audio/flame_audio.dart';
+
+double soundEffectVolume = 1.0;
 
 // 自定义正方形滑块（带白色边缘）
 class SquareThumbShape extends SliderComponentShape {
@@ -48,14 +52,14 @@ class MusicSettingsPage extends StatefulWidget {
   const MusicSettingsPage({super.key});
 
   @override
-  State<MusicSettingsPage> createState() => _MusicSettingsPageState();
+  State<MusicSettingsPage> createState() => MusicSettingsPageState();
 }
 
-class _MusicSettingsPageState extends State<MusicSettingsPage> {
+class MusicSettingsPageState extends State<MusicSettingsPage> {
   bool _isSoundEffectEnabled = true;
-  double _soundEffectVolume = 1.0;
+
   bool _isBackgroundMusicEnabled = true;
-  double _backgroundMusicVolume = 1.0;
+  static double backgroundMusicVolume = 1.0;
   // 新增：记录当前选中的按钮索引（0: graphic, 1: music, 2: other）
   int _selectedTabIndex = 1;
   bool isOn = true;
@@ -78,6 +82,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                 // music 按钮（当前选中）
                 TextButton(
                   onPressed: () {
+                    AudioManage().playclick();
                     setState(() {
                       _selectedTabIndex = 1;
                     });
@@ -105,6 +110,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                 // other 按钮
                 TextButton(
                   onPressed: () {
+                    AudioManage().playclick();
                     setState(() {
                       _selectedTabIndex = 2;
                     });
@@ -153,24 +159,19 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                     ),
                   ),
                   Expanded(
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        thumbShape: const SquareThumbShape(thumbSize: 18),
-                        thumbColor: Colors.yellow,
-                      ),
-                      child: Slider(
-                        value: _soundEffectVolume,
-                        onChanged:
-                            _isSoundEffectEnabled
-                                ? (value) {
-                                  setState(() {
-                                    _soundEffectVolume = value;
-                                  });
-                                }
-                                : null,
-                        activeColor: Colors.yellow,
-                        inactiveColor: Colors.white.withOpacity(0.3),
-                      ),
+                    child: Slider(
+                      value: soundEffectVolume,
+                      onChanged:
+                          _isSoundEffectEnabled
+                              ? (value) {
+                                setState(() {
+                                  soundEffectVolume = value;
+                                  AudioManage.volume = value;
+                                });
+                              }
+                              : null,
+                      activeColor: Colors.yellow,
+                      inactiveColor: Colors.white.withOpacity(0.3),
                     ),
                   ),
                 ],
@@ -196,24 +197,21 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                     ),
                   ),
                   Expanded(
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        thumbShape: const SquareThumbShape(thumbSize: 18),
-                        thumbColor: Colors.yellow,
-                      ),
-                      child: Slider(
-                        value: _backgroundMusicVolume,
-                        onChanged:
-                            _isBackgroundMusicEnabled
-                                ? (value) {
-                                  setState(() {
-                                    _backgroundMusicVolume = value;
-                                  });
-                                }
-                                : null,
-                        activeColor: Colors.yellow,
-                        inactiveColor: Colors.white.withOpacity(0.3),
-                      ),
+                    child: Slider(
+                      value: backgroundMusicVolume,
+                      onChanged:
+                          _isBackgroundMusicEnabled
+                              ? (value) {
+                                setState(() {
+                                  backgroundMusicVolume = value;
+                                  FlameAudio.bgm.audioPlayer.setVolume(
+                                    backgroundMusicVolume,
+                                  );
+                                });
+                              }
+                              : null,
+                      activeColor: Colors.yellow,
+                      inactiveColor: Colors.white.withOpacity(0.3),
                     ),
                   ),
                 ],
@@ -323,6 +321,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
+                  AudioManage().playclick();
                   Navigator.pop(context);
                 },
                 child: Stack(

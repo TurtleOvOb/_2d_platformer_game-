@@ -1,0 +1,2 @@
+D:/flutter_project/_2d_platformergame/android/app/.cxx/Debug/5w4g1u2t/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/flutter_project/_2d_platformergame/android/app/.cxx/Debug/5w4g1u2t/armeabi-v7a/CMakeFiles/rebuild_cache.dir

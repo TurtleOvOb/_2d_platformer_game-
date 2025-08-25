@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flutter/material.dart';
 import '../Game/My_Game.dart';
 
@@ -37,6 +38,7 @@ class PauseOverlay extends StatelessWidget {
                 backgroundColor: Colors.amber,
               ),
               onPressed: () {
+                AudioManage().playclick();
                 Navigator.of(context).pop(); // 关闭暂停对话框
                 game.resumeGame();
               },
@@ -52,6 +54,7 @@ class PauseOverlay extends StatelessWidget {
                 backgroundColor: Colors.red,
               ),
               onPressed: () {
+                AudioManage().playclick();
                 Navigator.of(context).pop(); // 关闭暂停对话框
                 onReturnToMain(); // 返回主菜单
               },
