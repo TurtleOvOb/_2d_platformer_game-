@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedLevelCard extends StatefulWidget {
@@ -59,6 +60,7 @@ class _AnimatedLevelCardState extends State<AnimatedLevelCard>
               ? (_) {
                 _controller.reverse();
                 widget.onTap?.call();
+                AudioManage().playclick();
               }
               : null,
       onTapCancel: widget.isUnlocked ? () => _controller.reverse() : null,

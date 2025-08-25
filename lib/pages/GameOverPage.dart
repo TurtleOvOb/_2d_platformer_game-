@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:_2d_platformergame/widgets/homepage/image_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:_2d_platformergame/Game/Game_Screen.dart';
@@ -145,6 +146,7 @@ class _GameOverPageState extends ConsumerState<GameOverPage>
                             onTap: () async {
                               final ldtkPath =
                                   'assets/levels/Level_${widget.nowlevel}.ldtk';
+                              AudioManage().playclick();
                               int pxWid = 512, pxHei = 288;
                               try {
                                 final parser = LdtkParser();
@@ -189,6 +191,8 @@ class _GameOverPageState extends ConsumerState<GameOverPage>
                             text: 'Exit',
                             imagePath: 'assets/images/buttons/Button1.png',
                             onTap: () {
+                              AudioManage().playclick();
+
                               Navigator.of(context).pop();
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(

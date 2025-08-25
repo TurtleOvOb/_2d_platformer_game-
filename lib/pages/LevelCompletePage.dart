@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:_2d_platformergame/widgets/homepage/image_text_button.dart';
 import 'package:_2d_platformergame/utils/level_manager.dart';
 import 'package:_2d_platformergame/Game/mission_system.dart';
@@ -176,6 +177,8 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                         text: 'Next Level',
                         imagePath: 'assets/images/buttons/Button1.png',
                         onTap: () async {
+                          AudioManage().playclick();
+
                           final nextLevelId = widget.nowlevel + 1;
                           final ldtkPath =
                               'assets/levels/Level_${nextLevelId}.ldtk';
@@ -218,6 +221,8 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                         text: 'Home',
                         imagePath: 'assets/images/buttons/Button1.png',
                         onTap: () {
+                          AudioManage().playclick();
+
                           Navigator.of(context).pop();
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(

@@ -1,17 +1,21 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flutter/material.dart';
+import 'package:flame_audio/flame_audio.dart';
+
+double soundEffectVolume = 1.0;
 
 class MusicSettingsPage extends StatefulWidget {
   const MusicSettingsPage({super.key});
 
   @override
-  State<MusicSettingsPage> createState() => _MusicSettingsPageState();
+  State<MusicSettingsPage> createState() => MusicSettingsPageState();
 }
 
-class _MusicSettingsPageState extends State<MusicSettingsPage> {
+class MusicSettingsPageState extends State<MusicSettingsPage> {
   bool _isSoundEffectEnabled = true;
-  double _soundEffectVolume = 1.0;
+
   bool _isBackgroundMusicEnabled = true;
-  double _backgroundMusicVolume = 1.0;
+  static double backgroundMusicVolume = 1.0;
   // 新增：记录当前选中的按钮索引（0: graphic, 1: music, 2: other）
   int _selectedTabIndex = 1;
   bool isOn = true;
@@ -36,6 +40,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   onPressed: () {
                     setState(() {
                       _selectedTabIndex = 1;
+                      AudioManage().playclick();
                     });
                   },
                   style: TextButton.styleFrom(
@@ -63,6 +68,7 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   onPressed: () {
                     setState(() {
                       _selectedTabIndex = 2;
+                      AudioManage().playclick();
                     });
                   },
                   style: TextButton.styleFrom(
@@ -110,12 +116,13 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   Expanded(
                     child: Slider(
-                      value: _soundEffectVolume,
+                      value: soundEffectVolume,
                       onChanged:
                           _isSoundEffectEnabled
                               ? (value) {
                                 setState(() {
-                                  _soundEffectVolume = value;
+                                  soundEffectVolume = value;
+                                  AudioManage.volume = value;
                                 });
                               }
                               : null,
@@ -147,12 +154,15 @@ class _MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   Expanded(
                     child: Slider(
-                      value: _backgroundMusicVolume,
+                      value: backgroundMusicVolume,
                       onChanged:
                           _isBackgroundMusicEnabled
                               ? (value) {
                                 setState(() {
-                                  _backgroundMusicVolume = value;
+                                  backgroundMusicVolume = value;
+                                  FlameAudio.bgm.audioPlayer.setVolume(
+                                    backgroundMusicVolume,
+                                  );
                                 });
                               }
                               : null,

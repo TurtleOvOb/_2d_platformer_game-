@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/Game/My_Game.dart';
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flame/collisions.dart';
@@ -49,10 +50,14 @@ class Key extends SpriteComponent
       // 不同类型钥匙的粒子效果颜色
       Color burstColor;
       if (type == 0) {
+        AudioManage().playkey1();
+
         // 黄钥匙
         burstColor = const Color(0xFFFFD54F);
       } else {
         // 蓝钥匙
+        AudioManage().playkey1();
+
         burstColor = const Color(0xFF42A5F5);
       }
 

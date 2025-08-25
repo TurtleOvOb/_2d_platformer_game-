@@ -1,3 +1,4 @@
+import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
@@ -32,6 +33,7 @@ class MyGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
     // 添加背景图片精灵到world底层
+
     final bg =
         SpriteComponent()
           ..sprite = await Sprite.load('containers/BackGround4.png')
@@ -239,6 +241,7 @@ class MyGame extends FlameGame
     try {
       // 暂停游戏
       pauseGame();
+      AudioManage().playlevelcomplete();
       // 获取当前分数（如果有需要可以计算）
       int score = calculateScore();
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
@@ -259,7 +262,7 @@ class MyGame extends FlameGame
     try {
       // 暂停游戏
       pauseGame();
-
+      AudioManage().playgameover();
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
 
       if (overlays.isActive('gameUI')) {
