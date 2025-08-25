@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:_2d_platformergame/audiomanage.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 
 enum ButtonAnimationType {
   scale, // 缩放动画

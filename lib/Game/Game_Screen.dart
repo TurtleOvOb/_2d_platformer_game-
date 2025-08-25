@@ -87,6 +87,9 @@ class _GameScreenState extends ConsumerState<GameScreen>
     // 等待资源加载完成
     await newGame.onLoad();
     if (!mounted) return;
+    // 每次新关卡加载后重置并启动计时器
+    ref.read(timeCountProvider.notifier).reset();
+    ref.read(timeCountProvider.notifier).start();
     setState(() {
       game = newGame;
       isGameCreated = true;

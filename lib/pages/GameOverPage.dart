@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/audiomanage.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:_2d_platformergame/widgets/homepage/image_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:_2d_platformergame/Game/Game_Screen.dart';

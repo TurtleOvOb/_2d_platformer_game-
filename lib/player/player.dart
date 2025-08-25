@@ -1,5 +1,5 @@
-import 'package:_2d_platformergame/audiomanage.dart';
 import 'package:_2d_platformergame/player/collision_logic.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/collisions.dart';

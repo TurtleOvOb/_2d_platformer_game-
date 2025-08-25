@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/audiomanage.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:_2d_platformergame/widgets/homepage/image_text_button.dart';
 import 'package:_2d_platformergame/utils/level_manager.dart';
 import 'package:_2d_platformergame/Game/mission_system.dart';
@@ -148,25 +148,7 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                       Center(
                         child: ScaleTransition(
                           scale: _floatAnim,
-                          child: FadeTransition(
-                            opacity: _fadeAnim,
-                            child: Text(
-                              'Level ${widget.nowlevel} Completed!',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'PixelMplus12-Regular',
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: 4,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          child: FadeTransition(opacity: _fadeAnim),
                         ),
                       ),
                       const SizedBox(height: 25),

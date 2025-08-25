@@ -3,6 +3,7 @@ import 'package:_2d_platformergame/Objects/bricks/DangerousPlat.dart';
 import 'package:_2d_platformergame/objects/Specials/ConveyorBelt.dart';
 import 'package:_2d_platformergame/objects/Specials/DashArrow.dart';
 import 'package:_2d_platformergame/objects/Specials/Key.dart';
+import 'package:_2d_platformergame/objects/Specials/Star.dart';
 import 'package:_2d_platformergame/objects/Specials/face.dart';
 import 'package:_2d_platformergame/objects/bricks/ChargedPlatform.dart';
 import 'package:_2d_platformergame/objects/bricks/DoorBlock.dart';
@@ -529,6 +530,8 @@ PositionComponent? createComponentForTile(
         type: 1, // 需要Key2开启的钥匙块
         gridSize: tileSize.toDouble(),
       );
+    case 368:
+      return Star(position: Vector2((x + offsetX), (y + offsetY)));
     case 420:
       return KeyBlock(
         brickpos: Vector2((x + offsetX), (y + offsetY)),

@@ -33,4 +33,8 @@ class AudioManage {
   void playkey2() {
     FlameAudio.play('拾取钥匙2.mp3', volume: volume);
   }
+
+  void playStar() {
+    FlameAudio.play('拾取星星.mp3', volume: volume);
+  }
 }
