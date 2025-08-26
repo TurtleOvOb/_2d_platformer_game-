@@ -1,12 +1,34 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:_2d_platformergame/Game/My_Game.dart';
+import 'package:flame/effects.dart';
+import 'package:_2d_platformergame/utils/particles.dart';
+import 'package:flutter/material.dart';
 
 /// 钥匙块类，根据type参数决定需要哪种钥匙来开启
 /// type: 0，2 - 需要Key1开启
 /// type: 1 ，4- 需要Key2开启
+
 class KeyBlock extends SpriteComponent
     with CollisionCallbacks, HasGameReference<MyGame> {
+  /// 钥匙块爆炸消失动画
+  void playUnlockAnimation() {
+    // 取中心点
+    final center = absoluteCenter;
+    // 颜色根据钥匙类型区分
+    final color = Colors.white;
+    parent?.add(
+      Particles.collectBurst(
+        center.clone(),
+        color: color,
+        count: 22,
+        lifespan: 0.55,
+        speed: 170,
+      ),
+    );
+    removeFromParent();
+  }
+
   final Vector2 brickpos;
   final int type; // 0:实心 1:空心 2:横实心 3:横空心
   final double gridSize;

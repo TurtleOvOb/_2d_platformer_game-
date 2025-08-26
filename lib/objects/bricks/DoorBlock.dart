@@ -53,6 +53,7 @@ class DoorBlock extends SpriteComponent
     if (other is Player) {
       final player = other;
       player.lockControl(); // 禁用玩家所有操作
+      player.setInvincible(true); // 通关时无敌，禁用碰撞箱
       // 计算目标点：门下方一格中心
       final double targetX = position.x + gridSize / 2 - player.size.x / 2;
       final double targetY = position.y + gridSize * 1.5 - player.size.y / 2;

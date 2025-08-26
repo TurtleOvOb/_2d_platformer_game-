@@ -1,5 +1,6 @@
 import 'package:_2d_platformergame/Game/My_Game.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:_2d_platformergame/utils/particles.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -44,7 +45,9 @@ class GreenOrb extends SpriteComponent
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
+
     if (other is Player) {
+      AudioManage().playChargedOrb();
       final burstColor =
           (other as dynamic).color is Color
               ? (other as dynamic).color as Color
@@ -87,7 +90,6 @@ class GreenOrb extends SpriteComponent
   }
 
   void collectOrb() {
-    // 只移除当前绿球实例
     removeFromParent();
   }
 }

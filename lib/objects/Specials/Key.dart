@@ -1,4 +1,5 @@
 import 'package:_2d_platformergame/Game/My_Game.dart';
+import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:_2d_platformergame/player/player.dart';
 import 'package:_2d_platformergame/utils/particles.dart';
@@ -49,17 +50,8 @@ class Key extends SpriteComponent
     if (other is Player) {
       // 不同类型钥匙的粒子效果颜色
       Color burstColor;
-      if (type == 0) {
-        AudioManage().playkey1();
-
-        // 黄钥匙
-        burstColor = const Color(0xFFFFD54F);
-      } else {
-        // 蓝钥匙
-        AudioManage().playkey1();
-
-        burstColor = const Color(0xFF42A5F5);
-      }
+      AudioManage().playkey1();
+      burstColor = Colors.white;
 
       parent?.add(Particles.collectBurst(center.clone(), color: burstColor));
       collectKey();
@@ -67,8 +59,16 @@ class Key extends SpriteComponent
   }
 
   void collectKey() {
+    // 钥匙块弹跳动画
+    for (final component in game.world.children) {
+      if (component is KeyBlock) {
+        if ((type == 0 && (component.type == 0 || component.type == 2)) ||
+            (type == 1 && (component.type == 1 || component.type == 3))) {
+          component.playUnlockAnimation();
+        }
+      }
+    }
     // 从游戏中移除钥匙
     removeFromParent();
-    game.removeKeyBlock(type);
   }
 }

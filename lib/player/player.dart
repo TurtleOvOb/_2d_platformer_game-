@@ -8,6 +8,9 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  bool isOnChargedOrb = false;
+  bool invincible = false;
+  RectangleHitbox? _mainHitbox;
   double portalCooldown = 0.0; // 传送门冷却，防止秒传
   // 动画缓存
   SpriteAnimation? _normalAnimation;
@@ -77,13 +80,12 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     // 默认未充能
     animation = _normalAnimation;
     size = playersize;
-    add(
-      RectangleHitbox(
-        anchor: anchor,
-        collisionType: CollisionType.active,
-        size: playersize,
-      ),
+    _mainHitbox = RectangleHitbox(
+      anchor: anchor,
+      collisionType: CollisionType.active,
+      size: playersize,
     );
+    add(_mainHitbox!);
   }
 
   @override
@@ -190,6 +192,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
+    if (invincible) return;
     super.onCollision(points, other);
     CollisionLogic.handleCollision(
       this,
@@ -198,12 +201,28 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       points,
       other,
     );
+    // 检查是否站在充能块
+    if (other.runtimeType.toString().contains('GreenOrb')) {
+      isOnChargedOrb = true;
+    }
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
+    if (invincible) return;
     super.onCollisionEnd(other);
     CollisionLogic.handleCollisionEnd((value) => isGrounded = value, other);
+    if (other.runtimeType.toString().contains('GreenOrb')) {
+      isOnChargedOrb = false;
+    }
+  }
+
+  void setInvincible(bool value) {
+    invincible = value;
+    if (_mainHitbox != null) {
+      _mainHitbox!.collisionType =
+          value ? CollisionType.inactive : CollisionType.active;
+    }
   }
 
   // 充能状态切换
@@ -230,8 +249,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   }
 
   void _doJump() {
-    // 起跳灰尘（略带玩家色调）
-    AudioManage().playjump3();
+    // 根据跳跃初速度（jumpSpeed）播放不同音效
+    // 高于阈值（如300）为高跳，低于则为低跳
+    if (jumpSpeed >= 300) {
+      AudioManage().playjump3(); // 高跳音效
+    } else {
+      AudioManage().playjump2(); // 低跳音效
+    }
     final c = color;
     final tinted = Color.fromARGB(
       255,

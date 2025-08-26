@@ -157,7 +157,6 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                         text: 'Next Level',
                         imagePath: 'assets/images/buttons/Button1.png',
                         onTap: () async {
-                          AudioManage().playclick();
                           final nextLevelId = widget.nowlevel + 1;
                           final ldtkPath =
                               'assets/levels/Level_${nextLevelId}.ldtk';
@@ -200,7 +199,6 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                         text: 'Home',
                         imagePath: 'assets/images/buttons/Button1.png',
                         onTap: () {
-                          AudioManage().playclick();
                           Navigator.of(context).pop();
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(

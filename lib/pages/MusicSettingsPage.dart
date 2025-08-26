@@ -177,7 +177,7 @@ class MusicSettingsPageState extends State<MusicSettingsPage> {
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
-              // 背景音乐设置行（不变）
+
               Row(
                 children: [
                   Checkbox(

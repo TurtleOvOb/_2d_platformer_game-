@@ -30,11 +30,15 @@ class AudioManage {
     FlameAudio.play('游戏胜利1.mp3', volume: volume);
   }
 
-  void playkey2() {
-    FlameAudio.play('拾取钥匙2.mp3', volume: volume);
-  }
-
   void playStar() {
     FlameAudio.play('拾取星星.mp3', volume: volume);
+  }
+
+  void playChargedOrb() {
+    FlameAudio.play('拾取充能球.mp3', volume: volume);
+  }
+
+  void playDash() {
+    FlameAudio.play('冲刺.mp3', volume: volume);
   }
 }
