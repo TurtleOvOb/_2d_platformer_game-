@@ -14,6 +14,7 @@ class TimeCountNotifier extends StateNotifier<Timestate> {
   Timer? timer;
   void start() {
     if (state.isRunning) return;
+    timer?.cancel(); // 防止重复计时
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       state = Timestate(state.seconds! + 1, true);
     });

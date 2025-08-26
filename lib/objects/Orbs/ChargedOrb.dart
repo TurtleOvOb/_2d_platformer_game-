@@ -55,7 +55,7 @@ class GreenOrb extends SpriteComponent
       final viewfinder = game.camera.viewfinder;
       // 以当前摄像机位置为本次震动原点
       final origin = viewfinder.position.clone();
-      final shakeDistance = 8.0;
+      final shakeDistance = 3.0;
       final shakeDuration = 0.04;
       // 先移除所有MoveEffect，避免叠加
       viewfinder.children.whereType<MoveEffect>().toList().forEach(
@@ -87,8 +87,7 @@ class GreenOrb extends SpriteComponent
   }
 
   void collectOrb() {
-    // 从游戏中移除绿球
+    // 只移除当前绿球实例
     removeFromParent();
-    game.removeGreenOrb(type);
   }
 }

@@ -26,8 +26,8 @@ class _TimerCountState extends ConsumerState<TimerCount> {
     return Text(
       '$m:$s',
       style: TextStyle(
-        //取消下划线
         decoration: TextDecoration.none,
+        fontFamily: 'PixelMplus12-Regular',
         fontSize: widget.size,
         color: const Color.fromARGB(255, 142, 131, 131),
       ),

@@ -5,7 +5,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 /// 传送门组件，根据type区分不同的传送门
@@ -22,7 +21,7 @@ class Portal extends SpriteAnimationComponent
   // 传送门特性参数
   bool _isActive = true; // 是否激活状态
   double _cooldownTime = 0; // 冷却时间计时器
-  final double _cooldownDuration = 1.0; // 冷却时间（秒）
+  final double _cooldownDuration = 2.0; // 冷却时间（秒）
 
   Portal({
     required this.brickpos,
@@ -106,7 +105,9 @@ class Portal extends SpriteAnimationComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
 
-    if (other is Player && _isActive) {
+    if (other is Player &&
+        _isActive &&
+        (other as dynamic).portalCooldown <= 0) {
       // 任何传送门都可以触发传送（双向传送）
       // 找到其他可用的传送门
       final targetPortal = _findTargetPortal();
@@ -173,11 +174,12 @@ class Portal extends SpriteAnimationComponent
     // 设置玩家新位置（目标传送门位置 + 偏移）
     player.position.x = targetPortal.position.x + offsetX;
     player.position.y = targetPortal.position.y + offsetY;
+    // 设置玩家传送门冷却，防止秒传
+    player.portalCooldown = 1.0;
 
     // 恢复玩家速度
     player.playerspeed.setFrom(playerSpeed);
 
-    // 播放目标传送门特效
     targetPortal._playTeleportEffect(player, isTeleporting: false);
   }
 

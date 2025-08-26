@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
+  double portalCooldown = 0.0; // 传送门冷却，防止秒传
   // 动画缓存
   SpriteAnimation? _normalAnimation;
   SpriteAnimation? _chargedAnimation;
@@ -95,6 +96,8 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
+    // 传送门冷却递减
+    if (portalCooldown > 0) portalCooldown -= dt;
 
     // 动画切换：充能状态用Player2帧，未充能用Player帧
     if (isCharged && animation != _chargedAnimation) {

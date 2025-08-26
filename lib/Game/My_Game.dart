@@ -1,4 +1,4 @@
-import 'package:_2d_platformergame/audiomanage.dart';
+import 'package:_2d_platformergame/utils/audiomanage.dart';
 import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
@@ -51,7 +51,7 @@ class MyGame extends FlameGame
 
   void onMount() {
     super.onMount();
-    //debugMode = true;
+    // debugMode = true;
   }
 
   Future<void> initial() async {

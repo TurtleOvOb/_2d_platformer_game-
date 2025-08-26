@@ -33,10 +33,10 @@ class Spike extends SpriteComponent
     } else if (type == 1) {
       // 天花板
       hitboxPos = Vector2(gridSize * 0.2, 0);
-    } else if (type == 2) {
-      // 左墙
-      hitboxPos = Vector2(0, gridSize * 0.2);
     } else if (type == 3) {
+      // 左墙
+      hitboxPos = Vector2(0.2, gridSize * 0.4);
+    } else if (type == 2) {
       // 右墙
       hitboxPos = Vector2(gridSize * 0.4, gridSize * 0.2);
     } else {
