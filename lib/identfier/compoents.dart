@@ -442,14 +442,14 @@ PositionComponent? createComponentForTile(
     case 274:
       return DangerousPlat(
         brickpos: Vector2(x + offsetX, y + offsetY + 8),
-        srcPosition: Vector2(20 * 16, 7 * 16),
+        srcPosition: Vector2(18 * 16, 7 * 16),
         type: 0,
         gridSize: tileSize.toDouble(),
       );
     case 275:
       return DangerousPlat(
         brickpos: Vector2(x + offsetX, y + offsetY + 8),
-        srcPosition: Vector2(20 * 16, 7 * 16),
+        srcPosition: Vector2(19 * 16, 7 * 16),
         type: 0,
         gridSize: tileSize.toDouble(),
       );
