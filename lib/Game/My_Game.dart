@@ -312,7 +312,12 @@ class MyGame extends FlameGame
     try {
       // 暂停游戏
       pauseGame();
-      AudioManage().playgameover();
+      // 根据全局开关切换死亡音效
+      if (AudioManage.useDoNotDeathSound) {
+        AudioManage().playDonot();
+      } else {
+        AudioManage().playgameover();
+      }
       final currentLevel = levelId ?? 1; // 保存当前关卡ID
 
       if (overlays.isActive('gameUI')) {

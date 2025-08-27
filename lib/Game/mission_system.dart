@@ -54,8 +54,21 @@ class MissionResult {
 
 /// 关卡任务配置
 final Map<int, Mission> missionMap = {
-  0: Mission(maxTime: 60, maxDeath: 3, minCollectibles: 0),
-  1: Mission(maxTime: 80, maxDeath: 2, minCollectibles: 8),
-  2: Mission(maxTime: 100, maxDeath: 5, minCollectibles: 10),
+  0: Mission(maxTime: 30, maxDeath: 3, minCollectibles: 0),
+  1: Mission(maxTime: 45, maxDeath: 2, minCollectibles: 2),
+  2: Mission(maxTime: 60, maxDeath: 4, minCollectibles: 3),
+  3: Mission(maxTime: 45, maxDeath: 4, minCollectibles: 3),
+  4: Mission(maxTime: 60, maxDeath: 3, minCollectibles: 3),
+  5: Mission(maxTime: 35, maxDeath: 4, minCollectibles: 3),
+  6: Mission(maxTime: 15, maxDeath: 3, minCollectibles: 2),
+  7: Mission(maxTime: 30, maxDeath: 3, minCollectibles: 3),
+  8: Mission(maxTime: 30, maxDeath: 5, minCollectibles: 3),
+  9: Mission(maxTime: 45, maxDeath: 5, minCollectibles: 3),
+  10: Mission(maxTime: 25, maxDeath: 3, minCollectibles: 3),
+  11: Mission(maxTime: 20, maxDeath: 3, minCollectibles: 2),
+  12: Mission(maxTime: 25, maxDeath: 3, minCollectibles: 1),
+  13: Mission(maxTime: 30, maxDeath: 6, minCollectibles: 3),
+  14: Mission(maxTime: 140, maxDeath: 12, minCollectibles: 3),
+  15: Mission(maxTime: 120, maxDeath: 20, minCollectibles: 5),
   // 可继续添加更多关卡任务
 };

@@ -296,18 +296,18 @@ class MusicSettingsPageState extends State<MusicSettingsPage> {
                   ),
                   SwitchListTile(
                     title: Text(
-                      'Particle Effect',
+                      'Do not',
                       style: TextStyle(
                         fontFamily: 'PixelMplus12-Regular',
                         fontSize: screenWidth * 0.045,
                         color: Colors.white,
                       ),
                     ),
-                    //subtitle: const Text('打开后可以收到消息提醒'),
                     value: isOn,
                     onChanged: (bool value) {
                       setState(() {
                         isOn = value;
+                        AudioManage.useDoNotDeathSound = value;
                       });
                     },
                   ),

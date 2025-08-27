@@ -2,6 +2,8 @@ import 'package:flame_audio/flame_audio.dart';
 
 class AudioManage {
   static double volume = 1.0;
+  static bool useDoNotDeathSound = false; // 控制死亡音效切换
+
   void play(String name) {
     FlameAudio.play(name, volume: volume);
   }
@@ -12,6 +14,10 @@ class AudioManage {
 
   void playgameover() {
     FlameAudio.play('玩家死亡.mp3', volume: volume);
+  }
+
+  void playDonot() {
+    FlameAudio.play('Do not.mp3', volume: volume);
   }
 
   void playjump3() {
