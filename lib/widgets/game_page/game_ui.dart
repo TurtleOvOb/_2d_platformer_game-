@@ -79,8 +79,6 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('GameUi widget.mission: ${widget.mission}');
-    print('GameUi widget.game.player: ${widget.game.player}');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -125,9 +123,6 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
                         148,
                         10,
                       ), // 背景改成橙色
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // 圆角减少到 8
-                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Builder(
@@ -143,20 +138,20 @@ class _GameUiState extends ConsumerState<GameUi> with TickerProviderStateMixin {
                                 children: [
                                   Task(
                                     result.timeOk,
-                                    '限时通关: ${widget.mission!.maxTime.toStringAsFixed(0)}秒',
+                                    'Time limit: ${widget.mission!.maxTime.toStringAsFixed(0)} s',
                                   ),
                                   Task(
                                     result.deathOk,
-                                    '死亡不超过: ${widget.mission!.maxDeath}次',
+                                    'Deaths ≤ ${widget.mission!.maxDeath}',
                                   ),
                                   Task(
                                     result.collectOk,
-                                    '收集物不少于: ${widget.mission!.minCollectibles}个',
+                                    'Collect at least ${widget.mission!.minCollectibles}',
                                   ),
                                 ],
                               );
                             } else {
-                              return const Text('无任务目标');
+                              return const Text('No Tasks');
                             }
                           },
                         ),

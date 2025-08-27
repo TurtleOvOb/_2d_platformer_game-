@@ -5,11 +5,13 @@ class LevelData {
   final int levelId;
   int starCount;
   bool isUnlocked;
+  int deathCount;
 
   LevelData({
     required this.levelId,
     this.starCount = 0,
     this.isUnlocked = false,
+    this.deathCount = 0,
   });
 }
 
@@ -27,6 +29,7 @@ class LevelManager {
     for (int i = 0; i < totalLevels; i++) {
       await prefs.remove('level_${i}_star');
       await prefs.remove('level_${i}_unlocked');
+      await prefs.remove('level_${i}_death');
     }
     _levels.clear();
   }
@@ -36,21 +39,31 @@ class LevelManager {
     for (int i = 0; i < totalLevels; i++) {
       int star = prefs.getInt('level_${i}_star') ?? 0;
       bool unlocked = prefs.getBool('level_${i}_unlocked') ?? (i == 0);
-      _levels[i] = LevelData(levelId: i, starCount: star, isUnlocked: unlocked);
+      int death = prefs.getInt('level_${i}_death') ?? 0;
+      _levels[i] = LevelData(
+        levelId: i,
+        starCount: star,
+        isUnlocked: unlocked,
+        deathCount: death,
+      );
     }
   }
 
   LevelData getLevel(int levelId) => _levels[levelId]!;
 
-  void updateLevel(int levelId, int starCount) async {
+  void updateLevel(int levelId, int starCount, {int? deathCount}) async {
     final prefs = await SharedPreferences.getInstance();
     final level = _levels[levelId]!;
     if (starCount > level.starCount) {
       level.starCount = starCount;
       await prefs.setInt('level_${levelId}_star', starCount);
     }
-    // 解锁下一关
-    if (_levels.containsKey(levelId + 1)) {
+    if (deathCount != null) {
+      level.deathCount = deathCount;
+      await prefs.setInt('level_${levelId}_death', deathCount);
+    }
+    // 只有达成3星才解锁下一关
+    if (_levels.containsKey(levelId + 1) && starCount >= 3) {
       _levels[levelId + 1]!.isUnlocked = true;
       await prefs.setBool('level_${levelId + 1}_unlocked', true);
     }

@@ -8,7 +8,6 @@ import 'package:_2d_platformergame/Game/mission_system.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:riverpod/riverpod.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
   final int? levelId;

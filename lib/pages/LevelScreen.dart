@@ -34,7 +34,19 @@ class _LevelScreenState extends State<LevelScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // 每次页面显示时刷新关卡数据
+    _resetCurrentLevelDeathCount();
     _initLevels();
+  }
+
+  void _resetCurrentLevelDeathCount() async {
+    // 获取所有关卡，重置每一关的死亡次数（如只需重置当前关卡可根据实际需求调整）
+    final manager = LevelManager();
+    await manager.loadLevels(_totalLevels);
+    for (var level in manager.allLevels) {
+      if (level.deathCount != 0) {
+        manager.updateLevel(level.levelId, level.starCount, deathCount: 0);
+      }
+    }
   }
 
   Future<void> _initLevels() async {

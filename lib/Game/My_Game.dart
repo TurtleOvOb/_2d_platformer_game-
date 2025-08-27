@@ -3,6 +3,7 @@ import 'package:flame/camera.dart';
 import 'package:_2d_platformergame/objects/Orbs/ChargedOrb.dart';
 import 'package:_2d_platformergame/objects/bricks/KeyBlock.dart';
 import 'package:_2d_platformergame/player/player.dart';
+import 'package:_2d_platformergame/utils/level_manager.dart';
 import '../identfier/ldtk_parser.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -63,6 +64,17 @@ class MyGame extends FlameGame
       }
       // 2. 重新创建玩家
       player = Player(spawnPosition: Vector2(16, 144));
+      // 读取本关历史死亡次数
+      try {
+        final levelData = LevelManager().getLevel(levelId ?? 0);
+        player!.deathCount = levelData.deathCount;
+        print('进入关卡${levelId ?? 0}，当前死亡次数：${levelData.deathCount}');
+      } catch (e) {
+        player!.deathCount = 0; // 只有存档读取失败时才置0
+        print('进入关卡${levelId ?? 0}，当前死亡次数：0（无存档）');
+      }
+      // 每次进关卡重置收集品数量
+      player!.collectiblesCount = 0;
       world.add(player!);
 
       // 4. 重新生成砖块并获取实际关卡尺寸
@@ -158,6 +170,8 @@ class MyGame extends FlameGame
     if (!isPaused && isInitialized && player != null) {
       // 仅在非暂停状态且初始化完成且玩家存在的情况下更新游戏
       super.update(dt);
+      // 累加通关用时
+      player!.levelTime += dt;
       if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
         player!.moveLeft();
       } else if (pressedKeys.contains(LogicalKeyboardKey.arrowRight)) {
@@ -310,6 +324,12 @@ class MyGame extends FlameGame
   // 添加玩家死亡方法
   void playerDeath() {
     try {
+      // 死亡次数累计
+      player?.deathCount++;
+      // 实时存档死亡次数，保证restart后能读取
+      if (player != null && levelId != null) {
+        LevelManager().updateLevel(levelId!, 0, deathCount: player!.deathCount);
+      }
       // 暂停游戏
       pauseGame();
       // 根据全局开关切换死亡音效

@@ -79,9 +79,14 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 结算星星数并写入关卡管理器
+    // 结算星星数并写入关卡管理器，并存储死亡次数
     final starCount = _calcStarCount();
-    LevelManager().updateLevel(widget.nowlevel, starCount);
+    final deathCount = widget.player?.deathCount ?? 0;
+    LevelManager().updateLevel(
+      widget.nowlevel,
+      starCount,
+      deathCount: deathCount,
+    );
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -153,45 +158,57 @@ class _LevelCompletePageState extends ConsumerState<LevelCompletePage>
                       ),
                       const SizedBox(height: 25),
                       // 下一关按钮
-                      ImageTextButton(
-                        text: 'Next Level',
-                        imagePath: 'assets/images/buttons/Button1.png',
-                        onTap: () async {
+                      Builder(
+                        builder: (context) {
                           final nextLevelId = widget.nowlevel + 1;
-                          final ldtkPath =
-                              'assets/levels/Level_${nextLevelId}.ldtk';
-                          int pxWid = 512, pxHei = 288;
-                          try {
-                            final parser = LdtkParser();
-                            final result = await parser.parseLdtkLevelWithSize(
-                              ldtkPath,
-                            );
-                            pxWid = result.$2;
-                            pxHei = result.$3;
-                          } catch (e) {}
-                          if (!mounted) return;
-                          Navigator.of(context).pop();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => GameScreen(
-                                    levelId: nextLevelId,
-                                    pxWid: pxWid,
-                                    pxHei: pxHei,
-                                  ),
+                          final canGoNext = starCount >= 3;
+                          return ImageTextButton(
+                            text: 'Next Level',
+                            imagePath: 'assets/images/buttons/Button1.png',
+                            onTap:
+                                canGoNext
+                                    ? () {
+                                      Future(() async {
+                                        final ldtkPath =
+                                            'assets/levels/Level_${nextLevelId}.ldtk';
+                                        int pxWid = 512, pxHei = 288;
+                                        try {
+                                          final parser = LdtkParser();
+                                          final result = await parser
+                                              .parseLdtkLevelWithSize(ldtkPath);
+                                          pxWid = result.$2;
+                                          pxHei = result.$3;
+                                        } catch (e) {}
+                                        if (!mounted) return;
+                                        Navigator.of(context).pop();
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => GameScreen(
+                                                  levelId: nextLevelId,
+                                                  pxWid: pxWid,
+                                                  pxHei: pxHei,
+                                                ),
+                                          ),
+                                        );
+                                      });
+                                    }
+                                    : () {},
+                            width: 180,
+                            height: 60,
+                            animationType: ButtonAnimationType.bounce,
+                            textStyle: TextStyle(
+                              fontFamily: 'PixelMplus12-Regular',
+                              color:
+                                  canGoNext
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.5),
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
                             ),
                           );
                         },
-                        width: 180,
-                        height: 60,
-                        animationType: ButtonAnimationType.bounce,
-                        textStyle: const TextStyle(
-                          fontFamily: 'PixelMplus12-Regular',
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                       const SizedBox(height: 10),
                       // 返回主页按钮
