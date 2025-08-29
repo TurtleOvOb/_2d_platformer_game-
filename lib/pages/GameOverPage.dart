@@ -154,9 +154,7 @@ class _GameOverPageState extends ConsumerState<GameOverPage>
                                     .parseLdtkLevelWithSize(ldtkPath);
                                 pxWid = result.$2;
                                 pxHei = result.$3;
-                              } catch (e) {
-                                print('读取关卡尺寸失败，使用默认值: $e');
-                              }
+                              } catch (e) {}
                               if (!mounted) return;
                               Navigator.of(context).pop();
                               Navigator.pushReplacement(

@@ -34,12 +34,6 @@ class MovingStar extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    /*     print('MovingStar - onLoad:');
-    print('起始位置: $startPosition');
-    print('结束位置: $endPosition');
-    print('速度: $speed'); */
-
-    // 加载精灵
     sprite = await Sprite.load(
       'tileset.png',
       srcPosition: Vector2(14 * 16, 12 * 16),

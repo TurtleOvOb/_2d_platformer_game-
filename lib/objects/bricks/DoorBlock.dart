@@ -48,7 +48,6 @@ class DoorBlock extends SpriteComponent
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
-    print('1');
     super.onCollision(points, other);
     if (other is Player) {
       final player = other;
@@ -77,12 +76,8 @@ class DoorBlock extends SpriteComponent
 
   // 通过本关卡
   void endLevel() {
-    print('6: endLevel called');
     if (game.isInitialized) {
-      print('7: game.isInitialized, call game.endLevel');
       game.endLevel();
-    } else {
-      print('8: 游戏尚未完全初始化，无法触发通关逻辑');
-    }
+    } else {}
   }
 }

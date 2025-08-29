@@ -45,7 +45,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   bool isGrounded = false; // 标记玩家是否在地面
   bool isDashing = false; // 标记玩家是否在冲刺中
   double levelTime = 0; // 当前关卡已用时间（秒）
-  int deathCount = 0; // 当前关卡死亡次数
+  int deathCount = 1; // 当前关卡死亡次数
   int collectiblesCount = 0; // 当前关卡收集品数量
 
   @override

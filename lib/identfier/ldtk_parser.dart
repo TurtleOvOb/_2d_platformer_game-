@@ -22,7 +22,6 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
     final components = <PositionComponent>[];
     final int pxWid = jsonData['pxWid'] as int? ?? 512;
     final int pxHei = jsonData['pxHei'] as int? ?? 288;
-    print('当前关卡大小: ${pxWid} x ${pxHei}');
 
     final layerInstances = jsonData['layerInstances'] as List<dynamic>;
     if (layerInstances.isEmpty) {
@@ -94,9 +93,7 @@ class LdtkParser extends Component with HasGameReference<MyGame> {
     Map<String, dynamic> layer,
     List<PositionComponent> components,
   ) {
-    print('开始解析实体层...');
     final entities = layer['entityInstances'] as List<dynamic>? ?? [];
-    print('找到 \\${entities.length} 个实体');
 
     for (final entity in entities) {
       final entityId = entity['__identifier'] as String;

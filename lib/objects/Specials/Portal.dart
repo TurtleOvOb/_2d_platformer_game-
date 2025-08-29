@@ -77,9 +77,6 @@ class Portal extends SpriteAnimationComponent
     );
   }
 
-  // 用于调试的标志
-  bool _debugPrinted = false;
-
   @override
   void update(double dt) {
     super.update(dt);
@@ -90,14 +87,6 @@ class Portal extends SpriteAnimationComponent
       if (_cooldownTime <= 0) {
         _isActive = true;
       }
-    }
-
-    // 启动后仅打印一次动画状态，确认是否正确加载
-    if (!_debugPrinted && animation != null) {
-      _debugPrinted = true;
-      print(
-        '传送门(类型:${VisualType == 0 ? "蓝" : "橙"}) - 动画帧数: ${animation!.frames.length}, playing=${playing}',
-      );
     }
   }
 

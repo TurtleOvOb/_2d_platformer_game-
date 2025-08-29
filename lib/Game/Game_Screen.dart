@@ -130,7 +130,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
                   Text(
-                    '正在加载关卡资源...',
+                    'Loading...',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ],

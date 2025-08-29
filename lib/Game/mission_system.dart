@@ -6,7 +6,6 @@ Future<void> unlockAllLevels({int maxLevel = 20}) async {
   for (int i = 0; i < maxLevel; i++) {
     await prefs.setBool('level_${i}_unlocked', true);
   }
-  print('所有关卡已解锁');
 }
 
 /// 关卡任务目标

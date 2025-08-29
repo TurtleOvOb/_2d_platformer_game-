@@ -5,7 +5,5 @@ void tapYouTube() async {
   final uri = Uri.parse(url);
   try {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } catch (e) {
-    print('fail: $e');
-  }
+  } catch (e) {}
 }

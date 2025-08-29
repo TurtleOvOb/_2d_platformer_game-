@@ -245,10 +245,7 @@ class MusicSettingsPageState extends State<MusicSettingsPage> {
                               child: Text('English'),
                             ),
                           ],
-                          onChanged: (String? newValue) {
-                            // 处理选中事件
-                            //print('选择了: $newValue');
-                          },
+                          onChanged: (String? newValue) {},
                           decoration: InputDecoration(
                             // labelText: '选择语言', // 可选标题
                             border: OutlineInputBorder(

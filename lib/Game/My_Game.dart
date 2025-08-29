@@ -68,10 +68,8 @@ class MyGame extends FlameGame
       try {
         final levelData = LevelManager().getLevel(levelId ?? 0);
         player!.deathCount = levelData.deathCount;
-        print('进入关卡${levelId ?? 0}，当前死亡次数：${levelData.deathCount}');
       } catch (e) {
         player!.deathCount = 0; // 只有存档读取失败时才置0
-        print('进入关卡${levelId ?? 0}，当前死亡次数：0（无存档）');
       }
       // 每次进关卡重置收集品数量
       player!.collectiblesCount = 0;
@@ -92,7 +90,6 @@ class MyGame extends FlameGame
         useDeadzone = true;
         // 摄像机初始居中
         camera.viewfinder.position = player!.position.clone();
-        print('当前摄影机大小: 512 x 288 (固定)');
       } else {
         // 关卡小于等于画面，摄像机分辨率等于关卡大小，静止居中
         camera.viewport = FixedResolutionViewport(
@@ -101,14 +98,11 @@ class MyGame extends FlameGame
         camera.viewfinder.anchor = Anchor.center;
         camera.viewfinder.position = Vector2(levelWidth / 2, levelHeight / 2);
         useDeadzone = false;
-        print('当前摄影机大小: \\${levelWidth} x \\${levelHeight} (自适应关卡)');
       }
 
       // 初始化完成
       isInitialized = true;
-      print('游戏初始化完成');
     } catch (e) {
-      print('游戏初始化失败: $e');
       // 在初始化失败的情况下，确保标记游戏未初始化
       isInitialized = false;
     }
@@ -146,11 +140,6 @@ class MyGame extends FlameGame
     if (parser.spawnPointPosition != null && player != null) {
       player!.spawnPosition = parser.spawnPointPosition!;
       player!.position = parser.spawnPointPosition!;
-      print('设置玩家出生点: ${parser.spawnPointPosition!}');
-    } else {
-      print(
-        '无法设置玩家出生点: ${player == null ? "player为null" : "spawnPosition为null"}',
-      );
     }
 
     return (bricks, pxWid, pxHei);
@@ -316,9 +305,7 @@ class MyGame extends FlameGame
       if (onLevelComplete != null) {
         onLevelComplete!(currentLevel);
       }
-    } catch (e) {
-      print('执行endLevel方法时发生错误: $e');
-    }
+    } catch (e) {}
   }
 
   // 添加玩家死亡方法
@@ -347,9 +334,7 @@ class MyGame extends FlameGame
       if (onPlayerDeath != null) {
         onPlayerDeath!(currentLevel);
       }
-    } catch (e) {
-      print('执行playerDeath方法时发生错误: $e');
-    }
+    } catch (e) {}
   }
 
   // 计算游戏得分的方法（可以根据实际需求自定义计分逻辑）
