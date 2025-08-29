@@ -51,7 +51,34 @@
 			"seed": 5282049,
 			"overrideTilesetUid": null,
 			"gridTiles": [],
-			"entityInstances": []
+			"entityInstances": [
+				{
+					"__identifier": "Movable_plat",
+					"__grid": [7,11],
+					"__pivot": [0,0],
+					"__tags": [],
+					"__tile": null,
+					"__smartColor": "#1DC27B",
+					"iid": "1ba51fa0-5e50-11f0-8652-d1dc382f9696",
+					"width": 16,
+					"height": 16,
+					"defUid": 58,
+					"px": [112,176],
+					"fieldInstances": [
+						{ "__identifier": "Speed", "__type": "Float", "__value": 50, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Float", "params": [50] }] },
+						{ "__identifier": "StartPos", "__type": "Point", "__value": { "cx": 8, "cy": 11 }, "__tile": null, "defUid": 59, "realEditorValues": [{
+							"id": "V_String",
+							"params": ["8,11"]
+						}] },
+						{ "__identifier": "EndPos", "__type": "Point", "__value": { "cx": 20, "cy": 11 }, "__tile": null, "defUid": 61, "realEditorValues": [{
+							"id": "V_String",
+							"params": ["20,11"]
+						}] }
+					],
+					"__worldX": 112,
+					"__worldY": 176
+				}
+			]
 		},
 		{
 			"__identifier": "Tiles",
@@ -62,8 +89,8 @@
 			"__opacity": 1,
 			"__pxTotalOffsetX": 0,
 			"__pxTotalOffsetY": 0,
-			"__tilesetDefUid": 46,
-			"__tilesetRelPath": "src_png/Sprite_01.png",
+			"__tilesetDefUid": 68,
+			"__tilesetRelPath": "src_png/Sprite_02.png",
 			"iid": "33c0c040-5e50-11f0-9c04-8dbeecc88682",
 			"levelId": 0,
 			"layerDefUid": 3,
@@ -74,7 +101,7 @@
 			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 3247960,
-			"overrideTilesetUid": 46,
+			"overrideTilesetUid": 68,
 			"gridTiles": [
 				{ "px": [0,0], "src": [16,16], "f": 0, "t": 33, "d": [0], "a": 1 },
 				{ "px": [16,0], "src": [16,16], "f": 0, "t": 33, "d": [1], "a": 1 },
@@ -156,6 +183,8 @@
 				{ "px": [496,160], "src": [16,16], "f": 0, "t": 33, "d": [351], "a": 1 },
 				{ "px": [0,176], "src": [16,16], "f": 0, "t": 33, "d": [352], "a": 1 },
 				{ "px": [48,176], "src": [16,144], "f": 0, "t": 289, "d": [355], "a": 1 },
+				{ "px": [208,176], "src": [32,240], "f": 0, "t": 482, "d": [365], "a": 1 },
+				{ "px": [224,176], "src": [48,240], "f": 0, "t": 483, "d": [366], "a": 1 },
 				{ "px": [432,176], "src": [48,160], "f": 0, "t": 323, "d": [379], "a": 1 },
 				{ "px": [432,176], "src": [144,208], "f": 0, "t": 425, "d": [379], "a": 1 },
 				{ "px": [496,176], "src": [16,16], "f": 0, "t": 33, "d": [383], "a": 1 },
